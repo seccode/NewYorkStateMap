@@ -407,9 +407,6 @@ function setUpGlobalVars(){
         var tompkins_vis = map.getLayoutProperty('tompkins_fills', 'visibility');
         var cayuga_vis = map.getLayoutProperty('cayuga_fills', 'visibility');
         var cortland_vis = map.getLayoutProperty('cortland_fills', 'visibility');
-        console.log(tompkins_vis);
-        console.log(cayuga_vis);
-        console.log(cortland_vis);
         if (tompkins_vis == 'visible') {
             var search_layer = "tompkins"
             var layer_source = "tompkins-6devsn"
@@ -426,15 +423,15 @@ function setUpGlobalVars(){
         var input_search = e.toElement.previousElementSibling.form[0].previousSibling.nextElementSibling.value;
         var replaced_name = false;
 
-        street_endings = [' Road',' road',' Rd',' rd',' Street',' street', ' St', ' Lane',' lane', ' Ln',' Avenue',' avenue',' Ave',' ave', ' Place', ' place',' Circle',' circle',' Blvd', 'blvd',' Drive',' drive']
+        // street_endings = [' Road',' road',' Rd',' rd',' Street',' street', ' St', ' Lane',' lane', ' Ln',' Avenue',' avenue',' Ave',' ave', ' Place', ' place',' Circle',' circle',' Blvd', 'blvd',' Drive',' drive']
         // Replace street endings if included in search
-        for (var j=0; j<street_endings.length; j++) {
-            if (input_search.includes(street_endings[j])) {
-                var new_search = input_search.replace(street_endings[j],'');
-                replaced_name = !replaced_name;
-                break
-            }
-        }
+        // for (var j=0; j<street_endings.length; j++) {
+            // if (input_search.includes(street_endings[j])) {
+                // var new_search = input_search.replace(street_endings[j],'');
+                // replaced_name = !replaced_name;
+                // break
+            // }
+        // }
         if (!replaced_name) {
             var new_search = input_search;
         }
@@ -445,25 +442,28 @@ function setUpGlobalVars(){
         });
 
         // Check if address matches entered search
+        var found_address = false;
         for (var i=0; i < relatedFeatures.length; i++) {
-            if (relatedFeatures[i].properties.PARCELADDR.includes(new_search)) {
+            if (relatedFeatures[i].properties.PARCELADDR == new_search) {
                 // Fly to address if match
                 var coords = relatedFeatures[i].geometry.coordinates[0][0];
                 map.flyTo({
                   center: coords,
                   zoom: 18
                 });
+                found_address = !found_address;
                 break
             }
         }
+        if (!found_address) {
+            alert("Address not found");
+        }
+
     });
     document.getElementById('parcel_go').addEventListener('click', function (e) {
         var tompkins_vis = map.getLayoutProperty('tompkins_fills', 'visibility');
         var cayuga_vis = map.getLayoutProperty('cayuga_fills', 'visibility');
         var cortland_vis = map.getLayoutProperty('cortland_fills', 'visibility');
-        console.log(tompkins_vis);
-        console.log(cayuga_vis);
-        console.log(cortland_vis);
         if (tompkins_vis == 'visible') {
             var search_layer = "tompkins"
             var layer_source = "tompkins-6devsn"
@@ -484,6 +484,7 @@ function setUpGlobalVars(){
         });
 
         // Check if parcel matches entered search
+        var found_parcel = false;
         for (var i=0; i < relatedFeatures.length; i++) {
             if (relatedFeatures[i].properties.PRINT_KEY == '') continue;
             if (input_search.includes(relatedFeatures[i].properties.PRINT_KEY)) {
@@ -493,9 +494,14 @@ function setUpGlobalVars(){
                   center: coords,
                   zoom: 18
                 });
+                parcel_address = !parcel_address;
                 break;
             }
         }
+        if (!found_parcel) {
+            alert("Parcel I.D. not found")
+        }
+
     });
     window.onclick = function(e) {
         if (!e.target.matches('.dropbtn')) {

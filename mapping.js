@@ -1,4 +1,4 @@
-function setUpGlobalVars(){
+function setUpGlobalVars() {
 
     // Mapbox access token
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2VjZmFzdCIsImEiOiJjanVlbGRxbTUwNGVlNDlwcXRxNnFhYnlzIn0.-dc9uxSNW4TUYbC96E8zjA';
@@ -10,438 +10,79 @@ function setUpGlobalVars(){
       center: [-76.5, 42.65],
       zoom: 8,
       pitch: 10,
+      bearing: 0,
     });
+    var county_dict = {'tompkins': ['mapbox://secfast.bxmtsg75',"tompkins-6devsn",[-76.5, 42.45]],
+                      'cayuga': ['mapbox://secfast.6ailnamb', "cayuga-dnav44",[-76.56, 42.93]],
+                      'cortland': ['mapbox://secfast.7u5fims4', "cortland-75081d",[-76.18, 42.60]],
+                    };
+
     var hoveredStateId =  null;
 
     // Load map
     map.on('load', function () {
 
-      var layers = map.getStyle().layers;
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'composite',
+            'source-layer': 'building',
+            'filter': ['==', 'extrude', 'true'],
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': 8,
+            'fill-extrusion-opacity': .6
+            }
+        }, 'water');
 
-      var labelLayerId;
-      // for (var i = 0; i < layers.length; i++) {
-      //     if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
-      //         labelLayerId = layers[i].id;
-      //         break;
-      // }
-      // }
+        for (var key in county_dict) {
+            map.addSource(key,{
+                type: 'vector',
+                url: county_dict[key][0]
+            });
+            map.addLayer({
+              "id": key+"_fills",
+              "type": "fill",
+              "source": key,
+              "source-layer": county_dict[key][1],
+              'paint': {
+                  'fill-opacity': .7,
+                  'fill-outline-color': 'black',
+                  'fill-color': [
+                    "case",
+                    ["boolean", ["feature-state","hover"], false],
+                    "#F370EF",
+                    [
+                    'interpolate', ['linear'],['get','FULL_MV'],
+                      0, '#18a9ec',
+                      50000, '#5ae7e5',
+                      100000, '#5ae79e',
+                      300000, '#b1e75a',
+                      600000, '#e7cd5a',
+                      800000, '#e7925a',
+                      1200000, '#e7875a',
+                      5000000, '#e75a5a',
+                    ]],
+                }
+            },'3d-buildings');
+            map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+        }
 
-      map.addLayer({
-          'id': '3d-buildings',
-          'source': 'composite',
-          'source-layer': 'building',
-          'filter': ['==', 'extrude', 'true'],
-          'type': 'fill-extrusion',
-          'minzoom': 15,
-          'paint': {
-          'fill-extrusion-color': '#aaa',
-          'fill-extrusion-height': 8,
-          'fill-extrusion-opacity': .6
-          }
-      }, 'water');
-
-
-
-      map.addSource("tompkins",{
-          type: 'vector',
-          url: 'mapbox://secfast.bxmtsg75'
-      });
-      map.addSource("cayuga",{
-          type: 'vector',
-          url: 'mapbox://secfast.6ailnamb'
-      });
-      map.addSource("cortland",{
-          type: 'vector',
-          url: 'mapbox://secfast.7u5fims4'
-      });
-      // Add TOMPKINS COUNTY
-      // Add fill layer
-      map.addLayer({
-          "id": "tompkins_fills",
-          "type": "fill",
-          "source": "tompkins",
-          "source-layer": "tompkins-6devsn",
-          'paint': {
-              'fill-opacity': .7,
-              'fill-outline-color': 'black',
-              'fill-color': [
-                "case",
-                ["boolean", ["feature-state","hover"], false],
-                "#F370EF",
-                [
-                'interpolate', ['linear'],['get','FULL_MV'],
-                  0, '#18a9ec',
-                  50000, '#5ae7e5',
-                  100000, '#5ae79e',
-                  300000, '#b1e75a',
-                  600000, '#e7cd5a',
-                  800000, '#e7925a',
-                  1200000, '#e7875a',
-                  5000000, '#e75a5a',
-                ]],
-          }
-      },'water');
-
-      // Add point layer
-      // map.addLayer({
-      //     "id": "tompkins_points",
-      //     "type": "symbol",
-      //     "source": "tompkins",
-      //     "source-layer": "tompkins-6devsn",
-      //     'layout': {
-      //         "text-field": ['concat',['get','PARCELADDR'],'\n','Parcel ID: ',['get','CT_SWIS'],'-',['get','PRINT_KEY']],
-      //         "text-size": [
-      //               'interpolate', ['linear'],['zoom'],
-      //               14, 0,
-      //               15, 1,
-      //               16, 9,
-      //               24, 14
-      //         ],
-      //     }
-      // },'water');
-      map.setLayoutProperty('tompkins_fills', 'visibility', 'none');
-      // map.setLayoutProperty('tompkins_points', 'visibility', 'none');
-
-      // Add CAYUGA COUNTY
-      // Add fill layer
-      map.addLayer({
-          "id": "cayuga_fills",
-          "type": "fill",
-          "source": "cayuga",
-          "source-layer": "cayuga-dnav44",
-          'paint': {
-              'fill-opacity': .7,
-              'fill-outline-color': 'black',
-              'fill-color': [
-                "case",
-                ["boolean", ["feature-state","hover"], false],
-                "#F370EF",
-                [
-                'interpolate', ['linear'],['get','FULL_MV'],
-                  0, '#18a9ec',
-                  50000, '#5ae7e5',
-                  100000, '#5ae79e',
-                  300000, '#b1e75a',
-                  600000, '#e7cd5a',
-                  800000, '#e7925a',
-                  1200000, '#e7875a',
-                  5000000, '#e75a5a',
-                ]],
-          }
-      },'water');
-
-      // Add point layer
-      // map.addLayer({
-      //     "id": "cayuga_points",
-      //     "type": "symbol",
-      //     "source": "cayuga",
-      //     "source-layer": "cayuga-dnav44",
-      //     'layout': {
-      //         "text-field": ['concat',['get','PARCELADDR'],'\n','Parcel ID: ',['get','CT_SWIS'],'-',['get','PRINT_KEY']],
-      //         "text-size": [
-      //               'interpolate', ['linear'],['zoom'],
-      //               14, 0,
-      //               15, 1,
-      //               16, 9,
-      //               24, 14
-      //         ],
-      //     }
-      // },'water');
-      map.setLayoutProperty('cayuga_fills', 'visibility', 'none');
-      // map.setLayoutProperty('cayuga_points', 'visibility', 'none');
-
-      // Add CORTLAND COUNTY
-      // Add fill layer
-      map.addLayer({
-          "id": "cortland_fills",
-          "type": "fill",
-          "source": "cortland",
-          "source-layer": "cortland-75081d",
-          'paint': {
-              'fill-opacity': .7,
-              'fill-outline-color': 'black',
-              'fill-color': [
-                "case",
-                ["boolean", ["feature-state","hover"], false],
-                "#F370EF",
-                [
-                'interpolate', ['linear'],['get','FULL_MV'],
-                  0, '#18a9ec',
-                  50000, '#5ae7e5',
-                  100000, '#5ae79e',
-                  300000, '#b1e75a',
-                  600000, '#e7cd5a',
-                  800000, '#e7925a',
-                  1200000, '#e7875a',
-                  5000000, '#e75a5a',
-                ]],
-          }
-      },'water');
-
-      // Add point layer
-      // map.addLayer({
-      //     "id": "cortland_points",
-      //     "type": "symbol",
-      //     "source": "cortland",
-      //     "source-layer": "cortland-75081d",
-      //     'layout': {
-      //         "text-field": ['concat',['get','PARCELADDR'],'\n','Parcel ID: ',['get','CT_SWIS'],'-',['get','PRINT_KEY']],
-      //         "text-size": [
-      //               'interpolate', ['linear'],['zoom'],
-      //               14, 0,
-      //               15, 1,
-      //               16, 9,
-      //               24, 14
-      //         ],
-      //     }
-      // },'water');
-      map.setLayoutProperty('cortland_fills', 'visibility', 'none');
-      // map.setLayoutProperty('cortland_points', 'visibility', 'none');
 
 
         // Display property features when tompkins_points are clicked
-        map.on('click', 'tompkins_fills', function (e) {
+        map.on('click', function (e) {
             var lngLat = e.lngLat;
-            var features = map.queryRenderedFeatures(e.point)[0].properties;
-            var street_view_url = "http://maps.google.com/?cbll="+lngLat.lat+","+lngLat.lng+"&cbp=12,20.09,,0,5&layer=c"
-            var value_item = features['FULL_MV'].toString();
-            var length = value_item.length;
-
-            // Show value if information exists
-            if (features['YR_BLT'] == 0) {
-                var year_built = '-';
-            } else {
-                var year_built = features['YR_BLT'];
-            }
-
-            // Show value if information exists
-            if (features['SQFT_LIV'] == 0) {
-                var square_feet = '-';
-            } else {
-                var num_length = features['SQFT_LIV'].toString().length;
-                if (num_length > 3) {
-                    var square_feet = features['SQFT_LIV'].toString().slice(0,num_length-3) + ',' + features['SQFT_LIV'].toString().slice(num_length-3,num_length);
-                } else {
-                    var square_feet = features['SQFT_LIV'];
+            let f = map.queryRenderedFeatures(e.point);
+            if (f.length) {
+                for (i=0; i<f.length; i++) {
+                    if (f[i].layer.id.includes('fills')) {
+                        makePopUp(map,f[i],lngLat);
+                    }
                 }
             }
-
-            // Format property value assessment
-            if (length > 9) {
-                var market_value = value_item.slice(0,length-9) + ',' + value_item.slice(length-9,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
-            } else if (length > 6) {
-                var market_value = value_item.slice(0,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
-            } else if (length > 3) {
-                var market_value = value_item.slice(0,length-3) + ',' + value_item.slice(length-3,length);
-            } else {
-                var market_value = value_item;
-            }
-
-            // Show value if information exists
-            if (features['NBR_BEDRM'] == 0) {
-                var beds = '-';
-            } else {
-                var beds = features['NBR_BEDRM'];
-            }
-
-            // Show value if information exists
-            if (features['NBR_F_BATH'] == 0) {
-                var baths = '-';
-            } else {
-                var baths = features['NBR_F_BATH'];
-            }
-
-
-            // Pop-up with information on click
-            new mapboxgl.Popup()
-                .setLngLat(lngLat)
-                .setHTML(
-                        '<h3><u>Address:</u> '+features['PARCELADDR']+'</h3>\n'+
-                        '<h3><u>Parcel ID:</u> '+features['PRINT_KEY']+'</h3>\n'+
-                        '<h3><u>Assessed Value:</u> $'+market_value+'</h3>\n'+
-                        '<h3><u>Acres:</u> '+Math.round(features['CALC_ACRES']*100) / 100+'</h3>\n'+
-                        '<h3><u>Square Feet:</u> '+square_feet+'</h3>\n'+
-                        '<h3><u># Bedrooms:</u> '+beds+'</h3>\n'+
-                        '<h3><u># Bathrooms:</u> '+baths+'</h3>\n'+
-                        '<h3><u>Year Built:</u> '+year_built+'</h3>\n'+
-                        '<h3><u>Owner:</u> '+features['PRMY_OWNER']+'</h3>\n'+
-                        '<h3><a href="' + street_view_url + '" target="_blank">' + "See Google Street View" + '</a></h3>'
-                        )
-                .addTo(map);
-            });
-
-        // Change mouse when on point
-        // map.on('mouseenter', 'tompkins_points', function () {
-        //     map.getCanvas().style.cursor = 'pointer';
-        // });
-
-        // Change mouse backwhen it leaves point
-        // map.on('mouseleave', 'tompkins_points', function () {
-        //     map.getCanvas().style.cursor = '';
-        // });
-
-
-        map.on('click', 'cayuga_fills', function (e) {
-            var lngLat = e.lngLat;
-            var features = map.queryRenderedFeatures(e.point)[0].properties;
-            var street_view_url = "http://maps.google.com/?cbll="+lngLat.lat+","+lngLat.lng+"&cbp=12,20.09,,0,5&layer=c"
-            var value_item = features['FULL_MV'].toString();
-            var length = value_item.length;
-
-            // Show value if information exists
-            if (features['YR_BLT'] == 0) {
-                var year_built = '-';
-            } else {
-                var year_built = features['YR_BLT'];
-            }
-
-            // Show value if information exists
-            if (features['SQFT_LIV'] == 0) {
-                var square_feet = '-';
-            } else {
-                var num_length = features['SQFT_LIV'].toString().length;
-                if (num_length > 3) {
-                    var square_feet = features['SQFT_LIV'].toString().slice(0,num_length-3) + ',' + features['SQFT_LIV'].toString().slice(num_length-3,num_length);
-                } else {
-                    var square_feet = features['SQFT_LIV'];
-                }
-            }
-
-            // Format property value assessment
-            if (length > 9) {
-                var market_value = value_item.slice(0,length-9) + ',' + value_item.slice(length-9,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
-            } else if (length > 6) {
-                var market_value = value_item.slice(0,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
-            } else if (length > 3) {
-                var market_value = value_item.slice(0,length-3) + ',' + value_item.slice(length-3,length);
-            } else {
-                var market_value = value_item;
-            }
-
-            // Show value if information exists
-            if (features['NBR_BEDRM'] == 0) {
-                var beds = '-';
-            } else {
-                var beds = features['NBR_BEDRM'];
-            }
-
-            // Show value if information exists
-            if (features['NBR_F_BATH'] == 0) {
-                var baths = '-';
-            } else {
-                var baths = features['NBR_F_BATH'];
-            }
-
-
-            // Pop-up with information on click
-            new mapboxgl.Popup()
-                .setLngLat(lngLat)
-                .setHTML(
-                        '<h3><u>Address:</u> '+features['PARCELADDR']+'</h3>\n'+
-                        '<h3><u>Parcel ID:</u> '+features['PRINT_KEY']+'</h3>\n'+
-                        '<h3><u>Assessed Value:</u> $'+market_value+'</h3>\n'+
-                        '<h3><u>Acres:</u> '+Math.round(features['CALC_ACRES']*100) / 100+'</h3>\n'+
-                        '<h3><u>Square Feet:</u> '+square_feet+'</h3>\n'+
-                        '<h3><u># Bedrooms:</u> '+beds+'</h3>\n'+
-                        '<h3><u># Bathrooms:</u> '+baths+'</h3>\n'+
-                        '<h3><u>Year Built:</u> '+year_built+'</h3>\n'+
-                        '<h3><u>Owner:</u> '+features['PRMY_OWNER']+'</h3>\n'+
-                        '<h3><a href="' + street_view_url + '" target="_blank">' + "See Google Street View" + '</a></h3>'
-                        )
-                .addTo(map);
-            });
-
-        // Change mouse when on point
-        // map.on('mouseenter', 'cayuga_points', function () {
-        //     map.getCanvas().style.cursor = 'pointer';
-        // });
-
-        // Change mouse backwhen it leaves point
-        // map.on('mouseleave', 'cayuga_points', function () {
-        //     map.getCanvas().style.cursor = '';
-        // });
-
-        map.on('click', 'cortland_fills', function (e) {
-            var lngLat = e.lngLat;
-            var features = map.queryRenderedFeatures(e.point)[0].properties;
-            var street_view_url = "http://maps.google.com/?cbll="+lngLat.lat+","+lngLat.lng+"&cbp=12,20.09,,0,5&layer=c"
-            var value_item = features['FULL_MV'].toString();
-            var length = value_item.length;
-
-            // Show value if information exists
-            if (features['YR_BLT'] == 0) {
-                var year_built = '-';
-            } else {
-                var year_built = features['YR_BLT'];
-            }
-
-            // Show value if information exists
-            if (features['SQFT_LIV'] == 0) {
-                var square_feet = '-';
-            } else {
-                var num_length = features['SQFT_LIV'].toString().length;
-                if (num_length > 3) {
-                    var square_feet = features['SQFT_LIV'].toString().slice(0,num_length-3) + ',' + features['SQFT_LIV'].toString().slice(num_length-3,num_length);
-                } else {
-                    var square_feet = features['SQFT_LIV'];
-                }
-            }
-
-            // Format property value assessment
-            if (length > 9) {
-                var market_value = value_item.slice(0,length-9) + ',' + value_item.slice(length-9,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
-            } else if (length > 6) {
-                var market_value = value_item.slice(0,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
-            } else if (length > 3) {
-                var market_value = value_item.slice(0,length-3) + ',' + value_item.slice(length-3,length);
-            } else {
-                var market_value = value_item;
-            }
-
-            // Show value if information exists
-            if (features['NBR_BEDRM'] == 0) {
-                var beds = '-';
-            } else {
-                var beds = features['NBR_BEDRM'];
-            }
-
-            // Show value if information exists
-            if (features['NBR_F_BATH'] == 0) {
-                var baths = '-';
-            } else {
-                var baths = features['NBR_F_BATH'];
-            }
-
-
-            // Pop-up with information on click
-            new mapboxgl.Popup()
-                .setLngLat(lngLat)
-                .setHTML(
-                        '<h3><u>Address:</u> '+features['PARCELADDR']+'</h3>\n'+
-                        '<h3><u>Parcel ID:</u> '+features['PRINT_KEY']+'</h3>\n'+
-                        '<h3><u>Assessed Value:</u> $'+market_value+'</h3>\n'+
-                        '<h3><u>Acres:</u> '+Math.round(features['CALC_ACRES']*100) / 100+'</h3>\n'+
-                        '<h3><u>Square Feet:</u> '+square_feet+'</h3>\n'+
-                        '<h3><u># Bedrooms:</u> '+beds+'</h3>\n'+
-                        '<h3><u># Bathrooms:</u> '+baths+'</h3>\n'+
-                        '<h3><u>Year Built:</u> '+year_built+'</h3>\n'+
-                        '<h3><u>Owner:</u> '+features['PRMY_OWNER']+'</h3>\n'+
-                        '<h3><a href="' + street_view_url + '" target="_blank">' + "See Google Street View" + '</a></h3>'
-                        )
-                .addTo(map);
-            });
-
-        // Change mouse when on point
-        // map.on('mouseenter', 'cortland_points', function () {
-        //     map.getCanvas().style.cursor = 'pointer';
-        // });
-
-        // Change mouse backwhen it leaves point
-        // map.on('mouseleave', 'cortland_points', function () {
-        //     map.getCanvas().style.cursor = '';
-        // });
-
-
+        });
 
 
         map.on("mousemove", "tompkins_fills", function(e) {
@@ -513,25 +154,7 @@ function setUpGlobalVars(){
             var layer_source = "cortland-75081d"
         }
         var input_search = e.toElement.previousElementSibling.form[0].previousSibling.nextElementSibling.value;
-        var replaced_name = false;
 
-        // street_endings = [' Road',' road',' Rd',' rd',' Street',' street', ' St', ' Lane',' lane', ' Ln',' Avenue',' avenue',' Ave',' ave', ' Place', ' place',' Circle',' circle',' Blvd', 'blvd',' Drive',' drive']
-        // Replace street endings if included in search
-        // for (var j=0; j<street_endings.length; j++) {
-            // if (input_search.includes(street_endings[j])) {
-                // var new_search = input_search.replace(street_endings[j],'');
-                // replaced_name = !replaced_name;
-                // break
-            // }
-        // }
-        if (!replaced_name) {
-            var new_search = input_search;
-        }
-
-        // Retrieve source features to match address
-        // var relatedFeatures = map.querySourceFeatures(search_layer+"_points",{
-        //     sourceLayer: layer_source,
-        // });
         var relatedFeatures = map.querySourceFeatures(search_layer+"_fills",{
             sourceLayer: layer_source,
         });
@@ -539,12 +162,14 @@ function setUpGlobalVars(){
         // Check if address matches entered search
         var found_address = false;
         for (var i=0; i < relatedFeatures.length; i++) {
-            if (relatedFeatures[i].properties.PARCELADDR == new_search) {
+            if (relatedFeatures[i].properties.PARCELADDR == input_search) {
                 // Fly to address if match
                 var coords = relatedFeatures[i].geometry.coordinates[0][0];
                 map.flyTo({
                   center: coords,
-                  zoom: 18
+                  zoom: 18,
+                  pitch: 10,
+                  bearing: 0,
                 });
                 found_address = !found_address;
                 break
@@ -574,9 +199,7 @@ function setUpGlobalVars(){
         }
 
         var input_search = e.toElement.previousElementSibling.form[0].previousSibling.nextElementSibling.value;
-        // var relatedFeatures = map.querySourceFeatures(search_layer+"_points",{
-        //     sourceLayer: layer_source,
-        // });
+
         var relatedFeatures = map.querySourceFeatures(search_layer+"_fills",{
             sourceLayer: layer_source,
         });
@@ -590,7 +213,9 @@ function setUpGlobalVars(){
                 var coords = relatedFeatures[i].geometry.coordinates[0][0];
                 map.flyTo({
                   center: coords,
-                  zoom: 18
+                  zoom: 18,
+                  pitch: 10,
+                  bearing: 0,
                 });
                 parcel_address = !parcel_address;
                 break;
@@ -608,72 +233,96 @@ function setUpGlobalVars(){
                 myDropdown.classList.remove('show');
             }
         }
-
-        switch (e.toElement.text) {
-            case "Tompkins":
-                map.setLayoutProperty('cayuga_fills', 'visibility', 'none');
-                // map.setLayoutProperty('cayuga_points', 'visibility', 'none');
-                map.setLayoutProperty('cortland_fills', 'visibility', 'none');
-                // map.setLayoutProperty('cortland_points', 'visibility', 'none');
-
-                var visibility = map.getLayoutProperty('tompkins_fills', 'visibility');
-                if (visibility == 'visible') {
-                  map.setLayoutProperty('tompkins_fills', 'visibility', 'none');
-                  map.setLayoutProperty('tompkins_points', 'visibility', 'none');
+        if (e.path[2].matches('.dropdown')) {
+            for (var key in county_dict) {
+                if (e.toElement.text.toLowerCase() != key) {
+                    map.setLayoutProperty(key+'_fills', 'visibility', 'none');
                 } else {
-                  map.flyTo({
-                    center: [-76.5, 42.45],
-                    zoom: 15
-                  });
-                  map.setLayoutProperty('tompkins_fills', 'visibility', 'visible');
-                  // map.setLayoutProperty('tompkins_points', 'visibility', 'visible');
+                    var visibility = map.getLayoutProperty(key+'_fills', 'visibility');
+                    if (visibility == 'visible') {
+                      map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                    } else {
+                      map.flyTo({
+                        center: county_dict[key][2],
+                        zoom: 15,
+                        pitch: 10,
+                        bearing: 0,
+                      });
+                      map.setLayoutProperty(key+'_fills', 'visibility', 'visible');
+                    }
                 }
-                break;
-            case "Cayuga":
-                map.setLayoutProperty('tompkins_fills', 'visibility', 'none');
-                // map.setLayoutProperty('tompkins_points', 'visibility', 'none');
-                map.setLayoutProperty('cortland_fills', 'visibility', 'none');
-                // map.setLayoutProperty('cortland_points', 'visibility', 'none');
-
-                var visibility = map.getLayoutProperty('cayuga_fills', 'visibility');
-                if (visibility == 'visible') {
-                  map.setLayoutProperty('cayuga_fills', 'visibility', 'none');
-                  // map.setLayoutProperty('cayuga_points', 'visibility', 'none');
-                } else {
-                  map.flyTo({
-                    center: [-76.56, 42.93],
-                    zoom: 15
-                  });
-                  map.setLayoutProperty('cayuga_fills', 'visibility', 'visible');
-                  // map.setLayoutProperty('cayuga_points', 'visibility', 'visible');
-                }
-                break;
-            case "Cortland":
-                map.setLayoutProperty('tompkins_fills', 'visibility', 'none');
-                // map.setLayoutProperty('tompkins_points', 'visibility', 'none');
-                map.setLayoutProperty('cayuga_fills', 'visibility', 'none');
-                // map.setLayoutProperty('cayuga_points', 'visibility', 'none');
-
-                var visibility = map.getLayoutProperty('cortland_fills', 'visibility');
-                if (visibility == 'visible') {
-                  map.setLayoutProperty('cortland_fills', 'visibility', 'none');
-                  // map.setLayoutProperty('cortland_points', 'visibility', 'none');
-                } else {
-                  map.flyTo({
-                    center: [-76.18, 42.60],
-                    zoom: 15
-                  });
-                  map.setLayoutProperty('cortland_fills', 'visibility', 'visible');
-                  // map.setLayoutProperty('cortland_points', 'visibility', 'visible');
-                }
-                break;
-        }
+            }
+        };
     };
 };
 
 
 
+function makePopUp(map,e,lngLat) {
+    var features = e.properties;
+    var street_view_url = "http://maps.google.com/?cbll="+lngLat.lat+","+lngLat.lng+"&cbp=12,20.09,,0,5&layer=c"
+    var value_item = features['FULL_MV'].toString();
+    var length = value_item.length;
 
+    // Show value if information exists
+    if (features['YR_BLT'] == 0) {
+        var year_built = '-';
+    } else {
+        var year_built = features['YR_BLT'];
+    }
+
+    // Show value if information exists
+    if (features['SQFT_LIV'] == 0) {
+        var square_feet = '-';
+    } else {
+        var num_length = features['SQFT_LIV'].toString().length;
+        if (num_length > 3) {
+            var square_feet = features['SQFT_LIV'].toString().slice(0,num_length-3) + ',' + features['SQFT_LIV'].toString().slice(num_length-3,num_length);
+        } else {
+            var square_feet = features['SQFT_LIV'];
+        }
+    }
+
+    // Format property value assessment
+    if (length > 9) {
+        var market_value = value_item.slice(0,length-9) + ',' + value_item.slice(length-9,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
+    } else if (length > 6) {
+        var market_value = value_item.slice(0,length-6) + ',' + value_item.slice(length-6,length-3) + ',' + value_item.slice(length-3,length);
+    } else if (length > 3) {
+        var market_value = value_item.slice(0,length-3) + ',' + value_item.slice(length-3,length);
+    } else {
+        var market_value = value_item;
+    }
+
+    // Show value if information exists
+    if (features['NBR_BEDRM'] == 0) {
+        var beds = '-';
+    } else {
+        var beds = features['NBR_BEDRM'];
+    }
+
+    // Show value if information exists
+    if (features['NBR_F_BATH'] == 0) {
+        var baths = '-';
+    } else {
+        var baths = features['NBR_F_BATH'];
+    }
+    new mapboxgl.Popup()
+        .setLngLat(lngLat)
+        .setHTML(
+                '<h3><u>Address:</u> '+features['PARCELADDR']+'</h3>\n'+
+                '<h3><u>Parcel ID:</u> '+features['PRINT_KEY']+'</h3>\n'+
+                '<h3><u>Assessed Value:</u> $'+market_value+'</h3>\n'+
+                '<h3><u>Acres:</u> '+Math.round(features['CALC_ACRES']*100) / 100+'</h3>\n'+
+                '<h3><u>Square Feet:</u> '+square_feet+'</h3>\n'+
+                '<h3><u># Bedrooms:</u> '+beds+'</h3>\n'+
+                '<h3><u># Bathrooms:</u> '+baths+'</h3>\n'+
+                '<h3><u>Year Built:</u> '+year_built+'</h3>\n'+
+                '<h3><u>Owner:</u> '+features['PRMY_OWNER']+'</h3>\n'+
+                '<h3><a href="' + street_view_url + '" target="_blank">' + "See Google Street View" + '</a></h3>'
+                )
+        .addTo(map);
+};
 
 
 

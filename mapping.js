@@ -6,15 +6,15 @@ function setUpGlobalVars() {
     // Initliaze base map
     var map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/secfast/cjunsfgnx1b6p1fn1y0ldamku',
+      style: 'mapbox://styles/secfast/cjupv9xy337he1fn1t6jaamlo',
       center: [-76.5, 42.65],
       zoom: 8,
       pitch: 10,
       bearing: 0,
     });
-    var county_dict = {'tompkins': ['mapbox://secfast.bxmtsg75',"tompkins-6devsn",[-76.5, 42.45]],
-                      'cayuga': ['mapbox://secfast.6ailnamb', "cayuga-dnav44",[-76.56, 42.93]],
-                      'cortland': ['mapbox://secfast.7u5fims4', "cortland-75081d",[-76.18, 42.60]],
+    var county_dict = {'tompkins': ['mapbox://secfast.bxmtsg75',"tompkins-6devsn",[-76.5, 42.45],false],
+                      'cayuga': ['mapbox://secfast.6ailnamb', "cayuga-dnav44",[-76.56, 42.93],false],
+                      'cortland': ['mapbox://secfast.7u5fims4', "cortland-75081d",[-76.18, 42.60],false],
                     };
 
     var hoveredStateId =  null;
@@ -41,6 +41,8 @@ function setUpGlobalVars() {
                 type: 'vector',
                 url: county_dict[key][0]
             });
+
+
             map.addLayer({
               "id": key+"_fills",
               "type": "fill",
@@ -79,80 +81,54 @@ function setUpGlobalVars() {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills')) {
                         makePopUp(map,f[i],lngLat);
-                    }
-                }
-            }
+                    };
+                };
+            };
         });
 
 
-        map.on("mousemove", "tompkins_fills", function(e) {
-            if (e.features.length > 0) {
-                if (hoveredStateId) {
-                    map.setFeatureState({source: "tompkins", id: hoveredStateId, sourceLayer: "tompkins-6devsn"}, { hover: false});
-                }
-                hoveredStateId = e.features[0].id;
-                map.setFeatureState({source: "tompkins", id: hoveredStateId, sourceLayer: "tompkins-6devsn"}, { hover: true});
-            }
+        map.on("mousemove", function(e) {
+            let f = map.queryRenderedFeatures(e.point);
+            if (f.length) {
+                for (i=0; i<f.length; i++) {
+                    if (f[i].layer.id.includes('fills')) {
+                        // console.log(f[i]);
+                        var layer_id = f[i].layer.id.replace('_fills','');
+                        if (hoveredStateId) {
+                            map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, { hover: false});
+                        };
+                        hoveredStateId = f[i].id;
+                        map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, { hover: true});
+                    };
+                };
+            };
         });
-        map.on("mouseleave", "tompkins_fills", function() {
-            if (hoveredStateId) {
-                map.setFeatureState({source: "tompkins", id: hoveredStateId, sourceLayer: "tompkins-6devsn"}, { hover: false});
-            }
-            hoveredStateId =  null;
-        });
-
-        map.on("mousemove", "cayuga_fills", function(e) {
-            if (e.features.length > 0) {
-                if (hoveredStateId) {
-                    map.setFeatureState({source: "cayuga", id: hoveredStateId, sourceLayer: "cayuga-dnav44"}, { hover: false});
-                }
-                hoveredStateId = e.features[0].id;
-                map.setFeatureState({source: "cayuga", id: hoveredStateId, sourceLayer: "cayuga-dnav44"}, { hover: true});
-            }
-        });
-        map.on("mouseleave", "cayuga_fills", function() {
-            if (hoveredStateId) {
-                map.setFeatureState({source: "cayuga", id: hoveredStateId, sourceLayer: "cayuga-dnav44"}, { hover: false});
-            }
-            hoveredStateId =  null;
-        });
-
-        map.on("mousemove", "cortland_fills", function(e) {
-            if (e.features.length > 0) {
-                if (hoveredStateId) {
-                    map.setFeatureState({source: "cortland", id: hoveredStateId, sourceLayer: "cortland-75081d"}, { hover: false});
-                }
-                hoveredStateId = e.features[0].id;
-                map.setFeatureState({source: "cortland", id: hoveredStateId, sourceLayer: "cortland-75081d"}, { hover: true});
-            }
-        });
-        map.on("mouseleave", "cortland_fills", function() {
-            if (hoveredStateId) {
-                map.setFeatureState({source: "cortland", id: hoveredStateId, sourceLayer: "cortland-75081d"}, { hover: false});
-            }
-            hoveredStateId =  null;
-        });
-
     });
 
     // Fly to address when searched, if it exists
     document.getElementById('go').addEventListener('click', function (e) {
-        var tompkins_vis = map.getLayoutProperty('tompkins_fills', 'visibility');
-        var cayuga_vis = map.getLayoutProperty('cayuga_fills', 'visibility');
-        var cortland_vis = map.getLayoutProperty('cortland_fills', 'visibility');
-        if (tompkins_vis == 'visible') {
-            var search_layer = "tompkins"
-            var layer_source = "tompkins-6devsn"
-        } else if (cayuga_vis == 'visible') {
-            var search_layer = "cayuga"
-            var layer_source = "cayuga-dnav44"
-        } else if (cortland_vis == 'visible') {
-            var search_layer = "cortland"
-            var layer_source = "cortland-75081d"
-        } else {
-            var search_layer = "cortland"
-            var layer_source = "cortland-75081d"
-        }
+        for (var key in county_dict) {
+            if (map.getLayoutProperty(key+'_fills','visibility')) {
+                var search_layer = key;
+                var layer_source = county_dict[key][1];
+            };
+        };
+        // var tompkins_vis = map.getLayoutProperty('tompkins_fills', 'visibility');
+        // var cayuga_vis = map.getLayoutProperty('cayuga_fills', 'visibility');
+        // var cortland_vis = map.getLayoutProperty('cortland_fills', 'visibility');
+        // if (tompkins_vis == 'visible') {
+        //     var search_layer = "tompkins"
+        //     var layer_source = "tompkins-6devsn"
+        // } else if (cayuga_vis == 'visible') {
+        //     var search_layer = "cayuga"
+        //     var layer_source = "cayuga-dnav44"
+        // } else if (cortland_vis == 'visible') {
+        //     var search_layer = "cortland"
+        //     var layer_source = "cortland-75081d"
+        // } else {
+        //     var search_layer = "cortland"
+        //     var layer_source = "cortland-75081d"
+        // };
         var input_search = e.toElement.previousElementSibling.form[0].previousSibling.nextElementSibling.value;
 
         var relatedFeatures = map.querySourceFeatures(search_layer+"_fills",{
@@ -174,10 +150,10 @@ function setUpGlobalVars() {
                 found_address = !found_address;
                 break
             }
-        }
+        };
         if (!found_address) {
             alert("Address not found");
-        }
+        };
 
     });
     document.getElementById('parcel_go').addEventListener('click', function (e) {
@@ -196,7 +172,7 @@ function setUpGlobalVars() {
         } else {
             var search_layer = "cortland"
             var layer_source = "cortland-75081d"
-        }
+        };
 
         var input_search = e.toElement.previousElementSibling.form[0].previousSibling.nextElementSibling.value;
 
@@ -219,11 +195,11 @@ function setUpGlobalVars() {
                 });
                 parcel_address = !parcel_address;
                 break;
-            }
-        }
+            };
+        };
         if (!found_parcel) {
             alert("Parcel I.D. not found")
-        }
+        };
 
     });
     window.onclick = function(e) {
@@ -249,9 +225,9 @@ function setUpGlobalVars() {
                         bearing: 0,
                       });
                       map.setLayoutProperty(key+'_fills', 'visibility', 'visible');
-                    }
-                }
-            }
+                    };
+                };
+            };
         };
     };
 };

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- <script type="text/javascript" src="plotly-latest.min.js"></script> -->
     <!-- <script src="jquery.csv.js"></script> -->
@@ -15,19 +16,6 @@
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; height:100%; width:100%; margin-top: 50px;}
-    </style>
-
-    <style>
-        i {
-          border: solid white;
-          border-width: 0 3px 3px 0;
-          display: inline-block;
-          padding: 3px;
-        }
-        .down {
-          transform: rotate(45deg);
-          -webkit-transform: rotate(45deg);
-        }
     </style>
 
     <style>
@@ -122,6 +110,9 @@
           font-family: inherit;
           margin: 0;
         }
+        .navbar a:hover, .dropdown:hover .dropbtn {
+          background-color: red;
+        }
         .dropdown-content {
           display: none;
           position: absolute;
@@ -142,6 +133,9 @@
 
         .dropdown-content a:hover {
           background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+          display: block;
         }
         .show {
           display: block;
@@ -220,6 +214,7 @@
         </div>
         <div class="dropdown">
             <button class="dropbtn" onclick="myFunction()">Choose County
+                <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content" id="myDropdown">
                 <a href="#">Tompkins</a>

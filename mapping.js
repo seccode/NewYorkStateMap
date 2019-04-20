@@ -8,26 +8,40 @@ function setUpGlobalVars(){
       container: 'map',
       style: 'mapbox://styles/secfast/cjunsfgnx1b6p1fn1y0ldamku',
       center: [-76.5, 42.65],
-      zoom: 9
+      zoom: 8
     });
+    var hoveredStateId =  null;
 
     // Load map
     map.on('load', function () {
 
+      map.addSource("tompkins",{
+          type: 'vector',
+          url: 'mapbox://secfast.bxmtsg75'
+      });
+      map.addSource("cayuga",{
+          type: 'vector',
+          url: 'mapbox://secfast.6ailnamb'
+      });
+      map.addSource("cortland",{
+          type: 'vector',
+          url: 'mapbox://secfast.7u5fims4'
+      });
       // Add TOMPKINS COUNTY
       // Add fill layer
       map.addLayer({
           "id": "tompkins_fills",
           "type": "fill",
-          "source": {
-              type: 'vector',
-              url: 'mapbox://secfast.bxmtsg75'
-          },
+          "source": "tompkins",
           "source-layer": "tompkins-6devsn",
           'paint': {
               'fill-opacity': .7,
               'fill-outline-color': 'black',
               'fill-color': [
+                "case",
+                ["boolean", ["feature-state","hover"], false],
+                "#F370EF",
+                [
                 'interpolate', ['linear'],['get','FULL_MV'],
                   0, '#18a9ec',
                   50000, '#5ae7e5',
@@ -37,7 +51,7 @@ function setUpGlobalVars(){
                   800000, '#e7925a',
                   1200000, '#e7875a',
                   5000000, '#e75a5a',
-                ],
+                ]],
           }
       },'water');
 
@@ -45,10 +59,7 @@ function setUpGlobalVars(){
       map.addLayer({
           "id": "tompkins_points",
           "type": "symbol",
-          "source": {
-              type: 'vector',
-              url: 'mapbox://secfast.bxmtsg75'
-          },
+          "source": "tompkins",
           "source-layer": "tompkins-6devsn",
           'layout': {
               "text-field": ['concat',['get','PARCELADDR'],'\n','Parcel ID: ',['get','CT_SWIS'],'-',['get','PRINT_KEY']],
@@ -69,15 +80,16 @@ function setUpGlobalVars(){
       map.addLayer({
           "id": "cayuga_fills",
           "type": "fill",
-          "source": {
-              type: 'vector',
-              url: 'mapbox://secfast.6ailnamb'
-          },
+          "source": "cayuga",
           "source-layer": "cayuga-dnav44",
           'paint': {
               'fill-opacity': .7,
               'fill-outline-color': 'black',
               'fill-color': [
+                "case",
+                ["boolean", ["feature-state","hover"], false],
+                "#F370EF",
+                [
                 'interpolate', ['linear'],['get','FULL_MV'],
                   0, '#18a9ec',
                   50000, '#5ae7e5',
@@ -87,7 +99,7 @@ function setUpGlobalVars(){
                   800000, '#e7925a',
                   1200000, '#e7875a',
                   5000000, '#e75a5a',
-                ],
+                ]],
           }
       },'water');
 
@@ -95,10 +107,7 @@ function setUpGlobalVars(){
       map.addLayer({
           "id": "cayuga_points",
           "type": "symbol",
-          "source": {
-              type: 'vector',
-              url: 'mapbox://secfast.6ailnamb'
-          },
+          "source": "cayuga",
           "source-layer": "cayuga-dnav44",
           'layout': {
               "text-field": ['concat',['get','PARCELADDR'],'\n','Parcel ID: ',['get','CT_SWIS'],'-',['get','PRINT_KEY']],
@@ -119,15 +128,16 @@ function setUpGlobalVars(){
       map.addLayer({
           "id": "cortland_fills",
           "type": "fill",
-          "source": {
-              type: 'vector',
-              url: 'mapbox://secfast.7u5fims4'
-          },
+          "source": "cortland",
           "source-layer": "cortland-75081d",
           'paint': {
               'fill-opacity': .7,
               'fill-outline-color': 'black',
               'fill-color': [
+                "case",
+                ["boolean", ["feature-state","hover"], false],
+                "#F370EF",
+                [
                 'interpolate', ['linear'],['get','FULL_MV'],
                   0, '#18a9ec',
                   50000, '#5ae7e5',
@@ -137,7 +147,7 @@ function setUpGlobalVars(){
                   800000, '#e7925a',
                   1200000, '#e7875a',
                   5000000, '#e75a5a',
-                ],
+                ]],
           }
       },'water');
 
@@ -145,10 +155,7 @@ function setUpGlobalVars(){
       map.addLayer({
           "id": "cortland_points",
           "type": "symbol",
-          "source": {
-              type: 'vector',
-              url: 'mapbox://secfast.7u5fims4'
-          },
+          "source": "cortland",
           "source-layer": "cortland-75081d",
           'layout': {
               "text-field": ['concat',['get','PARCELADDR'],'\n','Parcel ID: ',['get','CT_SWIS'],'-',['get','PRINT_KEY']],
@@ -166,7 +173,7 @@ function setUpGlobalVars(){
 
 
         // Display property features when tompkins_points are clicked
-        map.on('click', 'tompkins_points', function (e) {
+        map.on('click', 'tompkins_fills', function (e) {
             var lngLat = e.lngLat;
             var features = map.queryRenderedFeatures(e.point)[0].properties;
             var street_view_url = "http://maps.google.com/?cbll="+lngLat.lat+","+lngLat.lng+"&cbp=12,20.09,,0,5&layer=c"
@@ -245,7 +252,7 @@ function setUpGlobalVars(){
         });
 
 
-        map.on('click', 'cayuga_points', function (e) {
+        map.on('click', 'cayuga_fills', function (e) {
             var lngLat = e.lngLat;
             var features = map.queryRenderedFeatures(e.point)[0].properties;
             var street_view_url = "http://maps.google.com/?cbll="+lngLat.lat+","+lngLat.lng+"&cbp=12,20.09,,0,5&layer=c"
@@ -322,7 +329,7 @@ function setUpGlobalVars(){
         map.on('mouseleave', 'cayuga_points', function () {
             map.getCanvas().style.cursor = '';
         });
-        map.on('click', 'cortland_points', function (e) {
+        map.on('click', 'cortland_fills', function (e) {
             var lngLat = e.lngLat;
             var features = map.queryRenderedFeatures(e.point)[0].properties;
             var street_view_url = "http://maps.google.com/?cbll="+lngLat.lat+","+lngLat.lng+"&cbp=12,20.09,,0,5&layer=c"
@@ -398,6 +405,57 @@ function setUpGlobalVars(){
         // Change mouse backwhen it leaves point
         map.on('mouseleave', 'cortland_points', function () {
             map.getCanvas().style.cursor = '';
+        });
+
+
+
+
+        map.on("mousemove", "tompkins_fills", function(e) {
+            if (e.features.length > 0) {
+                if (hoveredStateId) {
+                    map.setFeatureState({source: "tompkins", id: hoveredStateId, sourceLayer: "tompkins-6devsn"}, { hover: false});
+                }
+                hoveredStateId = e.features[0].id;
+                map.setFeatureState({source: "tompkins", id: hoveredStateId, sourceLayer: "tompkins-6devsn"}, { hover: true});
+            }
+        });
+        map.on("mouseleave", "tompkins_fills", function() {
+            if (hoveredStateId) {
+                map.setFeatureState({source: "tompkins", id: hoveredStateId, sourceLayer: "tompkins-6devsn"}, { hover: false});
+            }
+            hoveredStateId =  null;
+        });
+
+        map.on("mousemove", "cayuga_fills", function(e) {
+            if (e.features.length > 0) {
+                if (hoveredStateId) {
+                    map.setFeatureState({source: "cayuga", id: hoveredStateId, sourceLayer: "cayuga-dnav44"}, { hover: false});
+                }
+                hoveredStateId = e.features[0].id;
+                map.setFeatureState({source: "cayuga", id: hoveredStateId, sourceLayer: "cayuga-dnav44"}, { hover: true});
+            }
+        });
+        map.on("mouseleave", "cayuga_fills", function() {
+            if (hoveredStateId) {
+                map.setFeatureState({source: "cayuga", id: hoveredStateId, sourceLayer: "cayuga-dnav44"}, { hover: false});
+            }
+            hoveredStateId =  null;
+        });
+
+        map.on("mousemove", "cortland_fills", function(e) {
+            if (e.features.length > 0) {
+                if (hoveredStateId) {
+                    map.setFeatureState({source: "cortland", id: hoveredStateId, sourceLayer: "cortland-75081d"}, { hover: false});
+                }
+                hoveredStateId = e.features[0].id;
+                map.setFeatureState({source: "cortland", id: hoveredStateId, sourceLayer: "cortland-75081d"}, { hover: true});
+            }
+        });
+        map.on("mouseleave", "cortland_fills", function() {
+            if (hoveredStateId) {
+                map.setFeatureState({source: "cortland", id: hoveredStateId, sourceLayer: "cortland-75081d"}, { hover: false});
+            }
+            hoveredStateId =  null;
         });
 
     });
@@ -511,7 +569,6 @@ function setUpGlobalVars(){
             }
         }
 
-
         switch (e.toElement.text) {
             case "Tompkins":
                 map.setLayoutProperty('cayuga_fills', 'visibility', 'none');
@@ -526,7 +583,7 @@ function setUpGlobalVars(){
                 } else {
                   map.flyTo({
                     center: [-76.5, 42.45],
-                    zoom: 14.5
+                    zoom: 15
                   });
                   map.setLayoutProperty('tompkins_fills', 'visibility', 'visible');
                   map.setLayoutProperty('tompkins_points', 'visibility', 'visible');
@@ -545,7 +602,7 @@ function setUpGlobalVars(){
                 } else {
                   map.flyTo({
                     center: [-76.56, 42.93],
-                    zoom: 14.5
+                    zoom: 15
                   });
                   map.setLayoutProperty('cayuga_fills', 'visibility', 'visible');
                   map.setLayoutProperty('cayuga_points', 'visibility', 'visible');
@@ -564,7 +621,7 @@ function setUpGlobalVars(){
                 } else {
                   map.flyTo({
                     center: [-76.18, 42.60],
-                    zoom: 14.5
+                    zoom: 15
                   });
                   map.setLayoutProperty('cortland_fills', 'visibility', 'visible');
                   map.setLayoutProperty('cortland_points', 'visibility', 'visible');

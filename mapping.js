@@ -14,13 +14,12 @@ function setUpGlobalVars() {
     });
 
     var popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        offset: 15,
+        closeButton: true,
+        closeOnClick: true,
+        offset: 40,
     });
 
     var open_popup = false;
-
     var county_dict = {
                       'tompkins': ['mapbox://secfast.bxmtsg75',"tompkins-6devsn",[-76.5, 42.45],false],
                       'cayuga': ['mapbox://secfast.6ailnamb', "cayuga-dnav44",[-76.56, 42.93],false],
@@ -39,6 +38,80 @@ function setUpGlobalVars() {
     // Load map
     map.on('load', function () {
 
+        // Add satellite layer
+        map.addLayer({
+          id: 'satellite',
+          source: {"type": "raster",  "url": "mapbox://mapbox.satellite", "tileSize": 256},
+          type: "raster",
+          layout: {
+            'visibility': 'none'
+          }
+        },'admin-state-province');
+
+        // Add county layers
+        for (var key in county_dict) {
+            map.addSource(key,{
+                type: 'vector',
+                url: county_dict[key][0]
+            });
+
+            map.addLayer({
+              "id": key+"_fill_outlines",
+              "type": "fill",
+              "source": key,
+              "source-layer": county_dict[key][1],
+              "paint": {
+                'fill-opacity': [
+                "case",
+                ["boolean", ["feature-state","hover"], false], .7,
+                0],
+                'fill-outline-color': '#FFB533',
+                'fill-color': '#FFB533',
+              }
+            },'admin-state-province');
+            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
+
+            map.addLayer({
+              "id": key+"_outlines",
+              "type": "line",
+              "source": key,
+              "source-layer": county_dict[key][1],
+              "paint": {
+                'line-color': '#FFB533',
+              }
+            },'admin-state-province');
+            map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
+
+
+            map.addLayer({
+              "id": key+"_fills",
+              "type": "fill",
+              "source": key,
+              "source-layer": county_dict[key][1],
+              "paint": {
+                  'fill-opacity': .7,
+                  'fill-outline-color': 'black',
+                  'fill-color': [
+                        "case",
+                            ["boolean", ["feature-state","hover"], false],
+                            "#F370EF",
+                            [
+                            'interpolate', ['linear'],['get','FULL_MV'],
+                              0, '#18a9ec',
+                              50000, '#5ae7e5',
+                              100000, '#5ae79e',
+                              300000, '#b1e75a',
+                              600000, '#e7cd5a',
+                              800000, '#e7925a',
+                              1200000, '#e7875a',
+                              5000000, '#e75a5a',
+                    ]],
+                },
+            },'water');
+            map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+        };
+
+        // Add 3D buildings
         map.addLayer({
             'id': '3d-buildings',
             'source': 'composite',
@@ -53,51 +126,19 @@ function setUpGlobalVars() {
             }
         }, 'water');
 
-        for (var key in county_dict) {
-            map.addSource(key,{
-                type: 'vector',
-                url: county_dict[key][0]
-            });
 
 
-            map.addLayer({
-              "id": key+"_fills",
-              "type": "fill",
-              "source": key,
-              "source-layer": county_dict[key][1],
-              'paint': {
-                  'fill-opacity': .7,
-                  'fill-outline-color': 'black',
-                  'fill-color': [
-                    "case",
-                    ["boolean", ["feature-state","hover"], false],
-                    "#F370EF",
-                    [
-                    'interpolate', ['linear'],['get','FULL_MV'],
-                      0, '#18a9ec',
-                      50000, '#5ae7e5',
-                      100000, '#5ae79e',
-                      300000, '#b1e75a',
-                      600000, '#e7cd5a',
-                      800000, '#e7925a',
-                      1200000, '#e7875a',
-                      5000000, '#e75a5a',
-                    ]],
-                }
-            },'3d-buildings');
-            map.setLayoutProperty(key+'_fills', 'visibility', 'none');
-        };
-
+        var checkMapLayer = map.getLayer('3d-buildings');
 
         // Display property features when fill layer parcels are clicked
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
-            if (f.length) {
+            if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
-                    if (f[i].layer.id.includes('fills')) {
+                    if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('outlines')) {
                         for (var key in county_dict) {
-                            if (map.getLayoutProperty(key+'_fills','visibility') == 'visible') {
+                            if (map.getLayoutProperty(key+'_fills','visibility') == 'visible' || map.getLayoutProperty(key+'_fill_outlines','visibility') == 'visible') {
                                 popup.remove();
                                 if (hoveredStateId) {
                                     map.setFeatureState({source: key, id: hoveredStateId, sourceLayer: county_dict[key][1]}, { hover: false});
@@ -120,34 +161,51 @@ function setUpGlobalVars() {
                 if (!new_popup.isOpen()) {
                     open_popup = false;
                 };
-            } else {
+            } else if (typeof checkMapLayer !== 'undefined') {
                 let f = map.queryRenderedFeatures(e.point);
                 var on_fills = false;
                 if (f.length) {
                     for (i=0; i<f.length; i++) {
-                        if (f[i].layer.id.includes('fills')) {
+                        if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('outlines')) {
                             on_fills = !on_fills;
                             var layer_id = f[i].layer.id.replace('_fills','');
+                            layer_id = layer_id.replace('_fill_outlines','');
+                            layer_id = layer_id.replace('_outlines','');
                             if (hoveredStateId) {
-                                map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, { hover: false});
+                                map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, {hover: false});
                             };
                             // Display parcel information when hovered
                             map.getCanvas().style.cursor = 'pointer';
+
+                            var address = f[i].properties.PARCELADDR;
+                            var parcel_id = f[i].properties.PRINT_KEY;
+                            var assessed_value = f[i].properties.FULL_MV.toString();
+                            var length = assessed_value.length;
+
+                            if (length > 9) {
+                                var assessed_value = assessed_value.slice(0,length-9) + ',' + assessed_value.slice(length-9,length-6) + ',' + assessed_value.slice(length-6,length-3) + ',' + assessed_value.slice(length-3,length);
+                            } else if (length > 6) {
+                                var assessed_value = assessed_value.slice(0,length-6) + ',' + assessed_value.slice(length-6,length-3) + ',' + assessed_value.slice(length-3,length);
+                            } else if (length > 3) {
+                                var assessed_value = assessed_value.slice(0,length-3) + ',' + assessed_value.slice(length-3,length);
+                            } else {
+                                var assessed_value = assessed_value;
+                            }
+
                             popup.setLngLat(e.lngLat)
-                                // .setText(f[i].properties.PARCELADDR+'Parcel ID: '+f[i].properties.PRINT_KEY)
-                                .setHTML("<p>"+f[i].properties.PARCELADDR+"</p><p>"+"Parcel ID: "+f[i].properties.PRINT_KEY+"</p>")
+                                .setHTML("<p style='font-size:140%;'>"+address+"</p><p style='font-size:120%;'>"+"<u>Assessed Value:</u> $"+assessed_value+"</p><p style='font-size:100%;'>"+"<u>Parcel ID:</u> "+parcel_id+"</p>")
                                 .addTo(map);
 
                             hoveredStateId = f[i].id;
-                            map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, { hover: true});
+                            map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, {hover: true});
                             break;
                         };
                     };
                     if (!on_fills) {
                         for (var key in county_dict) {
-                            if (map.getLayoutProperty(key+'_fills','visibility') == 'visible') {
+                            if (map.getLayoutProperty(key+'_fills','visibility') == 'visible' || map.getLayoutProperty(key+'_fill_outlines','visibility') == 'visible') {
                                 if (hoveredStateId) {
-                                    map.setFeatureState({source: key, id: hoveredStateId, sourceLayer: county_dict[key][1]}, { hover: false});
+                                    map.setFeatureState({source: key, id: hoveredStateId, sourceLayer: county_dict[key][1]}, {hover: false});
                                 };
                                 map.getCanvas().style.cursor = '';
                                 hoveredStateId =  null;
@@ -161,100 +219,112 @@ function setUpGlobalVars() {
         });
     });
 
-    // // Fly to address when searched, if it exists
-    // document.getElementById('go').addEventListener('click', function (e) {
-    //     for (var key in county_dict) {
-    //         if (map.getLayoutProperty(key+'_fills','visibility') == 'visible') {
-    //             var search_key = key;
-    //             break;
-    //         };
-    //     };
-    //
-    //     var input_search = e.toElement.previousElementSibling.form[0].previousSibling.nextElementSibling.value;
-    //     var relatedFeatures = map.queryRenderedFeatures(search_key+"_fills");
-    //
-    //     // Check if address matches entered search
-    //     var found_address = false;
-    //     for (var i=0; i < relatedFeatures.length; i++) {
-    //         if (relatedFeatures[i].properties.PARCELADDR == input_search) {
-    //             // Fly to address if match
-    //             var coords = relatedFeatures[i].geometry.coordinates[0][0];
-    //             map.flyTo({
-    //               center: coords,
-    //               zoom: 18,
-    //               pitch: 10,
-    //               bearing: 0,
-    //             });
-    //             found_address = !found_address;
-    //             break
-    //         }
-    //     };
-    //     if (!found_address) {
-    //         alert("Address not found");
-    //     };
-    //
-    // });
-    //
-    // // Fly to parcel when parcel ID is searched, if it exists
-    // document.getElementById('parcel_go').addEventListener('click', function (e) {
-    //     for (var key in county_dict) {
-    //         if (map.getLayoutProperty(key+'_fills','visibility') == 'visible') {
-    //             var search_key = key;
-    //             break;
-    //         };
-    //     };
-    //
-    //     var input_search = e.toElement.previousElementSibling.form[0].previousSibling.nextElementSibling.value;
-    //     var relatedFeatures = map.queryRenderedFeatures(search_key+"_fills");
-    //
-    //     // Check if parcel matches entered search
-    //     var found_parcel = false;
-    //     for (var i=0; i < relatedFeatures.length; i++) {
-    //         if (relatedFeatures[i].properties.PRINT_KEY == '') continue;
-    //         if (input_search == relatedFeatures[i].properties.PRINT_KEY) {
-    //             // Fly to parcel if match
-    //             var coords = relatedFeatures[i].geometry.coordinates[0][0];
-    //             map.flyTo({
-    //               center: coords,
-    //               zoom: 18,
-    //               pitch: 10,
-    //               bearing: 0,
-    //             });
-    //             parcel_address = !parcel_address;
-    //             break;
-    //         };
-    //     };
-    //     if (!found_parcel) {
-    //         alert("Parcel I.D. not found")
-    //     };
-    //
-    // });
+
+    var toggleableLayerIds = ['Satellite Mode'];
+
+    for (var i = 0; i < toggleableLayerIds.length; i++) {
+        var id = toggleableLayerIds[i];
+        var link = document.createElement('a');
+        link.href = '#';
+        link.className = 'active';
+        link.textContent = id;
+
+        link.onclick = function (e) {
+            var checkMapLayer = map.getLayer('3d-buildings');
+            if (typeof checkMapLayer !== 'undefined') {
+                if (this.textContent == 'Satellite Mode') {
+                    var clickedLayer = 'satellite';
+                } else {
+                    var clickedLayer = this.textContent;
+                };
+                e.preventDefault();
+                e.stopPropagation();
+
+
+                var layer_id = 'none';
+                for (var key in county_dict) {
+                  if (map.getLayoutProperty(key+'_fills','visibility') == 'visible' || map.getLayoutProperty(key+'_fill_outlines','visibility') == 'visible') {
+                    layer_id = key;
+                    break;
+                  };
+                };
+
+                var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+                if (visibility === 'visible') {
+                    map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                    if (layer_id != 'none') {
+                        map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'none');
+                        map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'none');
+
+                        map.setLayoutProperty(layer_id+'_fills', 'visibility', 'visible')
+                    };
+                    this.className = '';
+                } else {
+                    this.className = 'active';
+                    map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                    if (layer_id != 'none') {
+                        map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'visible');
+                        map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'visible');
+
+                        map.setLayoutProperty(layer_id+'_fills', 'visibility', 'none')
+                    };
+                };
+
+            };
+        };
+        var layers = document.getElementById('menu');
+        layers.appendChild(link);
+    };
+
+
+
+
 
     // Handle input from county selection dropdown
     window.onclick = function(e) {
+        var checkMapLayer = map.getLayer('3d-buildings');
         if (!e.target.matches('.dropbtn')) {
         var myDropdown = document.getElementById("myDropdown");
             if (myDropdown.classList.contains('show')) {
                 myDropdown.classList.remove('show');
-            }
-        }
-        if (e.composedPath()[2].matches('.dropdown')) {
+            };
+        };
+        if ((typeof checkMapLayer !== 'undefined') && e.composedPath()[2].matches('.dropdown')) {
             for (var key in county_dict) {
                 if (e.toElement.text.toLowerCase() != key) {
                     map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                    map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
+                    map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
                 } else {
                     // Change layer to be visible and fly to given coordinates
-                    var visibility = map.getLayoutProperty(key+'_fills', 'visibility');
-                    if (visibility == 'visible') {
-                        map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                    if (map.getLayoutProperty('satellite','visibility') == 'visible') {
+                        var visibility = map.getLayoutProperty(key+'_fill_outlines', 'visibility');
+                        if (visibility == 'visible') {
+                            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
+                            map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
+                        } else {
+                            map.flyTo({
+                                center: county_dict[key][2],
+                                zoom: 12,
+                                pitch: 10,
+                                bearing: 0,
+                            });
+                            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'visible');
+                            map.setLayoutProperty(key+'_outlines', 'visibility', 'visible');
+                        };
                     } else {
-                        map.flyTo({
-                            center: county_dict[key][2],
-                            zoom: 12,
-                            pitch: 10,
-                            bearing: 0,
-                        });
-                        map.setLayoutProperty(key+'_fills', 'visibility', 'visible');
+                        var visibility = map.getLayoutProperty(key+'_fills', 'visibility');
+                        if (visibility == 'visible') {
+                            map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                        } else {
+                            map.flyTo({
+                                center: county_dict[key][2],
+                                zoom: 12,
+                                pitch: 10,
+                                bearing: 0,
+                            });
+                            map.setLayoutProperty(key+'_fills', 'visibility', 'visible');
+                        };
                     };
                 };
             };
@@ -313,7 +383,7 @@ function makePopUp(map,e,lngLat,county_dict) {
     } else {
         var baths = features['NBR_F_BATH'];
     }
-    var popup = new mapboxgl.Popup()
+    var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
                 .setLngLat(lngLat)
                 .setHTML(
                         '<h3><u>Address:</u> '+features['PARCELADDR']+'</h3>\n'+

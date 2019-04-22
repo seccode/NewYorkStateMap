@@ -1,3 +1,4 @@
+
 function setUpGlobalVars() {
 
     // Mapbox access token
@@ -9,17 +10,22 @@ function setUpGlobalVars() {
       style: 'mapbox://styles/secfast/cjupvuh6m155a1gqwh1d4ko6u',
       center: [-76.5, 42.65],
       zoom: 8,
-      pitch: 10,
+      pitch: 5,
       bearing: 0,
     });
 
+    // Initialize mapbox popup
     var popup = new mapboxgl.Popup({
         closeButton: true,
         closeOnClick: true,
-        offset: 40,
+        offset: 70,
     });
 
     var open_popup = false;
+    var hoveredStateId =  null;
+    var activeLayer = 'none';
+    var satellite_view = false;
+
     var county_dict = {
                       'tompkins': ['mapbox://secfast.bxmtsg75',"tompkins-6devsn",[-76.5, 42.45],false],
                       'cayuga': ['mapbox://secfast.6ailnamb', "cayuga-dnav44",[-76.56, 42.93],false],
@@ -31,9 +37,7 @@ function setUpGlobalVars() {
                       'greene': ['mapbox://secfast.99g3sjwx', "greene-dqr1u2",[-74.12, 42.30],false],
                       'lewis': ['mapbox://secfast.15o2ac0d', "lewis-6b0i9e",[-75.43, 43.84],false],
                       'genesee': ['mapbox://secfast.8074s81k', "genesee-5fjsw7",[-78.18, 43.00],false],
-                    };
-
-    var hoveredStateId =  null;
+                      };
 
     // Load map
     map.on('load', function () {
@@ -55,6 +59,7 @@ function setUpGlobalVars() {
                 url: county_dict[key][0]
             });
 
+            // Add fill layer for satellite view
             map.addLayer({
               "id": key+"_fill_outlines",
               "type": "fill",
@@ -71,6 +76,7 @@ function setUpGlobalVars() {
             },'admin-state-province');
             map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
 
+            // Add outline layer for satellite view
             map.addLayer({
               "id": key+"_outlines",
               "type": "line",
@@ -78,11 +84,12 @@ function setUpGlobalVars() {
               "source-layer": county_dict[key][1],
               "paint": {
                 'line-color': '#FFB533',
+                'line-width': 1,
               }
             },'admin-state-province');
             map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
 
-
+            // Add fill layer for normal view
             map.addLayer({
               "id": key+"_fills",
               "type": "fill",
@@ -92,20 +99,21 @@ function setUpGlobalVars() {
                   'fill-opacity': .7,
                   'fill-outline-color': 'black',
                   'fill-color': [
-                        "case",
-                            ["boolean", ["feature-state","hover"], false],
-                            "#F370EF",
-                            [
-                            'interpolate', ['linear'],['get','FULL_MV'],
-                              0, '#18a9ec',
-                              50000, '#5ae7e5',
-                              100000, '#5ae79e',
-                              300000, '#b1e75a',
-                              600000, '#e7cd5a',
-                              800000, '#e7925a',
-                              1200000, '#e7875a',
-                              5000000, '#e75a5a',
-                    ]],
+                      "case",
+                          ["boolean", ["feature-state","hover"], false],
+                          "#F370EF",
+                          [
+                          'interpolate', ['linear'],['get','FULL_MV'],
+                            0, '#18a9ec',
+                            50000, '#5ae7e5',
+                            100000, '#5ae79e',
+                            300000, '#b1e75a',
+                            600000, '#e7cd5a',
+                            800000, '#e7925a',
+                            1200000, '#e7875a',
+                            5000000, '#e75a5a',
+                          ]
+                          ],
                 },
             },'water');
             map.setLayoutProperty(key+'_fills', 'visibility', 'none');
@@ -127,26 +135,21 @@ function setUpGlobalVars() {
         }, 'water');
 
 
-
         var checkMapLayer = map.getLayer('3d-buildings');
-
         // Display property features when fill layer parcels are clicked
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
-                    if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('outlines')) {
-                        for (var key in county_dict) {
-                            if (map.getLayoutProperty(key+'_fills','visibility') == 'visible' || map.getLayoutProperty(key+'_fill_outlines','visibility') == 'visible') {
-                                popup.remove();
-                                if (hoveredStateId) {
-                                    map.setFeatureState({source: key, id: hoveredStateId, sourceLayer: county_dict[key][1]}, { hover: false});
-                                };
-                                map.getCanvas().style.cursor = '';
-                                hoveredStateId =  null;
-                                break;
+                    if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
+                        if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
+                            popup.remove();
+                            if (hoveredStateId) {
+                                map.setFeatureState({source: activeLayer, id: hoveredStateId, sourceLayer: county_dict[activeLayer][1]}, {hover: false});
                             };
+                            map.getCanvas().style.cursor = '';
+                            hoveredStateId =  null;
                         };
                         new_popup = makePopUp(map,f[i],lngLat);
                         open_popup = true;
@@ -166,11 +169,9 @@ function setUpGlobalVars() {
                 var on_fills = false;
                 if (f.length) {
                     for (i=0; i<f.length; i++) {
-                        if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('outlines')) {
+                        if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
                             on_fills = !on_fills;
-                            var layer_id = f[i].layer.id.replace('_fills','');
-                            layer_id = layer_id.replace('_fill_outlines','');
-                            layer_id = layer_id.replace('_outlines','');
+                            var layer_id = f[i].layer.id.replace('_fills','').replace('_fill_outlines','').replace('_outlines','');
                             if (hoveredStateId) {
                                 map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, {hover: false});
                             };
@@ -190,7 +191,7 @@ function setUpGlobalVars() {
                                 var assessed_value = assessed_value.slice(0,length-3) + ',' + assessed_value.slice(length-3,length);
                             } else {
                                 var assessed_value = assessed_value;
-                            }
+                            };
 
                             popup.setLngLat(e.lngLat)
                                 .setHTML("<p style='font-size:140%;'>"+address+"</p><p style='font-size:120%;'>"+"<u>Assessed Value:</u> $"+assessed_value+"</p><p style='font-size:100%;'>"+"<u>Parcel ID:</u> "+parcel_id+"</p>")
@@ -202,15 +203,14 @@ function setUpGlobalVars() {
                         };
                     };
                     if (!on_fills) {
-                        for (var key in county_dict) {
-                            if (map.getLayoutProperty(key+'_fills','visibility') == 'visible' || map.getLayoutProperty(key+'_fill_outlines','visibility') == 'visible') {
+                        if (activeLayer != 'none') {
+                            if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
                                 if (hoveredStateId) {
-                                    map.setFeatureState({source: key, id: hoveredStateId, sourceLayer: county_dict[key][1]}, {hover: false});
+                                    map.setFeatureState({source: activeLayer, id: hoveredStateId, sourceLayer: county_dict[activeLayer][1]}, {hover: false});
                                 };
-                                map.getCanvas().style.cursor = '';
-                                hoveredStateId =  null;
-                                popup.remove();
-                                break;
+                              map.getCanvas().style.cursor = '';
+                              hoveredStateId =  null;
+                              popup.remove();
                             };
                         };
                     };
@@ -220,8 +220,8 @@ function setUpGlobalVars() {
     });
 
 
+    // Toggle satellite mode when clicked
     var toggleableLayerIds = ['Satellite Mode'];
-
     for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
         var link = document.createElement('a');
@@ -233,6 +233,7 @@ function setUpGlobalVars() {
             var checkMapLayer = map.getLayer('3d-buildings');
             if (typeof checkMapLayer !== 'undefined') {
                 if (this.textContent == 'Satellite Mode') {
+                    satellite_view = !satellite_view;
                     var clickedLayer = 'satellite';
                 } else {
                     var clickedLayer = this.textContent;
@@ -240,43 +241,34 @@ function setUpGlobalVars() {
                 e.preventDefault();
                 e.stopPropagation();
 
-
-                var layer_id = 'none';
-                for (var key in county_dict) {
-                  if (map.getLayoutProperty(key+'_fills','visibility') == 'visible' || map.getLayoutProperty(key+'_fill_outlines','visibility') == 'visible') {
-                    layer_id = key;
-                    break;
-                  };
+                if (activeLayer != 'none') {
+                    var layer_id = activeLayer;
+                } else {
+                    var layer_id = 'none';
                 };
 
-                var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-                if (visibility === 'visible') {
+                if (map.getLayoutProperty(clickedLayer, 'visibility') === 'visible') {
                     map.setLayoutProperty(clickedLayer, 'visibility', 'none');
                     if (layer_id != 'none') {
                         map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'none');
                         map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'none');
-
                         map.setLayoutProperty(layer_id+'_fills', 'visibility', 'visible')
                     };
                     this.className = '';
                 } else {
-                    this.className = 'active';
                     map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
                     if (layer_id != 'none') {
                         map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'visible');
                         map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'visible');
-
                         map.setLayoutProperty(layer_id+'_fills', 'visibility', 'none')
                     };
+                    this.className = 'active';
                 };
-
             };
         };
         var layers = document.getElementById('menu');
         layers.appendChild(link);
     };
-
-
 
 
 
@@ -291,17 +283,12 @@ function setUpGlobalVars() {
         };
         if ((typeof checkMapLayer !== 'undefined') && e.composedPath()[2].matches('.dropdown')) {
             for (var key in county_dict) {
-                if (e.toElement.text.toLowerCase() != key) {
-                    map.setLayoutProperty(key+'_fills', 'visibility', 'none');
-                    map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
-                    map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
-                } else {
+                if (e.toElement.text.toLowerCase() == key) {
+                    activeLayer = key;
                     // Change layer to be visible and fly to given coordinates
-                    if (map.getLayoutProperty('satellite','visibility') == 'visible') {
-                        var visibility = map.getLayoutProperty(key+'_fill_outlines', 'visibility');
-                        if (visibility == 'visible') {
+                    if (satellite_view) {
+                        if (map.getLayoutProperty(key+'_fill_outlines', 'visibility') == 'visible') {
                             map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
-                            map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
                         } else {
                             map.flyTo({
                                 center: county_dict[key][2],
@@ -309,12 +296,11 @@ function setUpGlobalVars() {
                                 pitch: 10,
                                 bearing: 0,
                             });
-                            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'visible');
                             map.setLayoutProperty(key+'_outlines', 'visibility', 'visible');
+                            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'visible');
                         };
                     } else {
-                        var visibility = map.getLayoutProperty(key+'_fills', 'visibility');
-                        if (visibility == 'visible') {
+                        if (map.getLayoutProperty(key+'_fills', 'visibility') == 'visible') {
                             map.setLayoutProperty(key+'_fills', 'visibility', 'none');
                         } else {
                             map.flyTo({
@@ -326,6 +312,10 @@ function setUpGlobalVars() {
                             map.setLayoutProperty(key+'_fills', 'visibility', 'visible');
                         };
                     };
+                } else {
+                    map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                    map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
+                    map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
                 };
             };
         };
@@ -345,7 +335,7 @@ function makePopUp(map,e,lngLat,county_dict) {
         var year_built = '-';
     } else {
         var year_built = features['YR_BLT'];
-    }
+    };
 
     // Show value if information exists
     if (features['SQFT_LIV'] == 0) {
@@ -356,8 +346,8 @@ function makePopUp(map,e,lngLat,county_dict) {
             var square_feet = features['SQFT_LIV'].toString().slice(0,num_length-3) + ',' + features['SQFT_LIV'].toString().slice(num_length-3,num_length);
         } else {
             var square_feet = features['SQFT_LIV'];
-        }
-    }
+        };
+    };
 
     // Format property value assessment
     if (length > 9) {
@@ -368,21 +358,21 @@ function makePopUp(map,e,lngLat,county_dict) {
         var market_value = value_item.slice(0,length-3) + ',' + value_item.slice(length-3,length);
     } else {
         var market_value = value_item;
-    }
+    };
 
     // Show value if information exists
     if (features['NBR_BEDRM'] == 0) {
         var beds = '-';
     } else {
         var beds = features['NBR_BEDRM'];
-    }
+    };
 
     // Show value if information exists
     if (features['NBR_F_BATH'] == 0) {
         var baths = '-';
     } else {
         var baths = features['NBR_F_BATH'];
-    }
+    };
     var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
                 .setLngLat(lngLat)
                 .setHTML(

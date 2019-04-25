@@ -10,7 +10,7 @@ function setUpGlobalVars() {
       style: 'mapbox://styles/secfast/cjupvuh6m155a1gqwh1d4ko6u',
       center: [-76.5, 42.65],
       zoom: 8,
-      pitch: 5,
+      pitch: 0,
       bearing: 0,
     });
 
@@ -52,6 +52,23 @@ function setUpGlobalVars() {
           }
         },'admin-state-province');
 
+        // map.addSource('school_zones',{
+        //     type: 'vector',
+        //     url: 'mapbox://secfast.5vs7dj3t'
+        // });
+
+        // map.addLayer({
+        //   "id": 'school_zones',
+        //   "type": "fill",
+        //   "source": 'school_zones',
+        //   "source-layer": 'school_zones-4v2mmg',
+        //   "paint": {
+        //     'fill-opacity': 0,
+        //     'fill-outline-color': '#000000',
+        //     'fill-color': '#000000',
+        //   }
+        // },'admin-state-province');
+
         // Add county layers
         for (var key in county_dict) {
             map.addSource(key,{
@@ -65,6 +82,7 @@ function setUpGlobalVars() {
               "type": "fill",
               "source": key,
               "source-layer": county_dict[key][1],
+              'minzoom': 0,
               "paint": {
                 'fill-opacity': [
                 "case",
@@ -76,32 +94,20 @@ function setUpGlobalVars() {
             },'admin-state-province');
             map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
 
-            // Add outline layer for satellite view
-            map.addLayer({
-              "id": key+"_outlines",
-              "type": "line",
-              "source": key,
-              "source-layer": county_dict[key][1],
-              "paint": {
-                'line-color': '#FFB533',
-                'line-width': 1,
-              }
-            },'admin-state-province');
-            map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
-
             // Add fill layer for normal view
             map.addLayer({
               "id": key+"_fills",
               "type": "fill",
               "source": key,
               "source-layer": county_dict[key][1],
+              'minzoom': 0,
               "paint": {
                   'fill-opacity': .7,
                   'fill-outline-color': 'black',
                   'fill-color': [
-                      "case",
-                          ["boolean", ["feature-state","hover"], false],
-                          "#F370EF",
+                          "case",
+                            ["boolean", ["feature-state","hover"], false],
+                            '#ff69b4',
                           [
                           'interpolate', ['linear'],['get','FULL_MV'],
                             0, '#18a9ec',
@@ -117,6 +123,24 @@ function setUpGlobalVars() {
                 },
             },'water');
             map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+
+            // Add outline layer for satellite view
+            map.addLayer({
+              "id": key+"_outlines",
+              "type": "line",
+              "source": key,
+              "source-layer": county_dict[key][1],
+              'minzoom': 0,
+              "paint": {
+                // 'line-color': '#FFB533',
+                'line-width': .7,
+              }
+            },'admin-state-province');
+            map.setPaintProperty(key+'_outlines', 'line-color', 'black');
+            // },key+'_fills');
+            map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
+
+
         };
 
         // Add 3D buildings
@@ -194,7 +218,7 @@ function setUpGlobalVars() {
                             };
 
                             popup.setLngLat(e.lngLat)
-                                .setHTML("<p style='font-size:140%;'>"+address+"</p><p style='font-size:120%;'>"+"<u>Assessed Value:</u> $"+assessed_value+"</p><p style='font-size:100%;'>"+"<u>Parcel ID:</u> "+parcel_id+"</p>")
+                                .setHTML("<p style='font-size:140%;'>"+address+"</p><p style='font-size:120%;'>"+"<u>Assessed Value*:</u> $"+assessed_value+"</p><p style='font-size:100%;'>"+"<u>Parcel ID:</u> "+parcel_id+"</p><p style='font-size:90%;'>* May not reflect market value</p>")
                                 .addTo(map);
 
                             hoveredStateId = f[i].id;
@@ -251,8 +275,9 @@ function setUpGlobalVars() {
                     map.setLayoutProperty(clickedLayer, 'visibility', 'none');
                     if (layer_id != 'none') {
                         map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'none');
-                        map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'none');
+                        // map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'none');
                         map.setLayoutProperty(layer_id+'_fills', 'visibility', 'visible')
+                        map.setPaintProperty(layer_id+'_outlines', 'line-color', 'black');
                     };
                     this.className = '';
                 } else {
@@ -261,6 +286,7 @@ function setUpGlobalVars() {
                         map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'visible');
                         map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'visible');
                         map.setLayoutProperty(layer_id+'_fills', 'visibility', 'none')
+                        map.setPaintProperty(layer_id+'_outlines', 'line-color', 'orange');
                     };
                     this.className = 'active';
                 };
@@ -269,8 +295,6 @@ function setUpGlobalVars() {
         var layers = document.getElementById('menu');
         layers.appendChild(link);
     };
-
-
 
     // Handle input from county selection dropdown
     window.onclick = function(e) {
@@ -288,7 +312,8 @@ function setUpGlobalVars() {
                     // Change layer to be visible and fly to given coordinates
                     if (satellite_view) {
                         if (map.getLayoutProperty(key+'_fill_outlines', 'visibility') == 'visible') {
-                            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
+                            map.setPaintProperty(key+'_outlines', 'line-color', 'orange');
+                            // map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
                         } else {
                             map.flyTo({
                                 center: county_dict[key][2],
@@ -302,6 +327,7 @@ function setUpGlobalVars() {
                     } else {
                         if (map.getLayoutProperty(key+'_fills', 'visibility') == 'visible') {
                             map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                            map.setPaintProperty(key+'_outlines', 'line-color', 'black');
                         } else {
                             map.flyTo({
                                 center: county_dict[key][2],
@@ -310,6 +336,7 @@ function setUpGlobalVars() {
                                 bearing: 0,
                             });
                             map.setLayoutProperty(key+'_fills', 'visibility', 'visible');
+                            map.setLayoutProperty(key+'_outlines', 'visibility', 'visible');
                         };
                     };
                 } else {
@@ -469,7 +496,22 @@ function makePopUp(map,e,lngLat,county_dict) {
 
 
 
-
+// School Zone Properties:
+// properties:
+// ALAND: 173961150
+// AWATER: 26333549
+// FUNCSTAT: "E"
+// GEOID: "3626940"
+// HIGRADE: "12"
+// INTPTLAT: "+42.8910396"
+// INTPTLON: "-076.4138846"
+// LOGRADE: "KG"
+// LSAD: "00"
+// MTFCC: "G5420"
+// NAME: "Skaneateles Central School District"
+// SDTYP: ""
+// STATEFP: "36"
+// UNSDLEA: "26940"
 
 
 

@@ -37,6 +37,7 @@ function setUpGlobalVars() {
                       'greene': ['mapbox://secfast.99g3sjwx', "greene-dqr1u2",[-74.12, 42.30],false],
                       'lewis': ['mapbox://secfast.15o2ac0d', "lewis-6b0i9e",[-75.43, 43.84],false],
                       'genesee': ['mapbox://secfast.8074s81k', "genesee-5fjsw7",[-78.18, 43.00],false],
+                      // 'onondaga': ['mapbox://secfast.aakb983p', "onondaga-bj1ko6",[-78.15, 43.05],false],
                       };
 
     // Load map
@@ -175,6 +176,11 @@ function setUpGlobalVars() {
                             map.getCanvas().style.cursor = '';
                             hoveredStateId =  null;
                         };
+                        // if (activeLayer == 'onondaga') {
+                        //     new_popup = makePopUp(map,f[i],lngLat,['FULL_MV','YR_BLT','SQFT_LIV','NBR_BEDRM','NBR_F_BATH','PARCELADDR','PRINT_KEY','CALC_ACRES','PRMY_OWNER']);
+                        // } else {
+                        //     new_popup = makePopUp(map,f[i],lngLat,['ATOTAL','BLOCKCE','SQFT_LIV','NBR_BEDRM','NBR_F_BATH','PARCELADDR','PRINT_KEY','CALC_ACRES','PRMY_OWNER']);
+                        // }
                         new_popup = makePopUp(map,f[i],lngLat);
                         open_popup = true;
                     };
@@ -218,7 +224,7 @@ function setUpGlobalVars() {
                             };
 
                             popup.setLngLat(e.lngLat)
-                                .setHTML("<p style='font-size:140%;'>"+address+"</p><p style='font-size:120%;'>"+"<u>Assessed Value*:</u> $"+assessed_value+"</p><p style='font-size:100%;'>"+"<u>Parcel ID:</u> "+parcel_id+"</p><p style='font-size:90%;'>* May not reflect market value</p>")
+                                .setHTML("<p style='font-size:140%;'>"+address+"</p><p style='font-size:120%;'>"+"<u>Assessed Value:</u> $"+assessed_value+"*</p><p style='font-size:100%;'>"+"<u>Parcel ID:</u> "+parcel_id+"</p><p style='font-size:90%;'>*May not reflect market value</p>")
                                 .addTo(map);
 
                             hoveredStateId = f[i].id;

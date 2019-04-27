@@ -56,6 +56,10 @@ function setUpGlobalVars() {
           }
         },'admin-state-province');
 
+        map.addSource('terrain',{
+            type: 'vector',
+            url: 'mapbox://mapbox.mapbox-terrain-v2'
+        });
         map.addSource('school_zones',{
             type: 'vector',
             url: 'mapbox://secfast.5vs7dj3t'
@@ -64,7 +68,6 @@ function setUpGlobalVars() {
             type: 'vector',
             url: 'mapbox://secfast.bhdyfqno'
         });
-
         map.addSource('senate',{
             type: 'vector',
             url: 'mapbox://secfast.59ncsd8l'
@@ -93,6 +96,213 @@ function setUpGlobalVars() {
             type: 'vector',
             url: 'mapbox://secfast.d1k5plil'
         });
+        map.addSource('crops',{
+            type: 'raster',
+            url: 'mapbox://secfast.63qhbo2t',
+            tileSize: 256
+        });
+        map.addSource('agriculture',{
+            type: 'vector',
+            url: 'mapbox://secfast.2euzzuud'
+        });
+        map.addSource('geology',{
+            type: 'vector',
+            url: 'mapbox://secfast.4cc0940p'
+        });
+        map.addSource('birds',{
+            type: 'vector',
+            url: 'mapbox://secfast.7o9su5kf'
+        });
+        map.addSource('precip',{
+            type: 'vector',
+            url: 'mapbox://secfast.4gi9cwh5'
+        });
+        map.addSource('soil',{
+            type: 'vector',
+            url: 'mapbox://secfast.1h9viy25'
+        });
+        map.addSource('census',{
+            type: 'vector',
+            url: 'mapbox://secfast.0fjc50cg'
+        });
+        map.addSource('zebra',{
+            type: 'vector',
+            url: 'mapbox://secfast.9qepxeqa'
+        });
+
+
+        // map.loadImage('https://commons.wikimedia.org/wiki/File:Zebra.png', function(error,image) {
+        //     if (error) throw error;
+        //     map.addImage('zebra',image);
+        // });
+        map.addLayer({
+          "id": 'zebra',
+          "type": "symbol",
+          "source": 'zebra',
+          "source-layer": 'zebra_mussels-3pzz5l',
+          "layout": {
+            // "text-field": "HERE",
+            "icon-image": "marker-11",
+            // "icon-size": .25,
+          },
+          // "paint": {
+            // 'line-width': 2,
+          // }
+        },'admin-state-province');
+        map.setLayoutProperty('zebra','visibility','none')
+
+        map.addLayer({
+          "id": 'terrain',
+          "type": "line",
+          "source": 'terrain',
+          "source-layer": 'contour',
+          "index": 1,
+          "paint": {
+            'line-width': 1,
+            'line-opacity': .7,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('terrain','visibility','none')
+        map.addLayer({
+          "id": 'terrain_label',
+          "type": "symbol",
+          "source": 'terrain',
+          "source-layer": 'contour',
+          "minZoom": 0,
+          "layout": {
+            "symbol-placement": "line",
+            "text-field": ["concat",["to-string",["get","ele"]],"m (",["to-string",["*",["get","ele"],3.3]],"ft)"],
+            "text-line-height": 2,
+          },
+          "paint": {
+              "text-halo-width": 2,
+              "text-halo-color": "rgba(255,255,255,255)",
+          }
+
+        },'admin-state-province');
+        map.setLayoutProperty('terrain_label','visibility','none')
+        map.addLayer({
+          "id": 'crops',
+          "type": "raster",
+          "source": 'crops',
+          "source-layer": 'CDL_2010_NY-7ym7gh',
+        },'admin-state-province');
+        map.setLayoutProperty('crops','visibility','none')
+        map.addLayer({
+          "id": 'agriculture',
+          "type": "line",
+          "source": 'agriculture',
+          "source-layer": 'agriculture-913eim',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'agriculture_fill',
+          "type": "fill",
+          "source": 'agriculture',
+          "source-layer": 'agriculture-913eim',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('agriculture','visibility','none')
+        map.addLayer({
+          "id": 'birds',
+          "type": "line",
+          "source": 'birds',
+          "source-layer": 'birds-0ixrxg',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'birds_fill',
+          "type": "fill",
+          "source": 'birds',
+          "source-layer": 'birds-0ixrxg',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('birds','visibility','none')
+        map.addLayer({
+          "id": 'precip',
+          "type": "line",
+          "source": 'precip',
+          "source-layer": 'precip-0qg8b2',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'precip_fill',
+          "type": "fill",
+          "source": 'precip',
+          "source-layer": 'precip-0qg8b2',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('precip','visibility','none')
+        map.addLayer({
+          "id": 'geology',
+          "type": "line",
+          "source": 'geology',
+          "source-layer": 'geology-7dpveh',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'geology_fill',
+          "type": "fill",
+          "source": 'geology',
+          "source-layer": 'geology-7dpveh',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('geology','visibility','none')
+        map.addLayer({
+          "id": 'soil',
+          "type": "line",
+          "source": 'soil',
+          "source-layer": 'soil-0j12c4',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'soil_fill',
+          "type": "fill",
+          "source": 'soil',
+          "source-layer": 'soil-0j12c4',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('soil','visibility','none')
+        map.addLayer({
+          "id": 'census',
+          "type": "line",
+          "source": 'census',
+          "source-layer": 'census_2-6uqqfb',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('census','visibility','none')
+        map.addLayer({
+          "id": 'census_fill',
+          "type": "fill",
+          "source": 'census',
+          "source-layer": 'census_2-6uqqfb',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+
 
         map.addLayer({
           "id": 'villages_fill',
@@ -391,6 +601,7 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
+            console.log(f);
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
@@ -643,7 +854,7 @@ function setUpGlobalVars() {
 
 
     // Toggle satellite mode when clicked
-    var toggleableLayerIds = ['Satellite View','Counties','Cities','Villages','Indian Territory','School Zones','Congressional Districts','State Senate','State Assembly','Empire Zone Program'];
+    var toggleableLayerIds = ['Satellite View','Crop Cover','Counties','Cities','Villages','Indian Territory','School Zones','Census Data','Congressional Districts','State Senate','State Assembly','Empire Zone Program','Agricultural Districts','Soil Info','Terrain','Precipitation','Geology','Bird Migration','Zebra Mussels'];
     for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
         var link = document.createElement('a');
@@ -669,6 +880,24 @@ function setUpGlobalVars() {
                     var clickedLayer = 'school_zones';
                 } else if (this.textContent == 'Empire Zone Program') {
                     var clickedLayer = 'empire_zones';
+                } else if (this.textContent == 'Census Data') {
+                    var clickedLayer = 'census';
+                } else if (this.textContent == 'Crop Cover') {
+                    var clickedLayer = 'crops';
+                } else if (this.textContent == 'Agricultural Districts') {
+                    var clickedLayer = 'agriculture';
+                } else if (this.textContent == 'Geology') {
+                    var clickedLayer = 'geology';
+                } else if (this.textContent == 'Bird Migration') {
+                    var clickedLayer = 'birds';
+                } else if (this.textContent == 'Zebra Mussels') {
+                    var clickedLayer = 'zebra';
+                } else if (this.textContent == 'Precipitation') {
+                    var clickedLayer = 'precip';
+                } else if (this.textContent == 'Terrain') {
+                    var clickedLayer = 'terrain';
+                } else if (this.textContent == 'Soil Info') {
+                    var clickedLayer = 'soil';
                 } else if (this.textContent == 'State Senate') {
                     var clickedLayer = 'senate';
                     if (map.getPaintProperty('senate_fill', 'fill-opacity') != .25) {
@@ -703,6 +932,9 @@ function setUpGlobalVars() {
                 };
 
                 if (map.getLayoutProperty(clickedLayer, 'visibility') === 'visible') {
+                    if (clickedLayer == 'terrain') {
+                        map.setLayoutProperty('terrain_label', 'visibility', 'none');
+                    };
                     map.setLayoutProperty(clickedLayer, 'visibility', 'none');
                     if (map.getLayoutProperty('satellite', 'visibility') === 'visible') {
                         map.setPaintProperty('school_zones','line-color','orange');
@@ -714,6 +946,13 @@ function setUpGlobalVars() {
                         map.setPaintProperty('city_town','line-color','orange');
                         map.setPaintProperty('counties','line-color','orange');
                         map.setPaintProperty('indian_territory','line-color','orange');
+                        map.setPaintProperty('geology','line-color','orange');
+                        map.setPaintProperty('agriculture','line-color','orange');
+                        map.setPaintProperty('birds','line-color','orange');
+                        map.setPaintProperty('census','line-color','orange');
+                        map.setPaintProperty('precip','line-color','orange');
+                        map.setPaintProperty('soil','line-color','orange');
+                        map.setPaintProperty('terrain','line-color','orange');
                     } else {
                         map.setPaintProperty('school_zones','line-color','purple');
                         map.setPaintProperty('senate','line-color','black');
@@ -724,16 +963,45 @@ function setUpGlobalVars() {
                         map.setPaintProperty('city_town','line-color','black');
                         map.setPaintProperty('counties','line-color','black');
                         map.setPaintProperty('indian_territory','line-color','black');
+                        map.setPaintProperty('geology','line-color','black');
+                        map.setPaintProperty('agriculture','line-color','black');
+                        map.setPaintProperty('birds','line-color','black');
+                        map.setPaintProperty('census','line-color','black');
+                        map.setPaintProperty('precip','line-color','black');
+                        map.setPaintProperty('soil','line-color','black');
+                        map.setPaintProperty('terrain','line-color','black');
                     };
                     if (layer_id != 'none' && clickedLayer == 'satellite') {
                         // map.setPaintProperty('school_zones','line-color','black');
-                        map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'none');
-                        map.setLayoutProperty(layer_id+'_fills', 'visibility', 'visible')
+                        if (map.getLayoutProperty(layer_id+'_fills', 'visibility') == 'visible') {
+                            map.setLayoutProperty(layer_id+'_fills', 'visibility', 'none');
+                            map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'visible');
+                        } else if (map.getLayoutProperty(layer_id+'_fill_outlines', 'visibility') == 'visible') {
+                            map.setLayoutProperty(layer_id+'_fills', 'visibility', 'visible');
+                            map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'none');
+                        };
                         map.setPaintProperty(layer_id+'_outlines', 'line-color', 'black');
                     };
                     this.className = 'active';
 
                 } else {
+                    if (clickedLayer == 'terrain') {
+                        map.setLayoutProperty('terrain_label', 'visibility', 'visible');
+                        map.flyTo({
+                            center: [-74.2, 44.13],
+                            zoom: 13,
+                            pitch: 10,
+                            bearing: 0,
+                        });
+                    };
+                    if (clickedLayer == 'agriculture') {
+                      map.flyTo({
+                          center: [-75.9, 42.9],
+                          zoom: 8.5,
+                          pitch: 10,
+                          bearing: 0,
+                      });
+                    }
                     map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
                     if (map.getLayoutProperty('satellite', 'visibility') === 'visible') {
                         map.setPaintProperty('school_zones','line-color','orange');
@@ -745,6 +1013,13 @@ function setUpGlobalVars() {
                         map.setPaintProperty('city_town','line-color','orange');
                         map.setPaintProperty('counties','line-color','orange');
                         map.setPaintProperty('indian_territory','line-color','orange');
+                        map.setPaintProperty('geology','line-color','orange');
+                        map.setPaintProperty('agriculture','line-color','orange');
+                        map.setPaintProperty('birds','line-color','orange');
+                        map.setPaintProperty('census','line-color','orange');
+                        map.setPaintProperty('precip','line-color','orange');
+                        map.setPaintProperty('soil','line-color','orange');
+                        map.setPaintProperty('terrain','line-color','orange');
                     } else {
                         map.setPaintProperty('school_zones','line-color','purple');
                         map.setPaintProperty('senate','line-color','black');
@@ -755,6 +1030,13 @@ function setUpGlobalVars() {
                         map.setPaintProperty('city_town','line-color','black');
                         map.setPaintProperty('counties','line-color','black');
                         map.setPaintProperty('indian_territory','line-color','black');
+                        map.setPaintProperty('geology','line-color','black');
+                        map.setPaintProperty('agriculture','line-color','black');
+                        map.setPaintProperty('birds','line-color','black');
+                        map.setPaintProperty('census','line-color','black');
+                        map.setPaintProperty('precip','line-color','black');
+                        map.setPaintProperty('soil','line-color','black');
+                        map.setPaintProperty('terrain','line-color','black');
                     };
                     if (layer_id != 'none' && clickedLayer == 'satellite') {
                         // map.setPaintProperty('school_zones','line-color','orange');
@@ -787,8 +1069,10 @@ function setUpGlobalVars() {
                     // Change layer to be visible and fly to given coordinates
                     if (satellite_view) {
                         if (map.getLayoutProperty(key+'_fill_outlines', 'visibility') == 'visible') {
-                            map.setPaintProperty(key+'_outlines', 'line-color', 'orange');
+                            map.setLayoutProperty(key+'_fills', 'visibility', 'none');
                             map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
+                            map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
+                            map.setPaintProperty(key+'_outlines', 'line-color', 'orange');
                         } else {
                             map.flyTo({
                                 center: county_dict[key][2],
@@ -804,6 +1088,7 @@ function setUpGlobalVars() {
                     } else {
                         if (map.getLayoutProperty(key+'_fills', 'visibility') == 'visible') {
                             map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
                             map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
                             map.setPaintProperty(key+'_outlines', 'line-color', 'black');
                         } else {

@@ -15,7 +15,8 @@
 
     <style>
         body { margin:0; padding:0; }
-        #map { position:absolute; bottom:0; height:94%; width:75%;}
+        /* #map { position:absolute; bottom:0; height:94%; width:75%;} */
+        #map { position:absolute; bottom:0; height:94%; width:100%;}
     </style>
 
     <style>
@@ -51,6 +52,7 @@
         .topnav a.active {
             background-color: #708090;
             border: 1px solid #000000;
+            border-radius: 5px;
             color: white;
         }
 
@@ -107,6 +109,7 @@
           cursor: pointer;
           font-size: 16px;
           border: 1px solid #000000;
+          border-radius: 5px;
           outline: none;
           color: black;
           padding-left: 10px;
@@ -152,12 +155,13 @@
         .legend {
             background-color: #DCEAE2;
             border-radius: 10px;
-            bottom: 10px;
+            /* bottom: 25px; */
+            bottom: 2.5%;
             box-shadow: 0 1px 2px rgba(0,0,0,0.10);
             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
             padding: 10px;
             position: absolute;
-            right: 10px;
+            right: 0px;
             z-index: 1;
         }
 
@@ -200,18 +204,19 @@
 
     <style>
         #menu {
-            background: #fff;
+            background: #C0C0C0;
             position: absolute;
             /* position: fixed; */
             color: #000000;
             z-index: 1;
             font-size: .8vw;
-            bottom: 0%;
-            right: 60%;
+            bottom: 2.5%;
+            right: 51%;
             border-radius: 3px;
             height: 48.4vh;
-            width: 10vw;
+            width: 12vw;
             border: 1px solid rgba(0,0,0,0.4);
+            border-radius: 5px;
             font-family: 'Open Sans', sans-serif;
             overflow-y: scroll;
         }
@@ -226,32 +231,50 @@
             padding: 10px;
             text-decoration: none;
             border-bottom: 1px solid rgba(0,0,0,0.25);
+            border-radius: 5px;
             text-align: center;
         }
 
         #menu a:last-child {
             border: none;
-            color: #000000;
         }
 
         #menu a:hover {
             background-color: #f8f8f8;
-            color: #000000;
         }
 
         #menu a.active {
             background-color: #DCDCDC;
-            color: #000000;
         }
 
         #menu a.inactive {
             background-color: #3887be;
-            color: #000000;
         }
 
         #menu a.active:hover {
             background: #3074a4;
         }
+        ::-webkit-scrollbar {
+          -webkit-appearance: none;
+          width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          border-radius: 5px;
+          background-color: rgba(0,0,0,.5);
+          -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+        }
+
+    </style>
+    <style>
+    .marker {
+      border: none;
+      cursor: pointer;
+      height: 56px;
+      width: 56px;
+      background-image: url(https://commons.wikimedia.org/wiki/File:Zebra.png);
+      background-color: rgba(0, 0, 0, 0);
+    }
     </style>
 
     <style>
@@ -297,7 +320,8 @@
       overflow-y: scroll;
       border-right: 1px solid rgba(0, 0, 0, 0.25);
       border-left: 1px solid rgba(0, 0, 0, 0.25);
-      background: #778899;
+      /* background: #778899; */
+      background: rgba(119,136,153,.4);
     }
 
     .pad2 {
@@ -305,11 +329,15 @@
     }
 
     .heading {
+      position: fixed;
       /* background: #C0C0C0; */
       background: #D0AB66;
       border: 2px solid #000000;
+      border-radius: 5px;
       /* border-bottom: 1px solid #eee; */
       height: 53px;
+      width: 24.95%;
+      top: 0;
       /* line-height: 60px; */
       /* padding: 0 10px; */
     }
@@ -381,12 +409,15 @@
     table {
       /* position: fixed; */
       position: absolute;
-      width:100%;
+      width:24.95%;
+      top:6%;
       background: #E8E8E8;
+      border: 1px solid #000;
+      border-radius: 5px;
     }
     table, th, td {
-      /* position: fixed; */
-      position: absolute;
+      position: fixed;
+      /* position: absolute; */
       height:35%;
       padding-bottom: 10px;
       /* border-bottom: 1px solid rgba(0, 0, 0, .5);
@@ -396,6 +427,7 @@
       /* height:30%; */
     }
     th {
+      /* position: fixed; */
       position: absolute;
       padding: 15px;
       text-align: left;
@@ -414,15 +446,16 @@
     .toggleheader {
       position: absolute;
       background: #555;
-      bottom: 48.4%;
+      bottom: 50.9%;
       border-style: solid;
       border-width: 1px;
       border-color: #bfbfbf;
-      right: 60%;
+      border-radius: 5px;
+      right: 51%;
       padding: 12px;
       text-align: center;
       height: 5vh;
-      width: 10vw;
+      width: 12vw;
       font: 1vw Arial;
       color: white
     }
@@ -437,6 +470,7 @@
       font-size: 17px;
       /* padding: 16px 20px; */
       border: 1px solid black;
+      border-radius: 5px;
       cursor: pointer;
       width: 100px;
       height: 5.6%;
@@ -455,11 +489,12 @@
       z-index: 9; */
       display: none;
       float: left;
-      overflow: hidden;
+      /* overflow: hidden; */
       position: absolute;
+      border-radius: 25px;
       top: 100px;
       left: 100px;
-      width: 90%;
+      width: 70%;
       height: 90%;
     }
 
@@ -469,6 +504,7 @@
       height: 90%;
       padding: 10px;
       background-color: white;
+      border-radius: 25px;
     }
 
     /* Set a style for the submit/login button */
@@ -498,7 +534,8 @@
 </head>
 <body onload="setUpGlobalVars()">
 
-    <div id='map' style='margin-right: 40px'></div>
+    <!-- <div id='map' style='margin-right: 40px'></div> -->
+    <div id='map'></div>
 
     <div class="sidebar">
         <nav id="menu"></nav>

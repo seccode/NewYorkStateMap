@@ -8,8 +8,9 @@ function setUpGlobalVars() {
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/secfast/cjupvuh6m155a1gqwh1d4ko6u',
-      center: [-76.5, 42.65],
-      zoom: 8,
+      center: [-75.9, 42.9],
+      zoom: 7,
+      minZoom: 7,
       pitch: 0,
       bearing: 0,
     });
@@ -42,6 +43,8 @@ function setUpGlobalVars() {
 
     // Load map
     map.on('load', function () {
+        map.setLayoutProperty('landuse', 'visibility', 'none');
+        map.setLayoutProperty('national_park', 'visibility', 'none');
 
         // Add satellite layer
         map.addLayer({
@@ -53,22 +56,245 @@ function setUpGlobalVars() {
           }
         },'admin-state-province');
 
-        // map.addSource('school_zones',{
-        //     type: 'vector',
-        //     url: 'mapbox://secfast.5vs7dj3t'
-        // });
+        map.addSource('school_zones',{
+            type: 'vector',
+            url: 'mapbox://secfast.5vs7dj3t'
+        });
+        map.addSource('empire_zones',{
+            type: 'vector',
+            url: 'mapbox://secfast.bhdyfqno'
+        });
 
-        // map.addLayer({
-        //   "id": 'school_zones',
-        //   "type": "fill",
-        //   "source": 'school_zones',
-        //   "source-layer": 'school_zones-4v2mmg',
-        //   "paint": {
-        //     'fill-opacity': 0,
-        //     'fill-outline-color': '#000000',
-        //     'fill-color': '#000000',
-        //   }
-        // },'admin-state-province');
+        map.addSource('senate',{
+            type: 'vector',
+            url: 'mapbox://secfast.59ncsd8l'
+        });
+        map.addSource('congress',{
+            type: 'vector',
+            url: 'mapbox://secfast.ax0xh5qg'
+        });
+        map.addSource('assembly',{
+            type: 'vector',
+            url: 'mapbox://secfast.5vwxb8ws'
+        });
+        map.addSource('villages',{
+            type: 'vector',
+            url: 'mapbox://secfast.52th248l'
+        });
+        map.addSource('counties',{
+            type: 'vector',
+            url: 'mapbox://secfast.0rhcbdxi'
+        });
+        map.addSource('indian_territory',{
+            type: 'vector',
+            url: 'mapbox://secfast.bc21xqhx'
+        });
+        map.addSource('city_town',{
+            type: 'vector',
+            url: 'mapbox://secfast.d1k5plil'
+        });
+
+        map.addLayer({
+          "id": 'villages_fill',
+          "type": "fill",
+          "source": 'villages',
+          "source-layer": 'villages-bnrwmd',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'villages',
+          "type": "line",
+          "source": 'villages',
+          "source-layer": 'villages-bnrwmd',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('villages','visibility','none')
+
+        map.addLayer({
+          "id": 'city_town_fill',
+          "type": "fill",
+          "source": 'city_town',
+          "source-layer": 'cities_towns-2uok5b',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'city_town',
+          "type": "line",
+          "source": 'city_town',
+          "source-layer": 'cities_towns-2uok5b',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('city_town','visibility','none')
+
+        map.addLayer({
+          "id": 'counties_fill',
+          "type": "fill",
+          "source": 'counties',
+          "source-layer": 'counties-7t5hf6',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'counties',
+          "type": "line",
+          "source": 'counties',
+          "source-layer": 'counties-7t5hf6',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('counties','visibility','none')
+
+        map.addLayer({
+          "id": 'indian_territory_fill',
+          "type": "fill",
+          "source": 'indian_territory',
+          "source-layer": 'indian_territory-4n30ds',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'indian_territory',
+          "type": "line",
+          "source": 'indian_territory',
+          "source-layer": 'indian_territory-4n30ds',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('indian_territory','visibility','none')
+
+        map.addLayer({
+          "id": 'senate_fill',
+          "type": "fill",
+          "source": 'senate',
+          "source-layer": 'senate-0213ch',
+          "paint": {
+            'fill-opacity': 0,
+            'fill-color': [
+              "match",
+              ['get','party'],
+              'Republican', 'red',
+              'Democrat', 'blue',
+              'grey',
+            ]
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'senate',
+          "type": "line",
+          "source": 'senate',
+          "source-layer": 'senate-0213ch',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('senate','visibility','none')
+        // map.setLayoutProperty('senate_fill','visibility','none')
+        map.addLayer({
+          "id": 'congress_fill',
+          "type": "fill",
+          "source": 'congress',
+          "source-layer": 'congress-962d2l',
+          "paint": {
+            'fill-opacity': 0,
+            'fill-color': [
+              "match",
+              ['get','Party'],
+              'Republican', 'red',
+              'Democrat', 'blue',
+              'grey',
+            ]
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'congress',
+          "type": "line",
+          "source": 'congress',
+          "source-layer": 'congress-962d2l',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('congress','visibility','none')
+        // map.setLayoutProperty('congress_fill','visibility','none')
+        map.addLayer({
+          "id": 'assembly_fill',
+          "type": "fill",
+          "source": 'assembly',
+          "source-layer": 'assembly-5wkkao',
+          "paint": {
+            'fill-opacity': 0,
+            'fill-color': [
+              "match",
+              ['get','party'],
+              'Republican', 'red',
+              'Democrat', 'blue',
+              'grey',
+            ]
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'assembly',
+          "type": "line",
+          "source": 'assembly',
+          "source-layer": 'assembly-5wkkao',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('assembly','visibility','none')
+        // map.setLayoutProperty('assembly_fill','visibility','none')
+
+        map.addLayer({
+          "id": 'school_zones_fill',
+          "type": "fill",
+          "source": 'school_zones',
+          "source-layer": 'school_zones-4v2mmg',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'school_zones',
+          "type": "line",
+          "source": 'school_zones',
+          "source-layer": 'school_zones-4v2mmg',
+          "paint": {
+            'line-width': 2,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('school_zones','visibility','none')
+
+        map.addLayer({
+          "id": 'empire_zones_fill',
+          "type": "fill",
+          "source": 'empire_zones',
+          "source-layer": 'empirezone-ah3phb',
+          "paint": {
+            'fill-opacity': 0,
+          }
+        },'admin-state-province');
+        map.addLayer({
+          "id": 'empire_zones',
+          "type": "line",
+          "source": 'empire_zones',
+          "source-layer": 'empirezone-ah3phb',
+          "paint": {
+            'line-width': 1,
+          }
+        },'admin-state-province');
+        map.setLayoutProperty('empire_zones','visibility','none')
 
         // Add county layers
         for (var key in county_dict) {
@@ -176,11 +402,6 @@ function setUpGlobalVars() {
                             map.getCanvas().style.cursor = '';
                             hoveredStateId =  null;
                         };
-                        // if (activeLayer == 'onondaga') {
-                        //     new_popup = makePopUp(map,f[i],lngLat,['FULL_MV','YR_BLT','SQFT_LIV','NBR_BEDRM','NBR_F_BATH','PARCELADDR','PRINT_KEY','CALC_ACRES','PRMY_OWNER']);
-                        // } else {
-                        //     new_popup = makePopUp(map,f[i],lngLat,['ATOTAL','BLOCKCE','SQFT_LIV','NBR_BEDRM','NBR_F_BATH','PARCELADDR','PRINT_KEY','CALC_ACRES','PRMY_OWNER']);
-                        // }
                         new_popup = makePopUp(map,f[i],lngLat);
                         open_popup = true;
                     };
@@ -197,8 +418,122 @@ function setUpGlobalVars() {
             } else if (typeof checkMapLayer !== 'undefined') {
                 let f = map.queryRenderedFeatures(e.point);
                 var on_fills = false;
+                var county = false;
+                var city = false;
+                var village = false;
+                var school = false;
+                var indian = false;
+                var senate = false;
+                var congress = false;
+                var assembly = false;
                 if (f.length) {
                     for (i=0; i<f.length; i++) {
+                        // if (f[i].layer.id == 'counties_fill') {
+                        //     info += f[i].properties.NAME + 'County\n'
+                        // }
+
+                        if (f[i].layer.id == 'city_town_fill') {
+                            county = true;
+                            var county_name = f[i].properties.COUNTY;
+                            var city_name = f[i].properties.NAME;
+                        }
+                        if (f[i].layer.id == 'villages_fill') {
+                            village = true;
+                            var village_name = f[i].properties.NAME;
+                        }
+                        if (f[i].layer.id == 'school_zones_fill') {
+                            school = true;
+                            var school_name = f[i].properties.NAME;
+                        }
+                        if (f[i].layer.id == 'indian_territory_fill') {
+                            indian = true;
+                            var indian_name = f[i].properties.NAME;
+                        }
+                        if (f[i].layer.id == 'senate_fill') {
+                            senate = true;
+                            var string = f[i].properties.DISTRICT.toString()
+                            string.charAt(string.length - 1)
+                            if (string.charAt(string.length - 1) == '2') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'nd';
+                              }
+                            } else if (string.charAt(string.length - 1) == '3') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'rd';
+                              }
+                            } else if (string.charAt(string.length - 1) == '1') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'st';
+                              }
+                            } else {
+                              var ending = 'th';
+                            }
+                            var senate_name = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.party[0]+'.)';
+                        }
+                        if (f[i].layer.id == 'congress_fill') {
+                            congress = true;
+                            var string = f[i].properties.DISTRICT.toString()
+                            string.charAt(string.length - 1)
+                            if (string.charAt(string.length - 1) == '2') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'nd';
+                              }
+                            } else if (string.charAt(string.length - 1) == '3') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'rd';
+                              }
+                            } else if (string.charAt(string.length - 1) == '1') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'st';
+                              }
+                            } else {
+                              var ending = 'th';
+                            }
+                            var congress_name = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.Party[0]+'.)';
+                        }
+                        if (f[i].layer.id == 'assembly_fill') {
+                            assembly = true;
+                            var string = f[i].properties.DISTRICT.toString()
+                            string.charAt(string.length - 1)
+                            if (string.charAt(string.length - 1) == '2') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'nd';
+                              }
+                            } else if (string.charAt(string.length - 1) == '3') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'rd';
+                              }
+                            } else if (string.charAt(string.length - 1) == '1') {
+                              if (string.charAt(string.length - 2) == '1') {
+                                  var ending = 'th';
+                              } else {
+                                  var ending = 'st';
+                              }
+                            } else {
+                              var ending = 'th';
+                            }
+                            var assembly_name = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.party[0]+'.)';
+                        }
+
+
+
+
                         if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
                             on_fills = !on_fills;
                             var layer_id = f[i].layer.id.replace('_fills','').replace('_fill_outlines','').replace('_outlines','');
@@ -227,11 +562,15 @@ function setUpGlobalVars() {
                                 .setHTML("<p style='font-size:140%;'>"+address+"</p><p style='font-size:120%;'>"+"<u>Assessed Value:</u> $"+assessed_value+"*</p><p style='font-size:100%;'>"+"<u>Parcel ID:</u> "+parcel_id+"</p><p style='font-size:90%;'>*May not reflect market value</p>")
                                 .addTo(map);
 
+                            // var listings = document.getElementById('listings');
+                            // var details = listing.appendChild(document.createElement('div'));
+
                             hoveredStateId = f[i].id;
                             map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, {hover: true});
-                            break;
+                            // break;
                         };
                     };
+
                     if (!on_fills) {
                         if (activeLayer != 'none') {
                             if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
@@ -245,13 +584,66 @@ function setUpGlobalVars() {
                         };
                     };
                 };
+                if (county) {
+                    element = document.getElementById('county');
+                    element.innerHTML = county_name;
+                    element = document.getElementById('city');
+                    element.innerHTML = city_name;
+                } else {
+                    element = document.getElementById('county');
+                    element.innerHTML = '-';
+                    element = document.getElementById('city');
+                    element.innerHTML = '-';
+                }
+                if (village) {
+                    element = document.getElementById('village');
+                    element.innerHTML = village_name;
+                } else {
+                    element = document.getElementById('village');
+                    element.innerHTML = '-';
+                }
+                if (school) {
+                    element = document.getElementById('school');
+                    element.innerHTML = school_name;
+                } else {
+                    element = document.getElementById('school');
+                    element.innerHTML = '-';
+                }
+                if (indian) {
+                    element = document.getElementById('indian');
+                    element.innerHTML = indian_name;
+                } else {
+                    element = document.getElementById('indian');
+                    element.innerHTML = '-';
+                }
+                if (senate) {
+                    element = document.getElementById('senate');
+                    element.innerHTML = senate_name;
+                } else {
+                    element = document.getElementById('senate');
+                    element.innerHTML = '-';
+                }
+                if (congress) {
+                    element = document.getElementById('congress');
+                    element.innerHTML = congress_name;
+                } else {
+                    element = document.getElementById('congress');
+                    element.innerHTML = '-';
+                }
+                if (assembly) {
+                    element = document.getElementById('assembly');
+                    element.innerHTML = assembly_name;
+                } else {
+                    element = document.getElementById('assembly');
+                    element.innerHTML = '-';
+                }
             };
         });
     });
 
 
     // Toggle satellite mode when clicked
-    var toggleableLayerIds = ['Satellite Mode'];
+    var toggleableLayerIds = ['Satellite View','Counties','Cities','Villages','Indian Territory','School Zones','Congressional Districts','State Senate','State Assembly','Empire Zone Program'];
     for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
         var link = document.createElement('a');
@@ -262,9 +654,42 @@ function setUpGlobalVars() {
         link.onclick = function (e) {
             var checkMapLayer = map.getLayer('3d-buildings');
             if (typeof checkMapLayer !== 'undefined') {
-                if (this.textContent == 'Satellite Mode') {
+                if (this.textContent == 'Satellite View') {
                     satellite_view = !satellite_view;
                     var clickedLayer = 'satellite';
+                } else if (this.textContent == 'Counties') {
+                    var clickedLayer = 'counties';
+                } else if (this.textContent == 'Cities') {
+                    var clickedLayer = 'city_town';
+                } else if (this.textContent == 'Villages') {
+                    var clickedLayer = 'villages';
+                } else if (this.textContent == 'Indian Territory') {
+                    var clickedLayer = 'indian_territory';
+                } else if (this.textContent == 'School Zones') {
+                    var clickedLayer = 'school_zones';
+                } else if (this.textContent == 'Empire Zone Program') {
+                    var clickedLayer = 'empire_zones';
+                } else if (this.textContent == 'State Senate') {
+                    var clickedLayer = 'senate';
+                    if (map.getPaintProperty('senate_fill', 'fill-opacity') != .25) {
+                        map.setPaintProperty('senate_fill', 'fill-opacity', .25)
+                    } else {
+                      map.setPaintProperty('senate_fill', 'fill-opacity', 0)
+                    };
+                } else if (this.textContent == 'Congressional Districts') {
+                    var clickedLayer = 'congress';
+                    if (map.getPaintProperty('congress_fill', 'fill-opacity') != .25) {
+                        map.setPaintProperty('congress_fill', 'fill-opacity', .25)
+                    } else {
+                      map.setPaintProperty('congress_fill', 'fill-opacity', 0)
+                    };
+                } else if (this.textContent == 'State Assembly') {
+                    var clickedLayer = 'assembly';
+                    if (map.getPaintProperty('assembly_fill', 'fill-opacity') != .25) {
+                        map.setPaintProperty('assembly_fill', 'fill-opacity', .25)
+                    } else {
+                      map.setPaintProperty('assembly_fill', 'fill-opacity', 0)
+                    };
                 } else {
                     var clickedLayer = this.textContent;
                 };
@@ -279,22 +704,66 @@ function setUpGlobalVars() {
 
                 if (map.getLayoutProperty(clickedLayer, 'visibility') === 'visible') {
                     map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-                    if (layer_id != 'none') {
+                    if (map.getLayoutProperty('satellite', 'visibility') === 'visible') {
+                        map.setPaintProperty('school_zones','line-color','orange');
+                        map.setPaintProperty('senate','line-color','orange');
+                        map.setPaintProperty('congress','line-color','orange');
+                        map.setPaintProperty('assembly','line-color','orange');
+                        map.setPaintProperty('empire_zones','line-color','orange');
+                        map.setPaintProperty('villages','line-color','orange');
+                        map.setPaintProperty('city_town','line-color','orange');
+                        map.setPaintProperty('counties','line-color','orange');
+                        map.setPaintProperty('indian_territory','line-color','orange');
+                    } else {
+                        map.setPaintProperty('school_zones','line-color','purple');
+                        map.setPaintProperty('senate','line-color','black');
+                        map.setPaintProperty('congress','line-color','black');
+                        map.setPaintProperty('assembly','line-color','black');
+                        map.setPaintProperty('empire_zones','line-color','black');
+                        map.setPaintProperty('villages','line-color','black');
+                        map.setPaintProperty('city_town','line-color','black');
+                        map.setPaintProperty('counties','line-color','black');
+                        map.setPaintProperty('indian_territory','line-color','black');
+                    };
+                    if (layer_id != 'none' && clickedLayer == 'satellite') {
+                        // map.setPaintProperty('school_zones','line-color','black');
                         map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'none');
-                        // map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'none');
                         map.setLayoutProperty(layer_id+'_fills', 'visibility', 'visible')
                         map.setPaintProperty(layer_id+'_outlines', 'line-color', 'black');
                     };
-                    this.className = '';
+                    this.className = 'active';
+
                 } else {
                     map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-                    if (layer_id != 'none') {
+                    if (map.getLayoutProperty('satellite', 'visibility') === 'visible') {
+                        map.setPaintProperty('school_zones','line-color','orange');
+                        map.setPaintProperty('senate','line-color','orange');
+                        map.setPaintProperty('congress','line-color','orange');
+                        map.setPaintProperty('assembly','line-color','orange');
+                        map.setPaintProperty('empire_zones','line-color','orange');
+                        map.setPaintProperty('villages','line-color','orange');
+                        map.setPaintProperty('city_town','line-color','orange');
+                        map.setPaintProperty('counties','line-color','orange');
+                        map.setPaintProperty('indian_territory','line-color','orange');
+                    } else {
+                        map.setPaintProperty('school_zones','line-color','purple');
+                        map.setPaintProperty('senate','line-color','black');
+                        map.setPaintProperty('congress','line-color','black');
+                        map.setPaintProperty('assembly','line-color','black');
+                        map.setPaintProperty('empire_zones','line-color','black');
+                        map.setPaintProperty('villages','line-color','black');
+                        map.setPaintProperty('city_town','line-color','black');
+                        map.setPaintProperty('counties','line-color','black');
+                        map.setPaintProperty('indian_territory','line-color','black');
+                    };
+                    if (layer_id != 'none' && clickedLayer == 'satellite') {
+                        // map.setPaintProperty('school_zones','line-color','orange');
                         map.setLayoutProperty(layer_id+'_fill_outlines', 'visibility', 'visible');
                         map.setLayoutProperty(layer_id+'_outlines', 'visibility', 'visible');
                         map.setLayoutProperty(layer_id+'_fills', 'visibility', 'none')
                         map.setPaintProperty(layer_id+'_outlines', 'line-color', 'orange');
                     };
-                    this.className = 'active';
+                    this.className = 'inactive';
                 };
             };
         };
@@ -319,7 +788,7 @@ function setUpGlobalVars() {
                     if (satellite_view) {
                         if (map.getLayoutProperty(key+'_fill_outlines', 'visibility') == 'visible') {
                             map.setPaintProperty(key+'_outlines', 'line-color', 'orange');
-                            // map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
+                            map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
                         } else {
                             map.flyTo({
                                 center: county_dict[key][2],
@@ -329,10 +798,13 @@ function setUpGlobalVars() {
                             });
                             map.setLayoutProperty(key+'_outlines', 'visibility', 'visible');
                             map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'visible');
+                            map.setLayoutProperty(key+'_outlines', 'visibility', 'visible');
+                            map.setPaintProperty(key+'_outlines', 'line-color', 'orange');
                         };
                     } else {
                         if (map.getLayoutProperty(key+'_fills', 'visibility') == 'visible') {
                             map.setLayoutProperty(key+'_fills', 'visibility', 'none');
+                            map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
                             map.setPaintProperty(key+'_outlines', 'line-color', 'black');
                         } else {
                             map.flyTo({
@@ -418,7 +890,7 @@ function makePopUp(map,e,lngLat,county_dict) {
                         '<h3><u># Bathrooms:</u> '+baths+'</h3>\n'+
                         '<h3><u>Year Built:</u> '+year_built+'</h3>\n'+
                         '<h3><u>Owner:</u> '+features['PRMY_OWNER']+'</h3>\n'+
-                        '<h3><a href="' + street_view_url + '" target="_blank">' + "See Google Street View" + '</a></h3>'
+                        '<h3><a  style="color:blue; text-decoration: underline" href="' + street_view_url + '" target="_blank">' + "See Google Street View" + '</a></h3>'
                         )
                 .addTo(map);
     return popup;

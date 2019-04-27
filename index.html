@@ -50,6 +50,7 @@
 
         .topnav a.active {
             background-color: #708090;
+            border: 1px solid #000000;
             color: white;
         }
 
@@ -100,19 +101,20 @@
           overflow: hidden;
           position: absolute;
           top: 1px;
-          left: 218px;
+          left: 321px;
         }
         .dropdown .dropbtn {
           cursor: pointer;
           font-size: 16px;
-          border: 1px solid #bfbfbf;
+          border: 1px solid #000000;
           outline: none;
-          color: white;
-          padding: 14px 16px;
+          color: black;
+          padding-left: 10px;
           /* background-color: inherit; */
-          background-color: #2F4F4F;
+          background-color: #D0AB66;
           font-family: inherit;
           margin: 0;
+          height: 5.65vh;
         }
         .navbar a:hover, .dropdown:hover .dropbtn {
           background-color: red;
@@ -120,6 +122,7 @@
         .dropdown-content {
           display: none;
           /* position: absolute; */
+          border: 1px solid #000000;
           background-color: #f9f9f9;
           min-width: 160px;
           box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -410,7 +413,7 @@
     <style>
     .toggleheader {
       position: absolute;
-      background: #2F4F4F;
+      background: #555;
       bottom: 48.4%;
       border-style: solid;
       border-width: 1px;
@@ -422,6 +425,71 @@
       width: 10vw;
       font: 1vw Arial;
       color: white
+    }
+    </style>
+    <style>
+    {box-sizing: border-box;}
+
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .open-button {
+      background-color: #555;
+      color: white;
+      font-size: 17px;
+      /* padding: 16px 20px; */
+      border: 1px solid black;
+      cursor: pointer;
+      width: 100px;
+      height: 5.6%;
+      position: absolute;
+      top: 1px;
+      left: 220px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+      /* display: none;
+      position: absolute;
+      top: 40%;
+      right: 40%;
+      border: 3px solid #f1f1f1;
+      z-index: 9; */
+      display: none;
+      float: left;
+      overflow: hidden;
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      width: 90%;
+      height: 90%;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+      width: 90%;
+      height: 90%;
+      padding: 10px;
+      background-color: white;
+    }
+
+    /* Set a style for the submit/login button */
+    .form-container .btn {
+      position: absolute;
+      background-color: #555;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      width: 10%;
+      bottom: 10%;
+      right: 49.7%;
+      margin-bottom:10px;
+      opacity: 0.8;
+      font-size: 20px;
+    }
+
+    /* Add some hover effects to buttons */
+    .form-container .btn:hover, .open-button:hover {
+      opacity: 1;
     }
     </style>
 
@@ -514,6 +582,28 @@
                 <a href="#">Warren</a>
             </div>
         </div>
+        <button class="open-button" onclick="openForm()">About</button>
+        <div class="form-popup" id="myForm">
+          <form class="form-container">
+              <div class="w3-col m6 w3-padding-large">
+                  <h1 class="w1-center" align="center">About this Map</h1>
+                  <p class="w1-large" align="center">This map was created as a tool to visualize and analyze features of New York State</p>
+              </div>
+              <div>
+                  <button type="button" class="btn" onclick="closeForm()">Close</button>
+              </div>
+
+          </form>
+        </div>
+        <script>
+        function openForm() {
+          document.getElementById("myForm").style.display = "block";
+        }
+
+        function closeForm() {
+          document.getElementById("myForm").style.display = "none";
+        }
+        </script>
     </div>
 
 

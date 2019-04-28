@@ -24,6 +24,7 @@ function setUpGlobalVars() {
 
     var open_popup = false;
     var hoveredStateId =  null;
+    var censushoveredStateId =  null;
     var activeLayer = 'none';
     var satellite_view = false;
 
@@ -131,23 +132,14 @@ function setUpGlobalVars() {
         });
 
 
-        // map.loadImage('https://commons.wikimedia.org/wiki/File:Zebra.png', function(error,image) {
-        //     if (error) throw error;
-        //     map.addImage('zebra',image);
-        // });
         map.addLayer({
           "id": 'zebra',
           "type": "symbol",
           "source": 'zebra',
           "source-layer": 'zebra_mussels-3pzz5l',
           "layout": {
-            // "text-field": "HERE",
             "icon-image": "marker-11",
-            // "icon-size": .25,
           },
-          // "paint": {
-            // 'line-width': 2,
-          // }
         },'admin-state-province');
         map.setLayoutProperty('zebra','visibility','none')
 
@@ -299,10 +291,15 @@ function setUpGlobalVars() {
           "source": 'census',
           "source-layer": 'census_2-6uqqfb',
           "paint": {
-            'fill-opacity': 0,
+            'fill-opacity': [
+              "case",
+              ["boolean", ["feature-state","hover"], false], .7,
+              0
+            ],
+            'fill-color':'#FFB533'
           }
         },'admin-state-province');
-
+        map.setLayoutProperty('census_fill','visibility','none')
 
         map.addLayer({
           "id": 'villages_fill',
@@ -597,16 +594,21 @@ function setUpGlobalVars() {
 
 
         var checkMapLayer = map.getLayer('3d-buildings');
+        var census_clicked = false;
         // Display property features when fill layer parcels are clicked
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
             console.log(f);
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
+                census_clicked = false;
                 for (i=0; i<f.length; i++) {
+                    if (f[i].layer.id.includes('census_fill')) {
+                        census_clicked = true;
+                    }
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
                         if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
-                            popup.remove();
+                            if (map.getLayoutProperty('census_fill', 'visibility') != 'visible') popup.remove();
                             if (hoveredStateId) {
                                 map.setFeatureState({source: activeLayer, id: hoveredStateId, sourceLayer: county_dict[activeLayer][1]}, {hover: false});
                             };
@@ -629,6 +631,7 @@ function setUpGlobalVars() {
             } else if (typeof checkMapLayer !== 'undefined') {
                 let f = map.queryRenderedFeatures(e.point);
                 var on_fills = false;
+                var on_census = false;
                 var county = false;
                 var city = false;
                 var village = false;
@@ -780,6 +783,67 @@ function setUpGlobalVars() {
                             map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, {hover: true});
                             // break;
                         };
+
+                        if (f[i].layer.id.includes('census_fill')) {
+                            on_census = !on_census;
+                            if (censushoveredStateId) {
+                                map.setFeatureState({source: 'census', id: censushoveredStateId, sourceLayer: 'census_2-6uqqfb'}, {hover: false});
+                            };
+                            map.getCanvas().style.cursor = 'pointer';
+
+                            // google.charts.load("current", {packages:["corechart"]});
+                            tot_pop = f[i].properties.POP2000;
+                            var other = f[i].properties.OTHER + f[i].properties.HAWN_PI + f[i].properties.MULT_RACE + f[i].properties.AMERI_ES;
+                            var data1 = google.visualization.arrayToDataTable([
+                              ['Race', 'Race'],
+                              ['White',     +((f[i].properties.WHITE/tot_pop).toFixed(2))],
+                              ['Black',      +((f[i].properties.BLACK/tot_pop).toFixed(2))],
+                              ['Hispanic',  +((f[i].properties.HISPANIC/tot_pop).toFixed(2))],
+                              ['Asian', +((f[i].properties.ASIAN/tot_pop).toFixed(2))],
+                              ['Other',    +((other/tot_pop).toFixed(2))]
+                            ]);
+
+                            var data2 = google.visualization.arrayToDataTable([
+                              ['Age', 'Age'],
+                              ['Under 5',     f[i].properties.AGE_UNDER5],
+                              ['5 - 17',      f[i].properties.AGE_5_17],
+                              ['18 - 21',  f[i].properties.AGE_18_21],
+                              ['22 - 29', f[i].properties.AGE_22_29],
+                              ['30 - 39',    f[i].properties.AGE_30_39],
+                              ['40 - 49',    f[i].properties.AGE_40_49],
+                              ['50 - 64',    f[i].properties.AGE_50_64],
+                              ['Above 65',    f[i].properties.AGE_65_UP],
+                            ]);
+                            var options1 = {
+                              title: 'Demographics',
+                              pieHole: 0.4,
+                              legend: {position: 'labeled'},
+                              pieSliceText: 'none',
+                            };
+                            var options2 = {
+                              title: 'Age',
+                              legend: 'none',
+                            };
+
+                            div = document.createElement('div');
+                            div.innerHTML = '<div id="chart_holder" align="center" style="float: left; width: 300px; height: 300px;"></div>'
+                            div1 = document.createElement('div');
+                            div2 = document.createElement('div');
+                            div1.innerHTML = '<div id="donutchart1" style="width: 250px; height: 150px;"></div>'
+                            div2.innerHTML = '<div id="donutchart2" style="width: 250px; height: 150px;"></div>'
+                            div.appendChild(div1);
+                            div.appendChild(div2);
+                            var chart1 = new google.visualization.PieChart(div1);
+                            var chart2 = new google.visualization.BarChart(div2);
+                            popup.setLngLat(e.lngLat)
+                                .setDOMContent(div)
+                                .addTo(map);
+                                censushoveredStateId = f[i].id;
+                                map.setFeatureState({source: 'census', id: censushoveredStateId, sourceLayer: 'census_2-6uqqfb'}, {hover: true});
+
+                            chart1.draw(data1, options1);
+                            chart2.draw(data2, options2);
+                        };
                     };
 
                     if (!on_fills) {
@@ -788,9 +852,21 @@ function setUpGlobalVars() {
                                 if (hoveredStateId) {
                                     map.setFeatureState({source: activeLayer, id: hoveredStateId, sourceLayer: county_dict[activeLayer][1]}, {hover: false});
                                 };
-                              map.getCanvas().style.cursor = '';
-                              hoveredStateId =  null;
-                              popup.remove();
+                                map.getCanvas().style.cursor = '';
+                                hoveredStateId =  null;
+                                popup.remove();
+                            };
+                        };
+                    };
+                    if (!on_census) {
+                        if (map.getLayoutProperty('census_fill','visibility') == 'visible') {
+                            if (censushoveredStateId) {
+                                map.setFeatureState({source: 'census', id: censushoveredStateId, sourceLayer: 'census_2-6uqqfb'}, {hover: false});
+                            };
+                            map.getCanvas().style.cursor = '';
+                            censushoveredStateId =  null;
+                            if (!census_clicked) {
+                                popup.remove();
                             };
                         };
                     };
@@ -935,6 +1011,11 @@ function setUpGlobalVars() {
                     if (clickedLayer == 'terrain') {
                         map.setLayoutProperty('terrain_label', 'visibility', 'none');
                     };
+
+                    if (clickedLayer == 'census') {
+                        map.setLayoutProperty('census_fill', 'visibility', 'none');
+                    };
+
                     map.setLayoutProperty(clickedLayer, 'visibility', 'none');
                     if (map.getLayoutProperty('satellite', 'visibility') === 'visible') {
                         map.setPaintProperty('school_zones','line-color','orange');
@@ -994,14 +1075,18 @@ function setUpGlobalVars() {
                             bearing: 0,
                         });
                     };
+                    if (clickedLayer == 'census') {
+                        map.setLayoutProperty('census_fill', 'visibility', 'visible');
+                    };
                     if (clickedLayer == 'agriculture') {
-                      map.flyTo({
-                          center: [-75.9, 42.9],
-                          zoom: 8.5,
-                          pitch: 10,
-                          bearing: 0,
-                      });
-                    }
+                        map.flyTo({
+                            center: [-75.9, 42.9],
+                            zoom: 8.5,
+                            pitch: 10,
+                            bearing: 0,
+                        });
+                    };
+
                     map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
                     if (map.getLayoutProperty('satellite', 'visibility') === 'visible') {
                         map.setPaintProperty('school_zones','line-color','orange');

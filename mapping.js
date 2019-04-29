@@ -132,7 +132,7 @@ function setUpGlobalVars() {
                     'fill-color':toggle_layers[key][4]
                   }
                 },'admin-state-province');
-                if (key != 'soil' && key != 'senate' && key != 'congress' && key != 'assembly' && key != 'county' && key != 'school' && key != 'city_town' && key != 'village' && key != 'indian_territory') {
+                if (key != 'soil' && key != 'senate' && key != 'congress' && key != 'assembly' && key != 'county' && key != 'school_zones' && key != 'city_town' && key != 'villages' && key != 'indian_territory') {
                     map.setLayoutProperty(key+'_fill','visibility','none');
                 };
             };
@@ -241,7 +241,6 @@ function setUpGlobalVars() {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
                         if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
-                            if (map.getLayoutProperty('census_fill', 'visibility') != 'visible') popup.remove();
                             if (hoveredStateId) {
                                 map.setFeatureState({source: activeLayer, id: hoveredStateId, sourceLayer: county_dict[activeLayer][1]}, {hover: false});
                             };

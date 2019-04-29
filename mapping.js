@@ -521,7 +521,7 @@ function setUpGlobalVars() {
                           map.setLayoutProperty(activeLayer+'_fills', 'visibility', 'none');
                           map.setLayoutProperty(activeLayer+'_fill_outlines', 'visibility', 'visible');
                           map.setPaintProperty(activeLayer+'_outlines','line-color','orange');
-                        } else {
+                        } else if  (map.getLayoutProperty(activeLayer+'_fill_outlines', 'visibility') == 'visible') {
                           map.setLayoutProperty(activeLayer+'_fills', 'visibility', 'visible');
                           map.setLayoutProperty(activeLayer+'_fill_outlines', 'visibility', 'none');
                           map.setPaintProperty(activeLayer+'_outlines','line-color','black');

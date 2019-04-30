@@ -235,9 +235,7 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
-            console.log(f);
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
-                census_clicked = false;
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
                         if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
@@ -496,7 +494,7 @@ function setUpGlobalVars() {
                     element.innerHTML = assembly_name;
                 } else {
                     element.innerHTML = '-';
-                }
+                };
             };
         });
     });
@@ -526,7 +524,7 @@ function setUpGlobalVars() {
                           map.setLayoutProperty(activeLayer+'_fill_outlines', 'visibility', 'none');
                           map.setPaintProperty(activeLayer+'_outlines','line-color','black');
                         };
-                    }
+                    };
                     if (map.getLayoutProperty('satellite','visibility') == 'visible') {
                         map.setLayoutProperty('satellite','visibility','none');
                         this.className = 'active';

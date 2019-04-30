@@ -26,6 +26,7 @@ function setUpGlobalVars() {
     var hoveredStateId =  null;
     var census1hoveredStateId =  null;
     var census2hoveredStateId =  null;
+    var geologyhoveredStateId =  null;
     var activeLayer = 'none';
 
     var county_dict = {
@@ -91,7 +92,7 @@ function setUpGlobalVars() {
                             ['==',['get','ROCKDESC'],'Upper Cretaceous'],'#99a8a4',
                             ['==',['get','ROCKDESC'],'Ultramafic rocks'],'#1d34fb',
                             'blue'
-                          ],.7,],
+                          ],["case",["boolean", ["feature-state","hover"], false], 1,.6]],
                           'zebra': ['mapbox://secfast.9qepxeqa','zebra_mussels-3pzz5l','Zebra Mussels','vector'],
                           'birds': ['mapbox://secfast.7o9su5kf','birds-0ixrxg','Bird Migration','vector'],
                           'empire_zones': ['mapbox://secfast.bhdyfqno','empirezone-ah3phb','Empire Zone Program','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
@@ -291,7 +292,7 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
-            console.log(f)
+            // console.log(f)
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
@@ -322,6 +323,7 @@ function setUpGlobalVars() {
                 let f = map.queryRenderedFeatures(e.point);
                 var on_fills = false;
                 var on_census = false;
+                var on_geology = false;
                 var county = false;
                 var city = false;
                 var village = false;
@@ -397,6 +399,16 @@ function setUpGlobalVars() {
 
                             hoveredStateId = f[i].id;
                             map.setFeatureState({source: layer_id, id: hoveredStateId, sourceLayer: county_dict[layer_id][1]}, {hover: true});
+                        };
+
+                        if (f[i].layer.id.includes('geology')) {
+                          on_geology = !on_geology;
+                          map.getCanvas().style.cursor = 'pointer';
+                          if (geologyhoveredStateId) {
+                            map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: false});
+                            geologyhoveredStateId = f[i].id;
+                            map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: true});
+                          }
                         };
 
                         if (f[i].layer.id.includes('census_1_fill') || f[i].layer.id.includes('census_2_fill')) {
@@ -479,6 +491,13 @@ function setUpGlobalVars() {
                             census2hoveredStateId = f[i].id;
                             map.setFeatureState({source: 'census_2', id: census2hoveredStateId, sourceLayer: toggle_layers['census_2'][1]}, {hover: true});
                         };
+                        if (f[i].layer.id.includes('geology')) {
+                            if (geologyhoveredStateId) {
+                                map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: false});
+                            };
+                            geologyhoveredStateId = f[i].id;
+                            map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: true});
+                        };
                     };
 
                     if (!on_fills) {
@@ -508,6 +527,13 @@ function setUpGlobalVars() {
                             map.getCanvas().style.cursor = '';
                             census2hoveredStateId =  null;
                         };
+                    };
+                    if (!on_geology) {
+                      if (geologyhoveredStateId) {
+                        map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: false});
+                      };
+                      map.getCanvas().style.cursor = '';
+                      geologyhoveredStateId =  null;
                     };
                 };
                 element = document.getElementById('county');

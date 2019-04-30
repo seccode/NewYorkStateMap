@@ -561,7 +561,7 @@ function setUpGlobalVars() {
 
 
     // Toggle satellite mode when clicked
-    var toggleableLayerIds = ['Satellite View','Crop Cover','Counties','Cities','Villages','Indian Territory','School Zones','Basic Census Data','Advanced Census Data','Congressional Districts','State Senate','State Assembly','Empire Zone Program','Agricultural Districts','Soil Info','Annual Precipitation (in.)','Geology','Bird Migration','Zebra Mussels','Railroads','Enhanced Phosphorus Watershed'];
+    var toggleableLayerIds = ['Satellite View','Crop Cover','Counties','Cities','Villages','Indian Territory','School Zones','Basic Census Data','Advanced Census Data','Congressional Districts','State Senate','State Assembly','Empire Zone Program','National Parks','State Parks','Agricultural Districts','Soil Info','Annual Precipitation (in.)','Geology','Bird Migration','Zebra Mussels','Railroads','Enhanced Phosphorus Watershed'];
     for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
         var link = document.createElement('a');
@@ -597,6 +597,18 @@ function setUpGlobalVars() {
                     for (var key in toggle_layers) {
                         if (key == 'crops' || key == 'zebra') continue;
                         map.setPaintProperty(key,'line-color',color)
+                    };
+                } else if (this.textContent == 'National Parks') {
+                    if (map.getLayoutProperty('national_park','visibility') == 'visible') {
+                      map.setLayoutProperty('national_park','visibility','none');
+                    } else {
+                      map.setLayoutProperty('national_park','visibility','visible');
+                    };
+                } else if (this.textContent == 'State Parks') {
+                    if (map.getLayoutProperty('landuse','visibility') == 'visible') {
+                      map.setLayoutProperty('landuse','visibility','none');
+                    } else {
+                      map.setLayoutProperty('landuse','visibility','visible');
                     };
                 } else {
                     for (key in toggle_layers) {

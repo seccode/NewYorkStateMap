@@ -57,12 +57,50 @@ function setUpGlobalVars() {
                           'crops': ['mapbox://secfast.63qhbo2t','CDL_2010_NY-7ym7gh','Crop Cover','raster'],
                           'agriculture': ['mapbox://secfast.2euzzuud','agriculture-913eim','Agricultural Districts','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
                           'soil': ['mapbox://secfast.1h9viy25','soil-0j12c4','Soil Info','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
-                          'precip': ['mapbox://secfast.4gi9cwh5','precip-0qg8b2','Precipitation','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
-                          'geology': ['mapbox://secfast.4cc0940p','geology-7dpveh','Geology','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
+                          'precip': ['mapbox://secfast.4gi9cwh5','precip-0qg8b2','Annual Precipitation (in.)','vector',['interpolate', ['linear'],['get','RANGE'],30, '#B5E3E9',65, '#3146DB',],.7,],
+                          'geology': ['mapbox://secfast.4cc0940p','geology-7dpveh','Geology','vector',["case",
+                            ['==',['get','ROCKDESC'],'Lower Ordovician (Canadian)'],'#6d2abd',
+                            ['==',['get','ROCKDESC'],'Middle Ordovician (Mohawkian)'],'#c15769',
+                            ['==',['get','ROCKDESC'],'Cambrian'],'#2f5d02',
+                            ['==',['get','ROCKDESC'],'Orthogneiss'],'#864c2e',
+                            ['==',['get','ROCKDESC'],'Syenite'],'#dd3ec3',
+                            ['==',['get','ROCKDESC'],'Y sedimentary rocks'],'#1407a1',
+                            ['==',['get','ROCKDESC'],'Younger Y granitic rocks'],'#02b13d',
+                            ['==',['get','ROCKDESC'],'Paragneiss and schist'],'#de9048',
+                            ['==',['get','ROCKDESC'],'Anorthosite'],'#4eccb6',
+                            ['==',['get','ROCKDESC'],'Upper Ordovician (Cincinnatian)'],'#06b101',
+                            ['==',['get','ROCKDESC'],'Cambrian eugeosynclinal'],'#5e4d13',
+                            ['==',['get','ROCKDESC'],'Ordovician eugeosynclinal'],'#7eadca',
+                            ['==',['get','ROCKDESC'],'Lower Silurian (Alexandrian)'],'#32d4bc',
+                            ['==',['get','ROCKDESC'],'Middle Silurian (Niagaran)'],'#d3e2a1',
+                            ['==',['get','ROCKDESC'],'Upper Silurian (Cayugan)'],'#3b5619',
+                            ['==',['get','ROCKDESC'],'Lower Devonian'],'#d55e06',
+                            ['==',['get','ROCKDESC'],'Middle Devonian'],'#7b3c31',
+                            ['==',['get','ROCKDESC'],'Lower Ordovician and Cambrian carbonate rocks'],'#a84c7d',
+                            ['==',['get','ROCKDESC'],'Upper Devonian'],'#c32f9d',
+                            ['==',['get','ROCKDESC'],'Upper Devonian continental'],'#9fe8e3',
+                            ['==',['get','ROCKDESC'],'Middle Devonian continental'],'#c2fad2',
+                            ['==',['get','ROCKDESC'],'Silurian'],'#1f9061',
+                            ['==',['get','ROCKDESC'],'Mississippian'],'#9d26a0',
+                            ['==',['get','ROCKDESC'],'Devonian'],'#9263b1',
+                            ['==',['get','ROCKDESC'],'Pleistocene'],'#ac9cfa',
+                            ['==',['get','ROCKDESC'],'Paleozoic mafic intrusives'],'#8f05dd',
+                            ['==',['get','ROCKDESC'],'Triassic'],'#a7a0ee',
+                            ['==',['get','ROCKDESC'],'Triassic mafic intrusives'],'#0c48d1',
+                            ['==',['get','ROCKDESC'],'Lower Paleozoic granitic rocks'],'#6a31b3',
+                            ['==',['get','ROCKDESC'],'Upper Cretaceous'],'#99a8a4',
+                            ['==',['get','ROCKDESC'],'Ultramafic rocks'],'#1d34fb',
+                            'blue'
+                          ],.7,],
                           'zebra': ['mapbox://secfast.9qepxeqa','zebra_mussels-3pzz5l','Zebra Mussels','vector'],
                           'birds': ['mapbox://secfast.7o9su5kf','birds-0ixrxg','Bird Migration','vector'],
                           'empire_zones': ['mapbox://secfast.bhdyfqno','empirezone-ah3phb','Empire Zone Program','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
+                          'rails': ['mapbox://secfast.102qlnny','rails_2-dsd9c5','Railroads','vector'],
+                          'phosphorus': ['mapbox://secfast.a1uuppsr','phosphorus_zones-aehz2m','Enhanced Phosphorus Watershed','vector','#79CC79',.7],
                           };
+
+
+
 
     // Load map
     map.on('load', function () {
@@ -85,6 +123,7 @@ function setUpGlobalVars() {
               type: toggle_layers[key][3],
               url: toggle_layers[key][0]
             });
+
             if (key == 'zebra') {
                 map.addLayer({
                   "id": 'zebra',
@@ -102,12 +141,12 @@ function setUpGlobalVars() {
                   "source": 'crops',
                   "source-layer": 'CDL_2010_NY-7ym7gh',
                 },'admin-state-province');
-            } else if (key == 'birds') {
+            } else if (key == 'birds' || key == 'rails') {
                 map.addLayer({
-                  "id": 'birds',
+                  "id": key,
                   "type": "line",
-                  "source": 'birds',
-                  "source-layer": 'birds-0ixrxg',
+                  "source": key,
+                  "source-layer": toggle_layers[key][1],
                   "paint": {
                     'line-width': 2,
                   }
@@ -132,6 +171,23 @@ function setUpGlobalVars() {
                     'fill-color':toggle_layers[key][4]
                   }
                 },'admin-state-province');
+                if (key == 'precip') {
+                    map.addLayer({
+                      "id": 'precip_text',
+                      "type": "symbol",
+                      "source": 'precip',
+                      "source-layer": 'precip-0qg8b2',
+                      "layout": {
+                        "text-field":[
+                                  "case",
+                                  ["==",["get","RANGE"],0],
+                                  "",
+                                  ["get","RANGE"],
+                                  ]
+                      },
+                    },'admin-state-province');
+                    map.setLayoutProperty('precip_text','visibility','none')
+                };
                 if (key != 'soil' && key != 'senate' && key != 'congress' && key != 'assembly' && key != 'county' && key != 'school_zones' && key != 'city_town' && key != 'villages' && key != 'indian_territory') {
                     map.setLayoutProperty(key+'_fill','visibility','none');
                 };
@@ -235,6 +291,7 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
+            console.log(f)
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
@@ -247,6 +304,9 @@ function setUpGlobalVars() {
                         };
                         new_popup = makePopUp(map,f[i],lngLat);
                         open_popup = true;
+                    };
+                    if (f[i].layer.id.includes('geology') && map.getLayoutProperty('geology_fill','visibility') == 'visible') {
+                        g_popup = geologyPopUp(map,f[i],lngLat);
                     };
                 };
             };
@@ -501,7 +561,7 @@ function setUpGlobalVars() {
 
 
     // Toggle satellite mode when clicked
-    var toggleableLayerIds = ['Satellite View','Crop Cover','Counties','Cities','Villages','Indian Territory','School Zones','Basic Census Data','Advanced Census Data','Congressional Districts','State Senate','State Assembly','Empire Zone Program','Agricultural Districts','Soil Info','Precipitation','Geology','Bird Migration','Zebra Mussels'];
+    var toggleableLayerIds = ['Satellite View','Crop Cover','Counties','Cities','Villages','Indian Territory','School Zones','Basic Census Data','Advanced Census Data','Congressional Districts','State Senate','State Assembly','Empire Zone Program','Agricultural Districts','Soil Info','Annual Precipitation (in.)','Geology','Bird Migration','Zebra Mussels','Railroads','Enhanced Phosphorus Watershed'];
     for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
         var link = document.createElement('a');
@@ -549,9 +609,20 @@ function setUpGlobalVars() {
                             if (clickedLayer == 'census_2') {
                               map.setLayoutProperty('census_2_fill', 'visibility', 'none');
                             };
+                            if (clickedLayer != 'school_zones' && clickedLayer != 'villages' && clickedLayer != 'congress' && clickedLayer != 'senate' && clickedLayer != 'assembly' && clickedLayer != 'indian_territory' && clickedLayer != 'county' && clickedLayer != 'city_town') {
+                              if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
+                                map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'none');
+                              };
+                            }
+                            if (clickedLayer == 'precip') {
+                              map.setLayoutProperty('precip_text','visibility','none')
+                            };
                             map.setLayoutProperty(clickedLayer, 'visibility', 'none');
                             this.className = 'active';
                           } else {
+                            if (clickedLayer == 'precip') {
+                              map.setLayoutProperty('precip_text','visibility','visible')
+                            };
                             if (clickedLayer == 'census_1') {
                               if (map.getLayoutProperty('census_2_fill','visibility') == 'visible') {
                                 window.alert("Close Advanced Census Layer before viewing Basic Census Layer");
@@ -584,13 +655,9 @@ function setUpGlobalVars() {
                               map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
                               this.className = 'inactive';
                             } else {
-                            // if (clickedLayer == 'census_2') {
-                              // map.flyTo({
-                              //   center: [-76.12, 43.05],
-                              //   zoom: 11.5,
-                              //   pitch: 10,
-                              //   bearing: 0,
-                              // });
+                              if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
+                                  map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'visible');
+                              };
                               map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
                               this.className = 'inactive';
                             };
@@ -711,6 +778,16 @@ function findSuffix(string) {
     return ending;
 };
 
+function geologyPopUp(map,e,lngLat) {
+  var features = e.properties;
+  var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
+              .setLngLat(lngLat)
+              .setHTML(
+                      '<h3><u>Geologic Layer:</u> '+features['ROCKDESC']+'</h3>\n'
+                      )
+              .addTo(map);
+  return popup;
+};
 
 // Pop-up for when parcel is clicked
 function makePopUp(map,e,lngLat,county_dict) {

@@ -553,29 +553,47 @@ function setUpGlobalVars() {
                             this.className = 'active';
                           } else {
                             if (clickedLayer == 'census_1') {
-                              map.setLayoutProperty('census_1_fill', 'visibility', 'visible');
-                            };
-                            if (clickedLayer == 'census_2') {
-                              map.setLayoutProperty('census_2_fill', 'visibility', 'visible');
-                            };
-                            if (clickedLayer == 'agriculture') {
+                              if (map.getLayoutProperty('census_2_fill','visibility') == 'visible') {
+                                window.alert("Close Advanced Census Layer before viewing Basic Census Layer");
+                              } else {
+                                map.setLayoutProperty('census_1_fill', 'visibility', 'visible');
+                                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                                this.className = 'inactive';
+                              };
+                            } else if (clickedLayer == 'census_2') {
+                              if (map.getLayoutProperty('census_1_fill','visibility') == 'visible') {
+                                window.alert("Close Basic Census Layer before viewing Advanced Census Layer");
+                              } else {
+                                map.flyTo({
+                                  center: [-76.12, 43.05],
+                                  zoom: 11.5,
+                                  pitch: 10,
+                                  bearing: 0,
+                                });
+                                map.setLayoutProperty('census_2_fill', 'visibility', 'visible');
+                                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                                this.className = 'inactive';
+                              };
+                            } else if (clickedLayer == 'agriculture') {
                               map.flyTo({
                                 center: [-75.9, 42.9],
                                 zoom: 8.5,
                                 pitch: 10,
                                 bearing: 0,
                               });
+                              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                              this.className = 'inactive';
+                            } else {
+                            // if (clickedLayer == 'census_2') {
+                              // map.flyTo({
+                              //   center: [-76.12, 43.05],
+                              //   zoom: 11.5,
+                              //   pitch: 10,
+                              //   bearing: 0,
+                              // });
+                              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                              this.className = 'inactive';
                             };
-                            if (clickedLayer == 'census_2') {
-                              map.flyTo({
-                                center: [-76, 43],
-                                zoom: 10.5,
-                                pitch: 10,
-                                bearing: 0,
-                              });
-                            };
-                            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-                            this.className = 'inactive';
                             break;
                           };
                       };

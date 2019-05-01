@@ -725,7 +725,8 @@ function setUpGlobalVars() {
                               'Aquifers',
                               'EcoZone',
                               'North/South Hunting Line',
-                              'Dams'];
+                              'Dams',
+                              'Biodiversity Indicator'];
 
     for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
@@ -760,7 +761,7 @@ function setUpGlobalVars() {
                         var color = 'orange';
                     };
                     for (var key in toggle_layers) {
-                        if (key == 'crops' || key == 'zebra') continue;
+                        if (key == 'crops' || key == 'zebra' || key == 'dams' || key == 'wells' || key == 'biodiversity' || key == 'traffic' || key == 'eco_zone') continue;
                         map.setPaintProperty(key,'line-color',color)
                     };
                 } else if (this.textContent == 'National Parks') {

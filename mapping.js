@@ -581,7 +581,7 @@ function setUpGlobalVars() {
                             div1 = document.createElement('div');
                             div2 = document.createElement('div');
                             div1.innerHTML = '<div id="donutchart1" style="position:relative; width: 250px; height: 150px;"></div>'
-                            div2.innerHTML = '<div id="donutchart2" style="position:relative; width: 250px; height: 150px;"></div>'
+                            div2.innerHTML = '<div id="donutchart2" style="position:relative; width: 250px; height: 180px;"></div>'
                             div.appendChild(div1);
                             div.appendChild(div2);
                             var chart1 = new google.visualization.PieChart(div1);

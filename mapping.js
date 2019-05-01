@@ -60,44 +60,56 @@ function setUpGlobalVars() {
                           'soil': ['mapbox://secfast.1h9viy25','soil-0j12c4','Soil Info','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
                           'precip': ['mapbox://secfast.4gi9cwh5','precip-0qg8b2','Annual Precipitation (in.)','vector',['interpolate', ['linear'],['get','RANGE'],30, '#B5E3E9',65, '#3146DB',],.7,],
                           'geology': ['mapbox://secfast.4cc0940p','geology-7dpveh','Geology','vector',["case",
-                            ['==',['get','ROCKDESC'],'Lower Ordovician (Canadian)'],'#6d2abd',
-                            ['==',['get','ROCKDESC'],'Middle Ordovician (Mohawkian)'],'#c15769',
-                            ['==',['get','ROCKDESC'],'Cambrian'],'#2f5d02',
-                            ['==',['get','ROCKDESC'],'Orthogneiss'],'#864c2e',
-                            ['==',['get','ROCKDESC'],'Syenite'],'#dd3ec3',
-                            ['==',['get','ROCKDESC'],'Y sedimentary rocks'],'#1407a1',
-                            ['==',['get','ROCKDESC'],'Younger Y granitic rocks'],'#02b13d',
-                            ['==',['get','ROCKDESC'],'Paragneiss and schist'],'#de9048',
-                            ['==',['get','ROCKDESC'],'Anorthosite'],'#4eccb6',
-                            ['==',['get','ROCKDESC'],'Upper Ordovician (Cincinnatian)'],'#06b101',
-                            ['==',['get','ROCKDESC'],'Cambrian eugeosynclinal'],'#5e4d13',
-                            ['==',['get','ROCKDESC'],'Ordovician eugeosynclinal'],'#7eadca',
-                            ['==',['get','ROCKDESC'],'Lower Silurian (Alexandrian)'],'#32d4bc',
-                            ['==',['get','ROCKDESC'],'Middle Silurian (Niagaran)'],'#d3e2a1',
-                            ['==',['get','ROCKDESC'],'Upper Silurian (Cayugan)'],'#3b5619',
-                            ['==',['get','ROCKDESC'],'Lower Devonian'],'#d55e06',
-                            ['==',['get','ROCKDESC'],'Middle Devonian'],'#7b3c31',
-                            ['==',['get','ROCKDESC'],'Lower Ordovician and Cambrian carbonate rocks'],'#a84c7d',
-                            ['==',['get','ROCKDESC'],'Upper Devonian'],'#c32f9d',
-                            ['==',['get','ROCKDESC'],'Upper Devonian continental'],'#9fe8e3',
-                            ['==',['get','ROCKDESC'],'Middle Devonian continental'],'#c2fad2',
-                            ['==',['get','ROCKDESC'],'Silurian'],'#1f9061',
-                            ['==',['get','ROCKDESC'],'Mississippian'],'#9d26a0',
-                            ['==',['get','ROCKDESC'],'Devonian'],'#9263b1',
-                            ['==',['get','ROCKDESC'],'Pleistocene'],'#ac9cfa',
-                            ['==',['get','ROCKDESC'],'Paleozoic mafic intrusives'],'#8f05dd',
-                            ['==',['get','ROCKDESC'],'Triassic'],'#a7a0ee',
-                            ['==',['get','ROCKDESC'],'Triassic mafic intrusives'],'#0c48d1',
-                            ['==',['get','ROCKDESC'],'Lower Paleozoic granitic rocks'],'#6a31b3',
-                            ['==',['get','ROCKDESC'],'Upper Cretaceous'],'#99a8a4',
-                            ['==',['get','ROCKDESC'],'Ultramafic rocks'],'#1d34fb',
-                            'blue'
-                          ],["case",["boolean", ["feature-state","hover"], false], 1,.6]],
+                            ['==',['get','ROCKDESC'],'Lower Ordovician (Canadian)'],rainbow(31,1),
+                            ['==',['get','ROCKDESC'],'Middle Ordovician (Mohawkian)'],rainbow(31,2),
+                            ['==',['get','ROCKDESC'],'Cambrian'],rainbow(31,3),
+                            ['==',['get','ROCKDESC'],'Orthogneiss'],rainbow(31,4),
+                            ['==',['get','ROCKDESC'],'Syenite'],rainbow(31,5),
+                            ['==',['get','ROCKDESC'],'Y sedimentary rocks'],rainbow(31,6),
+                            ['==',['get','ROCKDESC'],'Younger Y granitic rocks'],rainbow(31,7),
+                            ['==',['get','ROCKDESC'],'Paragneiss and schist'],rainbow(31,8),
+                            ['==',['get','ROCKDESC'],'Anorthosite'],rainbow(31,9),
+                            ['==',['get','ROCKDESC'],'Upper Ordovician (Cincinnatian)'],rainbow(31,10),
+                            ['==',['get','ROCKDESC'],'Cambrian eugeosynclinal'],rainbow(31,11),
+                            ['==',['get','ROCKDESC'],'Ordovician eugeosynclinal'],rainbow(31,12),
+                            ['==',['get','ROCKDESC'],'Lower Silurian (Alexandrian)'],rainbow(31,13),
+                            ['==',['get','ROCKDESC'],'Middle Silurian (Niagaran)'],rainbow(31,14),
+                            ['==',['get','ROCKDESC'],'Upper Silurian (Cayugan)'],rainbow(31,15),
+                            ['==',['get','ROCKDESC'],'Lower Devonian'],rainbow(31,16),
+                            ['==',['get','ROCKDESC'],'Middle Devonian'],rainbow(31,17),
+                            ['==',['get','ROCKDESC'],'Lower Ordovician and Cambrian carbonate rocks'],rainbow(31,18),
+                            ['==',['get','ROCKDESC'],'Upper Devonian'],rainbow(31,19),
+                            ['==',['get','ROCKDESC'],'Upper Devonian continental'],rainbow(31,20),
+                            ['==',['get','ROCKDESC'],'Middle Devonian continental'],rainbow(31,21),
+                            ['==',['get','ROCKDESC'],'Silurian'],rainbow(31,22),
+                            ['==',['get','ROCKDESC'],'Mississippian'],rainbow(31,23),
+                            ['==',['get','ROCKDESC'],'Devonian'],rainbow(31,24),
+                            ['==',['get','ROCKDESC'],'Pleistocene'],rainbow(31,25),
+                            ['==',['get','ROCKDESC'],'Paleozoic mafic intrusives'],rainbow(31,26),
+                            ['==',['get','ROCKDESC'],'Triassic'],rainbow(31,27),
+                            ['==',['get','ROCKDESC'],'Triassic mafic intrusives'],rainbow(31,28),
+                            ['==',['get','ROCKDESC'],'Lower Paleozoic granitic rocks'],rainbow(31,29),
+                            ['==',['get','ROCKDESC'],'Upper Cretaceous'],rainbow(31,30),
+                            ['==',['get','ROCKDESC'],'Ultramafic rocks'],rainbow(31,31),
+                            '#000000'
+                          ],["case",["boolean", ["feature-state","hover"], false], 1,.5]],
                           'zebra': ['mapbox://secfast.9qepxeqa','zebra_mussels-3pzz5l','Zebra Mussels','vector'],
                           'birds': ['mapbox://secfast.7o9su5kf','birds-0ixrxg','Bird Migration','vector'],
                           'empire_zones': ['mapbox://secfast.bhdyfqno','empirezone-ah3phb','Empire Zone Program','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
                           'rails': ['mapbox://secfast.102qlnny','rails_2-dsd9c5','Railroads','vector'],
-                          'phosphorus': ['mapbox://secfast.a1uuppsr','phosphorus_zones-aehz2m','Enhanced Phosphorus Watershed','vector','#79CC79',.7],
+                          'biodiversity': ['mapbox://secfast.2lstx3qf','Biodiversity_Indicator-46nyrk','Biodiversity Indicator','raster'],
+                          'water_biodiversity': ['mapbox://secfast.5f341fim','Watershed-Biodiversity-12g1bi','Watershed Biodiversity','vector','#79CC79',.7],
+                          'traffic': ['mapbox://secfast.4khlw6gc','AADT_2015_tdv-5aggpk','Average Annual Traffic','vector'],
+                          'watershed': ['mapbox://secfast.86eo47nf','aa_aas_watersheds_2-cnc9go','AA and AAs Watersheds','vector','#79CC79',.7],
+                          'dec_land': ['mapbox://secfast.7ivjw684','DEC_lands-7ljzj9','DEC Land','vector','#79CC79',.7],
+                          'lwrp': ['mapbox://secfast.7iomvt5s','LWRP_Communities-5p8xpg','Local Waterfront Revitatilzation Program','vector','#79CC79',.7],
+                          'wells': ['mapbox://secfast.460kvfe7','WaterWellProgram-84yp5j','Water Wells','vector'],
+                          'crit_env': ['mapbox://secfast.4xzc0n3a','Critical_Env_Areas-b4nsa9','Critical Environmental Areas','vector','#79CC79',.7],
+                          'aquifers': ['mapbox://secfast.0c1xjicm','primaryaquifers-4ftr6o','Aquifers','vector','#79CC79',.7],
+                          'eco_zone': ['mapbox://secfast.045p6lht','ecozone-68q54s','EcoZone','vector','#79CC79',.7],
+                          'hunt_zone': ['mapbox://secfast.6wjgtb4v','hunt_zone-6xv8r5','North/South Hunting Line','vector'],
+                          'dams': ['mapbox://secfast.9ybj04wk','nysdec_dams-72j3u4','Dams','vector'],
+                          'phosphorus': ['mapbox://secfast.a1uuppsr','phosphorus_zones-aehz2m','Enhanced Phosphorus Watersheds','vector','#79CC79',.7],
                           };
 
 
@@ -125,24 +137,27 @@ function setUpGlobalVars() {
               url: toggle_layers[key][0]
             });
 
-            if (key == 'zebra') {
+            if (key == 'zebra' || key == 'dams' || key == 'wells') {
                 map.addLayer({
-                  "id": 'zebra',
+                  "id": key,
                   "type": "symbol",
-                  "source": 'zebra',
-                  "source-layer": 'zebra_mussels-3pzz5l',
+                  "source": key,
+                  "source-layer": toggle_layers[key][1],
                   "layout": {
                     "icon-image": "marker-11",
                   },
                 },'admin-state-province');
-            } else if (key == 'crops') {
+            } else if (key == 'crops' || key == 'biodiversity') {
                 map.addLayer({
-                  "id": 'crops',
+                  "id": key,
                   "type": "raster",
-                  "source": 'crops',
-                  "source-layer": 'CDL_2010_NY-7ym7gh',
+                  "source": key,
+                  "source-layer": toggle_layers[key][1],
+                  "paint": {
+                    "raster-saturation": 1,
+                  },
                 },'admin-state-province');
-            } else if (key == 'birds' || key == 'rails') {
+            } else if (key == 'birds' || key == 'rails' || key == 'hunt_zone') {
                 map.addLayer({
                   "id": key,
                   "type": "line",
@@ -152,6 +167,93 @@ function setUpGlobalVars() {
                     'line-width': 2,
                   }
                 },'admin-state-province');
+            } else if (key == 'traffic') {
+                map.addLayer({
+                  "id": key,
+                  "type": "line",
+                  "source": key,
+                  "source-layer": toggle_layers[key][1],
+                  "paint": {
+                    'line-width': [
+                      "case",
+                      ['<',['get','AADT'],1500],2,
+                      ['<',['get','AADT'],4000],2,
+                      ['<',['get','AADT'],10000],2,
+                      ['<',['get','AADT'],25000],3,
+                      ['<',['get','AADT'],75000],4,
+                      ['<',['get','AADT'],300000],5,
+                      ['>=',['get','AADT'],300000],6,
+                      2
+                    ],
+                    'line-color': [
+                      "case",
+                      ['<',['get','AADT'],1500],'#6EA34A',
+                      ['<',['get','AADT'],4000],'#64DB47',
+                      ['<',['get','AADT'],10000],'#B4DB33',
+                      ['<',['get','AADT'],25000],'#EEC137',
+                      ['<',['get','AADT'],75000],'#EE9837',
+                      ['<',['get','AADT'],300000],'#EE6637',
+                      ['>=',['get','AADT'],300000],'#F13A27',
+                      '#AFB4AC'
+                    ]
+                  }
+                },'admin-state-province');
+            } else if (key == 'eco_zone') {
+                map.addLayer({
+                  "id": key,
+                  "type": "fill",
+                  "source": key,
+                  "source-layer": toggle_layers[key][1],
+                  "paint": {
+                    'fill-opacity': .4,
+                    'fill-color': [
+                      "match",
+                      ["get","MINOR_DESC"],
+                      'BLACK RIVER VALLEY',rainbow(40,1),
+                      'EASTERN ONTARIO PLAIN',rainbow(40,2),
+                      'TUG HILL TRANSITION',rainbow(40,3),
+                      'CENTRAL TUG HILL',rainbow(40,4),
+                      'CHAMPLAIN VALLEY',rainbow(40,5),
+                      'TACONIC FOOTHILLS',rainbow(40,6),
+                      'OSWEGO LOWLANDS',rainbow(40,7),
+                      'DRUMLIN',rainbow(40,8),
+                      'EASTERN ADIRONDACK TRANSITION',rainbow(40,9),
+                      'CENTRAL HUDSON',rainbow(40,10),
+                      'NEVERSINK HIGHLANDS',rainbow(40,11),
+                      'SHAWANKGUNK HILLS',rainbow(40,12),
+                      'CHAMPLAIN TRANSITION',rainbow(40,13),
+                      'ST. LAWRENCE PLAINS',rainbow(40,14),
+                      'MALONE PLAINS',rainbow(40,15),
+                      'ST.LAWRENCE TRANSITION',rainbow(40,16),
+                      'WESTERN ADIRONDACK TRANSITION',rainbow(40,17),
+                      'WESTERN ADIRONDACK FOOTHILLS',rainbow(40,18),
+                      'SABLE HIGHLANDS',rainbow(40,19),
+                      'INDIAN RIVER LAKES',rainbow(40,20),
+                      'EASTERN ADIRONDACK FOOTHILLS',rainbow(40,21),
+                      'ADIRONDACK HIGH PEAKS',rainbow(40,22),
+                      'CENTRAL ADIRONDACKS',rainbow(40,23),
+                      'ERIE-ONTARIO PLAIN',rainbow(40,24),
+                      'MOHAWK VALLEY',rainbow(40,25),
+                      'TACONIC MOUNTAINS',rainbow(40,26),
+                      'CENTRAL APPALACHIANS',rainbow(40,27),
+                      'CATTARAUGUS HIGHLANDS',rainbow(40,28),
+                      'FINGER LAKE HIGHLANDS',rainbow(40,29),
+                      'RENSSELAER HILLS',rainbow(40,30),
+                      'HELDERBERG HIGHLANDS',rainbow(40,31),
+                      'SCHOHARIE HILLS',rainbow(40,32),
+                      'ALLEGHENY HILLS',rainbow(40,33),
+                      'CATSKILL PEAKS',rainbow(40,34),
+                      'DELAWARE HILLS',rainbow(40,35),
+                      'COASTAL LOWLANDS',rainbow(40,36),
+                      'MANHATTAN HILLS',rainbow(40,37),
+                      'MONGAUP HILLS',rainbow(40,38),
+                      'HUDSON HIGHLANDS',rainbow(40,39),
+                      'TRIASSIC LOWLANDS',rainbow(40,40),
+                      '#000000'
+                  ]
+                  }
+                },'admin-state-province');
+                map.setLayoutProperty('eco_zone','visibility','none')
             } else {
                 map.addLayer({
                   "id": key,
@@ -292,7 +394,7 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
-            // console.log(f)
+            console.log(f)
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
@@ -587,7 +689,44 @@ function setUpGlobalVars() {
 
 
     // Toggle satellite mode when clicked
-    var toggleableLayerIds = ['Satellite View','Crop Cover','Counties','Cities','Villages','Indian Territory','School Zones','Basic Census Data','Advanced Census Data','Congressional Districts','State Senate','State Assembly','Empire Zone Program','National Parks','State Parks','Agricultural Districts','Soil Info','Annual Precipitation (in.)','Geology','Bird Migration','Zebra Mussels','Railroads','Enhanced Phosphorus Watershed'];
+    // Toggle satellite mode when clicked
+    var toggleableLayerIds = ['Satellite View',
+                              'Crop Cover',
+                              'Biodiversity Indicator',
+                              'Counties',
+                              'Cities',
+                              'Villages',
+                              'Indian Territory',
+                              'School Zones',
+                              'Basic Census Data',
+                              'Advanced Census Data',
+                              'Congressional Districts',
+                              'State Senate',
+                              'State Assembly',
+                              'Empire Zone Program',
+                              'National Parks',
+                              'State Parks',
+                              'Agricultural Districts',
+                              'Soil Info',
+                              'Annual Precipitation (in.)',
+                              'Geology',
+                              'Bird Migration',
+                              'Zebra Mussels',
+                              'Railroads',
+                              'Average Annual Traffic',
+                              'Enhanced Phosphorus Watersheds',
+                              'Watershed Biodiversity',
+                              'Average Annual Traffic',
+                              'AA and AAs Watersheds',
+                              'DEC Land',
+                              'Local Waterfront Revitatilzation Program',
+                              'Water Wells',
+                              'Critical Environmental Areas',
+                              'Aquifers',
+                              'EcoZone',
+                              'North/South Hunting Line',
+                              'Dams'];
+
     for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
         var link = document.createElement('a');
@@ -660,6 +799,14 @@ function setUpGlobalVars() {
                           } else {
                             if (clickedLayer == 'precip') {
                               map.setLayoutProperty('precip_text','visibility','visible')
+                            };
+                            if (clickedLayer == 'traffic') {
+                              map.flyTo({
+                                center: [-76.12, 43.05],
+                                zoom: 8.5,
+                                pitch: 10,
+                                bearing: 0,
+                              });
                             };
                             if (clickedLayer == 'census_1') {
                               if (map.getLayoutProperty('census_2_fill','visibility') == 'visible') {
@@ -821,7 +968,8 @@ function geologyPopUp(map,e,lngLat) {
   var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
               .setLngLat(lngLat)
               .setHTML(
-                      '<h3><u>Geologic Layer:</u> '+features['ROCKDESC']+'</h3>\n'
+                      '<h3><u>Geologic Layer:</u> '+features['ROCKDESC']+'</h3>\n' +
+                      '<h3><a  style="color:blue; text-decoration: underline" href="https://en.wikipedia.org/wiki/Special:Search?search='+features['ROCKDESC'].split("(")[0]+'" target="_blank">' + "See Wikipedia Page" + '</a></h3>'
                       )
               .addTo(map);
   return popup;
@@ -894,7 +1042,26 @@ function makePopUp(map,e,lngLat,county_dict) {
                 .addTo(map);
     return popup;
 };
-
+function rainbow(numOfSteps, step) {
+    // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
+    // Adam Cole, 2011-Sept-14
+    // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+    var r, g, b;
+    var h = step / numOfSteps;
+    var i = ~~(h * 6);
+    var f = h * 6 - i;
+    var q = 1 - f;
+    switch(i % 6){
+        case 0: r = 1; g = f; b = 0; break;
+        case 1: r = q; g = 1; b = 0; break;
+        case 2: r = 0; g = 1; b = f; break;
+        case 3: r = 0; g = q; b = 1; break;
+        case 4: r = f; g = 0; b = 1; break;
+        case 5: r = 1; g = 0; b = q; break;
+    }
+    var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
+    return (c);
+}
 
 
 

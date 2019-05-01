@@ -107,7 +107,51 @@ function setUpGlobalVars() {
                           'wells': ['mapbox://secfast.460kvfe7','WaterWellProgram-84yp5j','Water Wells','vector'],
                           'crit_env': ['mapbox://secfast.4xzc0n3a','Critical_Env_Areas-b4nsa9','Critical Environmental Areas','vector','#79CC79',.7],
                           'aquifers': ['mapbox://secfast.0c1xjicm','primaryaquifers-4ftr6o','Aquifers','vector','#79CC79',.7],
-                          'eco_zone': ['mapbox://secfast.045p6lht','ecozone-68q54s','Eco-Zones','vector','#79CC79',.7],
+                          'eco_zone': ['mapbox://secfast.045p6lht','ecozone-68q54s','Eco-Zones','vector',[
+                            "match",
+                            ["get","MINOR_DESC"],
+                            'BLACK RIVER VALLEY',rainbow(40,1),
+                            'EASTERN ONTARIO PLAIN',rainbow(40,2),
+                            'TUG HILL TRANSITION',rainbow(40,3),
+                            'CENTRAL TUG HILL',rainbow(40,4),
+                            'CHAMPLAIN VALLEY',rainbow(40,5),
+                            'TACONIC FOOTHILLS',rainbow(40,6),
+                            'OSWEGO LOWLANDS',rainbow(40,7),
+                            'DRUMLIN',rainbow(40,8),
+                            'EASTERN ADIRONDACK TRANSITION',rainbow(40,9),
+                            'CENTRAL HUDSON',rainbow(40,10),
+                            'NEVERSINK HIGHLANDS',rainbow(40,11),
+                            'SHAWANKGUNK HILLS',rainbow(40,12),
+                            'CHAMPLAIN TRANSITION',rainbow(40,13),
+                            'ST. LAWRENCE PLAINS',rainbow(40,14),
+                            'MALONE PLAINS',rainbow(40,15),
+                            'ST.LAWRENCE TRANSITION',rainbow(40,16),
+                            'WESTERN ADIRONDACK TRANSITION',rainbow(40,17),
+                            'WESTERN ADIRONDACK FOOTHILLS',rainbow(40,18),
+                            'SABLE HIGHLANDS',rainbow(40,19),
+                            'INDIAN RIVER LAKES',rainbow(40,20),
+                            'EASTERN ADIRONDACK FOOTHILLS',rainbow(40,21),
+                            'ADIRONDACK HIGH PEAKS',rainbow(40,22),
+                            'CENTRAL ADIRONDACKS',rainbow(40,23),
+                            'ERIE-ONTARIO PLAIN',rainbow(40,24),
+                            'MOHAWK VALLEY',rainbow(40,25),
+                            'TACONIC MOUNTAINS',rainbow(40,26),
+                            'CENTRAL APPALACHIANS',rainbow(40,27),
+                            'CATTARAUGUS HIGHLANDS',rainbow(40,28),
+                            'FINGER LAKE HIGHLANDS',rainbow(40,29),
+                            'RENSSELAER HILLS',rainbow(40,30),
+                            'HELDERBERG HIGHLANDS',rainbow(40,31),
+                            'SCHOHARIE HILLS',rainbow(40,32),
+                            'ALLEGHENY HILLS',rainbow(40,33),
+                            'CATSKILL PEAKS',rainbow(40,34),
+                            'DELAWARE HILLS',rainbow(40,35),
+                            'COASTAL LOWLANDS',rainbow(40,36),
+                            'MANHATTAN HILLS',rainbow(40,37),
+                            'MONGAUP HILLS',rainbow(40,38),
+                            'HUDSON HIGHLANDS',rainbow(40,39),
+                            'TRIASSIC LOWLANDS',rainbow(40,40),
+                            '#000000'
+                        ],["case",["boolean", ["feature-state","hover"], false], .8,.5]],
                           'hunt_zone': ['mapbox://secfast.6wjgtb4v','hunt_zone-6xv8r5','North/South Hunting Line','vector'],
                           'dams': ['mapbox://secfast.9ybj04wk','nysdec_dams-72j3u4','Dams','vector'],
                           'phosphorus': ['mapbox://secfast.a1uuppsr','phosphorus_zones-aehz2m','Enhanced Phosphorus Watersheds','vector','#79CC79',.7],
@@ -199,64 +243,6 @@ function setUpGlobalVars() {
                     ]
                   }
                 },'admin-state-province');
-            } else if (key == 'eco_zone') {
-                map.addLayer({
-                  "id": key,
-                  "type": "fill",
-                  "source": key,
-                  "source-layer": toggle_layers[key][1],
-                  "paint": {
-                    'fill-opacity': [
-                      "case",["boolean", ["feature-state","hover"], false], .8,.5
-                    ],
-                    'fill-color': [
-                      "match",
-                      ["get","MINOR_DESC"],
-                      'BLACK RIVER VALLEY',rainbow(40,1),
-                      'EASTERN ONTARIO PLAIN',rainbow(40,2),
-                      'TUG HILL TRANSITION',rainbow(40,3),
-                      'CENTRAL TUG HILL',rainbow(40,4),
-                      'CHAMPLAIN VALLEY',rainbow(40,5),
-                      'TACONIC FOOTHILLS',rainbow(40,6),
-                      'OSWEGO LOWLANDS',rainbow(40,7),
-                      'DRUMLIN',rainbow(40,8),
-                      'EASTERN ADIRONDACK TRANSITION',rainbow(40,9),
-                      'CENTRAL HUDSON',rainbow(40,10),
-                      'NEVERSINK HIGHLANDS',rainbow(40,11),
-                      'SHAWANKGUNK HILLS',rainbow(40,12),
-                      'CHAMPLAIN TRANSITION',rainbow(40,13),
-                      'ST. LAWRENCE PLAINS',rainbow(40,14),
-                      'MALONE PLAINS',rainbow(40,15),
-                      'ST.LAWRENCE TRANSITION',rainbow(40,16),
-                      'WESTERN ADIRONDACK TRANSITION',rainbow(40,17),
-                      'WESTERN ADIRONDACK FOOTHILLS',rainbow(40,18),
-                      'SABLE HIGHLANDS',rainbow(40,19),
-                      'INDIAN RIVER LAKES',rainbow(40,20),
-                      'EASTERN ADIRONDACK FOOTHILLS',rainbow(40,21),
-                      'ADIRONDACK HIGH PEAKS',rainbow(40,22),
-                      'CENTRAL ADIRONDACKS',rainbow(40,23),
-                      'ERIE-ONTARIO PLAIN',rainbow(40,24),
-                      'MOHAWK VALLEY',rainbow(40,25),
-                      'TACONIC MOUNTAINS',rainbow(40,26),
-                      'CENTRAL APPALACHIANS',rainbow(40,27),
-                      'CATTARAUGUS HIGHLANDS',rainbow(40,28),
-                      'FINGER LAKE HIGHLANDS',rainbow(40,29),
-                      'RENSSELAER HILLS',rainbow(40,30),
-                      'HELDERBERG HIGHLANDS',rainbow(40,31),
-                      'SCHOHARIE HILLS',rainbow(40,32),
-                      'ALLEGHENY HILLS',rainbow(40,33),
-                      'CATSKILL PEAKS',rainbow(40,34),
-                      'DELAWARE HILLS',rainbow(40,35),
-                      'COASTAL LOWLANDS',rainbow(40,36),
-                      'MANHATTAN HILLS',rainbow(40,37),
-                      'MONGAUP HILLS',rainbow(40,38),
-                      'HUDSON HIGHLANDS',rainbow(40,39),
-                      'TRIASSIC LOWLANDS',rainbow(40,40),
-                      '#000000'
-                  ]
-                  }
-                },'admin-state-province');
-                map.setLayoutProperty('eco_zone','visibility','none')
             } else {
                 map.addLayer({
                   "id": key,
@@ -920,7 +906,8 @@ function setUpGlobalVars() {
         };
         if ((typeof checkMapLayer !== 'undefined') && e.composedPath()[2].matches('.dropdown')) {
             for (var key in county_dict) {
-                if (e.toElement.text.toLowerCase() == key) {
+                var target = e.toElement || e.relatedTarget || e.target || function () { throw "Failed to attach event target"; }
+                if (target.text.toLowerCase() == key) {
                     activeLayer = key;
                     // Change layer to be visible and fly to given coordinates
                     if (map.getLayoutProperty('satellite','visibility') == 'visible') {

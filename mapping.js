@@ -27,6 +27,7 @@ function setUpGlobalVars() {
     var census1hoveredStateId =  null;
     var census2hoveredStateId =  null;
     var geologyhoveredStateId =  null;
+    var ecohoveredStateId =  null;
     var activeLayer = 'none';
 
     var county_dict = {
@@ -92,7 +93,7 @@ function setUpGlobalVars() {
                             ['==',['get','ROCKDESC'],'Upper Cretaceous'],rainbow(31,30),
                             ['==',['get','ROCKDESC'],'Ultramafic rocks'],rainbow(31,31),
                             '#000000'
-                          ],["case",["boolean", ["feature-state","hover"], false], 1,.5]],
+                          ],["case",["boolean", ["feature-state","hover"], false], .8,.5]],
                           'zebra': ['mapbox://secfast.9qepxeqa','zebra_mussels-3pzz5l','Zebra Mussels','vector'],
                           'birds': ['mapbox://secfast.7o9su5kf','birds-0ixrxg','Bird Migration','vector'],
                           'empire_zones': ['mapbox://secfast.bhdyfqno','empirezone-ah3phb','Empire Zone Program','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],],
@@ -106,7 +107,7 @@ function setUpGlobalVars() {
                           'wells': ['mapbox://secfast.460kvfe7','WaterWellProgram-84yp5j','Water Wells','vector'],
                           'crit_env': ['mapbox://secfast.4xzc0n3a','Critical_Env_Areas-b4nsa9','Critical Environmental Areas','vector','#79CC79',.7],
                           'aquifers': ['mapbox://secfast.0c1xjicm','primaryaquifers-4ftr6o','Aquifers','vector','#79CC79',.7],
-                          'eco_zone': ['mapbox://secfast.045p6lht','ecozone-68q54s','EcoZone','vector','#79CC79',.7],
+                          'eco_zone': ['mapbox://secfast.045p6lht','ecozone-68q54s','Eco-Zones','vector','#79CC79',.7],
                           'hunt_zone': ['mapbox://secfast.6wjgtb4v','hunt_zone-6xv8r5','North/South Hunting Line','vector'],
                           'dams': ['mapbox://secfast.9ybj04wk','nysdec_dams-72j3u4','Dams','vector'],
                           'phosphorus': ['mapbox://secfast.a1uuppsr','phosphorus_zones-aehz2m','Enhanced Phosphorus Watersheds','vector','#79CC79',.7],
@@ -205,7 +206,9 @@ function setUpGlobalVars() {
                   "source": key,
                   "source-layer": toggle_layers[key][1],
                   "paint": {
-                    'fill-opacity': .4,
+                    'fill-opacity': [
+                      "case",["boolean", ["feature-state","hover"], false], .8,.5
+                    ],
                     'fill-color': [
                       "match",
                       ["get","MINOR_DESC"],
@@ -394,7 +397,7 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
-            console.log(f)
+            // console.log(f)
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
@@ -411,6 +414,9 @@ function setUpGlobalVars() {
                     if (f[i].layer.id.includes('geology') && map.getLayoutProperty('geology_fill','visibility') == 'visible') {
                         g_popup = geologyPopUp(map,f[i],lngLat);
                     };
+                    if (f[i].layer.id.includes('eco_zone') && map.getLayoutProperty('eco_zone','visibility') == 'visible') {
+                        e_popup = ecoPopUp(map,f[i],lngLat);
+                    };
                 };
             };
         });
@@ -426,6 +432,7 @@ function setUpGlobalVars() {
                 var on_fills = false;
                 var on_census = false;
                 var on_geology = false;
+                var on_eco = false;
                 var county = false;
                 var city = false;
                 var village = false;
@@ -510,6 +517,15 @@ function setUpGlobalVars() {
                             map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: false});
                             geologyhoveredStateId = f[i].id;
                             map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: true});
+                          }
+                        };
+                        if (f[i].layer.id.includes('eco_zone')) {
+                          on_eco = !on_eco;
+                          map.getCanvas().style.cursor = 'pointer';
+                          if (ecohoveredStateId) {
+                            map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: false});
+                            ecohoveredStateId = f[i].id;
+                            map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: true});
                           }
                         };
 
@@ -600,6 +616,13 @@ function setUpGlobalVars() {
                             geologyhoveredStateId = f[i].id;
                             map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: true});
                         };
+                        if (f[i].layer.id.includes('eco_zone')) {
+                            if (ecohoveredStateId) {
+                                map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: false});
+                            };
+                            ecohoveredStateId = f[i].id;
+                            map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: true});
+                        };
                     };
 
                     if (!on_fills) {
@@ -636,6 +659,13 @@ function setUpGlobalVars() {
                       };
                       map.getCanvas().style.cursor = '';
                       geologyhoveredStateId =  null;
+                    };
+                    if (!on_eco) {
+                      if (ecohoveredStateId) {
+                        map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: false});
+                      };
+                      map.getCanvas().style.cursor = '';
+                      ecohoveredStateId =  null;
                     };
                 };
                 element = document.getElementById('county');
@@ -723,7 +753,7 @@ function setUpGlobalVars() {
                               'Water Wells',
                               'Critical Environmental Areas',
                               'Aquifers',
-                              'EcoZone',
+                              'Eco-Zones',
                               'North/South Hunting Line',
                               'Dams',
                               'Biodiversity Indicator'];
@@ -971,6 +1001,17 @@ function geologyPopUp(map,e,lngLat) {
               .setHTML(
                       '<h3><u>Geologic Layer:</u> '+features['ROCKDESC']+'</h3>\n' +
                       '<h3><a  style="color:blue; text-decoration: underline" href="https://en.wikipedia.org/wiki/Special:Search?search='+features['ROCKDESC'].split("(")[0]+'" target="_blank">' + "See Wikipedia Page" + '</a></h3>'
+                      )
+              .addTo(map);
+  return popup;
+};
+
+function ecoPopUp(map,e,lngLat) {
+  var features = e.properties;
+  var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
+              .setLngLat(lngLat)
+              .setHTML(
+                      '<h3><u>Eco-Region:</u> '+features['MINOR_DESC']+'</h3>\n'
                       )
               .addTo(map);
   return popup;

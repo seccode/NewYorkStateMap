@@ -20,7 +20,8 @@
     <style>
         body { margin:0; padding:0; }
         /* #map { position:absolute; bottom:0; height:94%; width:75%;} */
-        #map { position:absolute; top:52px; height:94%; width:100%;}
+        /* #map { position:absolute; height:100%; width:82.1%; left: 216px} */
+        #map { position:absolute; height:100%; right: 0; left: 216px}
     </style>
 
     <style>
@@ -53,9 +54,11 @@
             font-family: Arial, Helvetica, sans-serif;
         }
         .topnav {
+            position: absolute;
+            /* height: 152px; */
             overflow: hidden;
-            background-color: #778899;
-            border-bottom: 3px solid #000;
+            /* background-color: #778899; */
+            /* border-bottom: 3px solid #000; */
         }
         .topnav a {
             float: left;
@@ -71,8 +74,8 @@
             color: black;
         }
         .topnav a.active {
-            /* background-color: #708090; */
-            background-color: #D0AB66;
+            background-color: #62B4E6;
+            /* background-color: #D0AB66; */
             border-right: 1px solid #000000;
             color: black;
         }
@@ -388,9 +391,9 @@
       /* overflow: hidden; */
       overflow-y: scroll;
       border-right: 1px solid rgba(0, 0, 0, 0.25);
-      border-left: 1px solid rgba(0, 0, 0, 0.25);
-      /* background: #778899; */
-      background: rgba(119,136,153,.4);
+      /* border-left: 1px solid rgba(0, 0, 0, 0.25); */
+      background: none;
+      /* background: rgba(119,136,153,.4); */
     }
 
     .pad2 {
@@ -532,203 +535,400 @@
     }
     </style>
     <style>
-    {box-sizing: border-box;}
+    body {font-family: Arial, Helvetica, sans-serif;}
 
-    /* Button used to open the contact form - fixed at the bottom of the page */
-    .open-button {
-      position: absolute;
-      background-color: #555;
-      color: white;
-      font-size: 17px;
-      border: 1px solid black;
-      border-radius: 3px;
-      cursor: pointer;
-      width: 5.9%;
-      height: 5.65%;
-      top: 1px;
-      left: 13.15%;
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     }
 
-    /* The popup form - hidden by default */
-    .form-popup {
-      /* display: none;
-      position: absolute;
-      top: 40%;
-      right: 40%;
-      border: 3px solid #f1f1f1;
-      z-index: 9; */
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    </style>
+    <style>
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    .sidenav {
+      /* height: 92.4%; */
+      position: fixed;
+      top: 50px;
+      /* bottom: 40px; */
+      bottom: 0px;
+      width: 216px;
+      z-index: 1;
+      left: 0;
+      background-color: #111;
+      opacity: .9;
+      overflow-x: hidden;
+      padding-top: 20px;
+      border-right: 1px solid black;
+    }
+
+    .sidenav a, .main-dropdown-btn {
+      padding: 6px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #818181;
+      display: block;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .sidenav a, .side-dropdown-btn {
+      padding: 6px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 20px;
+      display: block;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .sidenav a:hover, .main-dropdown-btn:hover {
+      color: #f1f1f1;
+    }
+
+    .side-dropdown-btn:hover {
+      color: #f1f1f1;
+    }
+
+    .main {
+      margin-left: 200px;
+      font-size: 20px;
+      padding: 0px 10px;
+    }
+
+    .active_main {
+      background-color: #62B4E6;
+      color: black;
+    }
+
+    .main-dropdown-container {
       display: none;
-      float: left;
-      /* overflow: hidden; */
+      background-color: #808080;
+      border: 2px solid #62B4E6;
+    }
+
+    .active {
+      background-color: #F65454;
+      color: black;
+    }
+
+    .side-dropdown-container {
+      display: none;
+      background-color: #111;
+      border: 2px solid #F65454;
+    }
+
+    .link-active {
+      background-color: #fff,
+      color: #000,
+    }
+    .link-inactive {
+      background-color: #FFA07A,
+      color: #000,
+    }
+
+    .fa-caret-down {
+      float: right;
+      padding-right: 8px;
+    }
+
+    @media screen and (max-height: 450px) {
+      .sidenav {padding-top: 15px;}
+      .sidenav a {font-size: 18px;}
+    }
+    </style>
+    <style>
+    #mydiv {
       position: absolute;
-      border-radius: 25px;
-      top: 100px;
-      left: 100px;
-      width: 70%;
-      height: 90%;
+      width: 250px;
+      top: 300px;
+      left: 400px;
+      z-index: 9;
+      background-color: #f1f1f1;
+      text-align: center;
+      border: 1px solid #000;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
     }
 
-    /* Add styles to the form container */
-    .form-container {
-      width: 90%;
-      height: 90%;
+    #mydivheader {
       padding: 10px;
-      background-color: white;
-      border-radius: 25px;
+      cursor: move;
+      z-index: 10;
+      background-color: #62B4E6;
+      border: 1px solid #000;
+      color: #000;
+      text-align: left;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    span.grippy {
+      content: '....';
+      width: 10px;
+      height: 20px;
+      display: inline-block;
+      overflow: hidden;
+      line-height: 5px;
+      padding: 3px 4px;
+      cursor: move;
+      vertical-align: middle;
+      margin-top: -.7em;
+      margin-right: .3em;
+      font-size: 16px;
+      font-family: sans-serif;
+      letter-spacing: 2px;
+      color: #000;
+      text-shadow: 1px 0 1px black;
+    }
+    span.grippy::after {
+      content: '.. .. .. ..';
     }
 
-    /* Set a style for the submit/login button */
-    .form-container .btn {
-      position: relative;
-      background-color: #555;
+    </style>
+    <style>
+    .remove-button {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 40px;
+      width: 216px;
+      background-color: #E74C3C;
+      color: black;
+      text-align: center;
+      padding: 6px;
+      font-size: 18px;
+      border: 3px solid black;
+    }
+
+    .remove-button:hover {
       color: white;
-      cursor: pointer;
-      width: 10%;
-      left: 45%;
-      opacity: 0.8;
-      font-size: 1.5vw;
-    }
-
-    /* Add some hover effects to buttons */
-    .form-container .btn:hover, .open-button:hover {
-      opacity: 1;
     }
     </style>
 
 
 
 </head>
-<body onload="setUpGlobalVars()">
+<!-- <body> -->
+<body style="overflow:hidden" onload="setUpGlobalVars()">
+    <div id="mydiv">
+      <div id="mydivheader"><span class="grippy"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Active Layers</div>
+    </div>
 
     <div id='map'></div>
+    <div class="sidenav">
+      <a id="About" href="#about">About</a>
+      <div id="About_modal" class="modal">
+        <div class="modal-content">
+          <span id="About_close" class="close">&times;</span>
+          <div class="w3-col m6 w3-padding-large">
+            <h1 class="w1-center" align="center">About this Map</h1>
+            <p class="w1-large" align="center">This map was created as a tool to visualize and analyze features of New York State<br/></p>
+          </div>
+        </div>
+      </div>
+      <a id="Contact" href="#contact">Contact</a>
+      <div id="Contact_modal" class="modal">
+        <div class="modal-content">
+          <span id="Contact_close" class="close">&times;</span>
+          <div class="w3-col m6 w3-padding-large">
+            <h1 class="w1-center" align="center">Contact Page</h1>
+            <p class="w1-large" align="center">Sam Clymer <br/><br/> clymersam@gmail.com <br/><br/></p>
+          </div>
+        </div>
+      </div>
 
-    <div class="sidebar">
-        <nav id="menu"></nav>
-        <a class="toggleheader" href="#toggle">Toggle Layers</a>
-        <div class="heading">
-            <h1 class="headingtext">Area Info</h1>
+
+        <button class="main-dropdown-btn">Add Layers
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div id="main-container" class="main-dropdown-container">
+          <!-- <a style="color:black; background-color:#F6BE54; text-align:center; border:5px solid #808080; box-shadow:inset 0px 0px 0px 1px #000;" href="#satellite">Satellite View</a> -->
+          <button id="side-start" class="side-dropdown-btn">Boundaries
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Boundaries" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Politics
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Politics" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Economics
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Economics" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Demographics
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Demographics" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Tax Parcels
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Tax Parcels" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Agriculture
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Agriculture" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Environment
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Environment" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Animals
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Animals" class="side-dropdown-container">
+          </div>
+          <button class="side-dropdown-btn">Infrastructure
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div id="Infrastructure" class="side-dropdown-container">
+          </div>
         </div>
-        <div id='property_value' class='legend'>
-            <h4>Property Value Legend</h4>
-            <div><span style='background-color: #e75a5a; vertical-align: middle; margin-top:3px;'></span>$5,000,000 +</div>
-            <div><span style='background-color: #e7925a; vertical-align: middle; margin-top:3px;'></span>$1,000,000</div>
-            <div><span style='background-color: #e7cd5a; vertical-align: middle; margin-top:3px;'></span>$500,000</div>
-            <div><span style='background-color: #b1e75a; vertical-align: middle; margin-top:3px;'></span>$250,000</div>
-            <div><span style='background-color: #5ae79e; vertical-align: middle; margin-top:3px;'></span>$100,000</div>
-            <div><span style='background-color: #5ae7e5; vertical-align: middle; margin-top:3px;'></span>< $50,000</div>
-        </div>
-        <table id='table'>
-          <tr>
-            <th>County</th>
-            <td id='county'>-</td>
-          </tr>
-          <tr>
-            <th>City</th>
-            <td id='city'>-</td>
-          </tr>
-          <tr>
-            <th>Village</th>
-            <td id='village'>-</td>
-          </tr>
-          <tr>
-            <th>School District</th>
-            <td id='school'>-</td>
-          </tr>
-          <tr>
-            <th>Congressional District</th>
-            <td id='congress'>-</td>
-          </tr>
-          <tr>
-            <th>State Senate</th>
-            <td id='senate'>-</td>
-          </tr>
-          <tr>
-            <th>State Assembly</th>
-            <td id='assembly'>-</td>
-          </tr>
-          <tr>
-            <th>Indian Territory</th>
-            <td id='indian'>-</td>
-          </tr>
-        </table>
-    </div>
+      </div>
 
     <div class="topnav" id="topnavbar">
       <a href="#home" class="active" onclick="setUpGlobalVars()">New York State Mapped</a>
-      <a href="#contact" style="color:white; border-right: 1px solid #000000;" onclick="openContactForm()">Contact</a>
-      <a href="#about" style="color:white; border-right: 1px solid #000000;" onclick="openForm()">About</a>
-        <!-- <div class="main-header">
-            <a class="main-header-text" href="#home">New York State Mapped</a>
-        </div> -->
-        <div class="dropdown">
-            <button class="dropbtn" onclick="showContents()">Tax Parcels by County
-                <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content" id="myDropdown">
-                <a href="#">Cayuga</a>
-                <a href="#">Cortland</a>
-                <a href="#">Genesee</a>
-                <a href="#">Greene</a>
-                <a href="#">Lewis</a>
-                <a href="#">Ontario</a>
-                <a href="#">Rensselaer</a>
-                <a href="#">Sullivan</a>
-                <a href="#">Tompkins</a>
-                <a href="#">Warren</a>
-            </div>
-        </div>
     </div>
-    <!-- <button class="open-button" onclick="openForm()">About</button> -->
-    <div class="form-popup" id="myForm">
-      <form class="form-container">
-        <div class="w3-col m6 w3-padding-large">
-          <h1 class="w1-center" align="center">About this Map</h1>
-          <p class="w1-large" align="center">This map was created as a tool to visualize and analyze features of New York State<br/></p>
-        </div>
-        <div>
-          <button type="button" class="btn" onclick="closeForm()">Close</button>
-        </div>
+    <!-- <a href="#reset" class="remove-button" onclick="setUpGlobalVars()">Remove All Layers<a> -->
 
-      </form>
-    </div>
-    <div class="form-popup" id="contactForm">
-      <form class="form-container">
-        <div class="w3-col m6 w3-padding-large">
-          <h1 class="w1-center" align="center">Contact Page</h1>
-          <p class="w1-large" align="center">Sam Clymer <br/><br/> clymersam@gmail.com <br/><br/></p>
-        </div>
-        <div>
-          <button type="button" class="btn" onclick="closeContactForm()">Close</button>
-        </div>
 
-      </form>
-    </div>
     <script>
-    function openForm() {
-      document.getElementById("myForm").style.display = "block";
+    dragElement(document.getElementById("mydiv"));
+
+    function dragElement(elmnt) {
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      if (document.getElementById(elmnt.id + "header")) {
+        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+      } else {
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        /* stop moving when mouse button is released:*/
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
     }
-    function closeForm() {
-      document.getElementById("myForm").style.display = "none";
-    }
-    function openContactForm() {
-      document.getElementById("contactForm").style.display = "block";
-    }
-    function closeContactForm() {
-      document.getElementById("contactForm").style.display = "none";
-    }
-    function showContents() {
-        document.getElementById("myDropdown").classList.toggle("show");
-        window.alert(a)
-    }
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function(e) {
-        if (!e.target.matches('.dropbtn')) {
-        var myDropdown = document.getElementById("myDropdown");
-            if (myDropdown.classList.contains('show')) {
-                myDropdown.classList.remove('show');
-            }
+
+    var layerDropdown = document.getElementsByClassName("main-dropdown-btn")[0];
+    layerDropdown.addEventListener("click", function() {
+      this.classList.toggle("active_main");
+      var layerDropdown = this.nextElementSibling;
+      if (layerDropdown.style.display === "block") {
+      layerDropdown.style.display = "none";
+      } else {
+      layerDropdown.style.display = "block";
+      }
+    });
+
+
+    var dropdown = document.getElementsByClassName("side-dropdown-btn");
+    var i;
+    for (i=0;i<dropdown.length;i++) {
+      dropdown[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === "block") {
+        dropdownContent.style.display = "none";
+        } else {
+        dropdownContent.style.display = "block";
         }
+      });
     }
+
+
+    var modal_1 = document.getElementById('About_modal');
+    var btn_1 = document.getElementById('About');
+    var span_1 = document.getElementById('About_close');
+    var modal_2 = document.getElementById('Contact_modal');
+    var btn_2 = document.getElementById('Contact');
+    var span_2 = document.getElementById('Contact_close');
+    btn_1.onclick = function() {
+      modal_1.style.display = "block";
+    }
+    span_1.onclick = function() {
+      modal_1.style.display = "none";
+    }
+    btn_2.onclick = function() {
+      modal_2.style.display = "block";
+    }
+    span_2.onclick = function() {
+      modal_2.style.display = "none";
+    }
+    window.onclick = function(event) {
+      if (event.target == modal_1 || event.target == modal_2) {
+        modal_1.style.display = "none";
+        modal_2.style.display = "none";
+      }
+    }
+
     </script>
 
 </body>

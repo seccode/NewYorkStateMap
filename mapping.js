@@ -716,9 +716,9 @@ function setUpGlobalVars() {
       var link = document.createElement('a');
       document.getElementById('main-container').insertBefore(link,document.getElementById('side-start'));
       link.href = '#';
-      // link.className = 'link-active';
-      // link.textContent = 'Satellite View';
-      link.innerHTML = '<a style="color:black; background-color:#F6BE54; text-align:center; border:5px solid #808080; box-shadow:inset 0px 0px 0px 1px #000;" href="#satellite">Satellite View</a>'
+      link.className = 'link-active';
+      link.textContent = 'Satellite View';
+      // link.innerHTML = '<a style=>Satellite View</a>'
       link.id = 'satellite';
     };
     link.onclick = function(e) {
@@ -745,11 +745,11 @@ function setUpGlobalVars() {
           };
           if (map.getLayoutProperty('satellite','visibility') == 'visible') {
             map.setLayoutProperty('satellite','visibility','none');
-            // this.className = 'link-active';
+            this.className = 'link-active';
             var color = 'black';
           } else {
             map.setLayoutProperty('satellite','visibility','visible');
-            // this.className = 'link-inactive';
+            this.className = 'link-inactive';
             var color = 'orange';
           };
           for (var key in toggle_layers) {

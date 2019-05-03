@@ -949,10 +949,11 @@ function setUpGlobalVars() {
                             map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
                             moving_div.removeChild(document.getElementById(key+'_item'))
                         } else {
-                            var line = document.createElement('p');
-                            line.innerHTML = county_dict[key][4] + ' Tax Parcels';
+                            var line = document.createElement('tr');
+                            line.innerHTML = '<td id="'+key+'_label" class="table-label"><b>'+county_dict[key][4]+'</b></td><td id="'+key+'_info" class="table-info"> </td>';
                             line.id = key+'_item';
                             moving_div.appendChild(line)
+
                             map.flyTo({
                                 center: county_dict[key][2],
                                 zoom: 12,
@@ -970,8 +971,8 @@ function setUpGlobalVars() {
                             map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
                             moving_div.removeChild(document.getElementById(key+'_item'))
                         } else {
-                            var line = document.createElement('p');
-                            line.innerHTML = county_dict[key][4] + ' Tax Parcels';
+                            var line = document.createElement('tr');
+                            line.innerHTML = '<td id="'+key+'_label" class="table-label"><b>'+county_dict[key][4]+'</b></td><td id="'+key+'_info" class="table-info"> </td>';
                             line.id = key+'_item';
                             moving_div.appendChild(line)
                             map.flyTo({

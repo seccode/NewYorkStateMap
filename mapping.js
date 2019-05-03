@@ -159,10 +159,14 @@ function setUpGlobalVars() {
                             'TRIASSIC LOWLANDS',rainbow(40,40),
                             '#000000'
                         ],["case",["boolean", ["feature-state","hover"], false], .8,.5],'Environment'],
-                          'hunt_zone': ['mapbox://secfast.6wjgtb4v','hunt_zone-6xv8r5','North/South Hunting Line','vector','none','none','Animals'],
+                          'hunt_zone': ['mapbox://secfast.6wjgtb4v','hunt_zone-6xv8r5','North-South Hunting Line','vector','none','none','Animals'],
                           'dams': ['mapbox://secfast.9ybj04wk','nysdec_dams-72j3u4','Dams','vector','none','none','Infrastructure'],
                           'phosphorus': ['mapbox://secfast.a1uuppsr','phosphorus_zones-aehz2m','Enhanced Phosphorus Watersheds','vector','#79CC79',.7,'Environment'],
-                          // 'bears': ['mapbox://secfast.7fm6tgh0','bears_2-0vjcbh','Black Bear Ranges','vector','#79CC79',.7,'Animals'],
+                          // 'bears': ['mapbox://secfast.1ehs1gtd','bears_3-dcycad','Black Bear Ranges','vector','#79CC79',.7,'Animals'],
+                          'bears': ['mapbox://secfast.1ehs1gtd','bears_3-dcycad','Black Bear Ranges','vector',["match",['get','Label'],'Primary Bear Range','#3FA54B','Secondary Bear Range','#8CDA95','#8CDA95'],.7,'Animals'],
+                          'snowmobile': ['mapbox://secfast.048x0bwe','NYSsnowmobile2018-19-06xu1u','Snowmobile Trails','vector','none','none','Infrastructure'],
+                          'adirondacks': ['mapbox://secfast.609mbd92','adirondacks-8d6bzu','Adirondacks','vector','#79CC79',.7,'Environment'],
+                          // 'mining': ['mapbox://secfast.2r3ghji5','mining-907hl9','Mining Operations','vector','none','none','Economics'],
                           };
 
 
@@ -170,8 +174,6 @@ function setUpGlobalVars() {
 
     // Load map
     map.on('load', function () {
-        map.setLayoutProperty('landuse', 'visibility', 'none');
-        map.setLayoutProperty('national_park', 'visibility', 'none');
 
         // Add satellite layer
         map.addLayer({
@@ -190,7 +192,7 @@ function setUpGlobalVars() {
               url: toggle_layers[key][0]
             });
 
-            if (key == 'zebra' || key == 'dams' || key == 'wells') {
+            if (key == 'zebra' || key == 'dams' || key == 'wells' || key == 'mining') {
                 map.addLayer({
                   "id": key,
                   "type": "symbol",
@@ -210,7 +212,7 @@ function setUpGlobalVars() {
                     "raster-saturation": 1,
                   },
                 },'admin-state-province');
-            } else if (key == 'birds' || key == 'rails' || key == 'hunt_zone') {
+            } else if (key == 'birds' || key == 'rails' || key == 'hunt_zone' || key == 'snowmobile') {
                 map.addLayer({
                   "id": key,
                   "type": "line",
@@ -391,7 +393,6 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
-            // console.log(f)
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
@@ -757,7 +758,7 @@ function setUpGlobalVars() {
             var color = 'orange';
           };
           for (var key in toggle_layers) {
-            if (key == 'crops' || key == 'zebra' || key == 'dams' || key == 'wells' || key == 'biodiversity' || key == 'traffic' || key == 'eco_zone') continue;
+            if (key == 'crops' || key == 'zebra' || key == 'dams' || key == 'wells' || key == 'mining' || key == 'biodiversity' || key == 'traffic' || key == 'eco_zone') continue;
             map.setPaintProperty(key,'line-color',color)
           };
         };
@@ -789,8 +790,6 @@ function setUpGlobalVars() {
                               'State Senate',
                               'State Assembly',
                               'Empire Zone Program',
-                              'National Parks',
-                              'State Parks',
                               'Agricultural Districts',
                               'Soil Info',
                               'Annual Precipitation (in.)',
@@ -803,17 +802,19 @@ function setUpGlobalVars() {
                               'Watershed Biodiversity',
                               'AA and AAs Watersheds',
                               'DEC Land',
+                              'Snowmobile Trails',
                               'Local Waterfront Revitatilzation Program',
                               'Water Wells',
                               'Critical Environmental Areas',
                               'Aquifers',
                               'Eco-Zones',
-                              'North/South Hunting Line',
+                              'North-South Hunting Line',
                               'Dams',
                               // 'Biodiversity Indicator',
-                              'Black Bear Ranges'];
+                              'Black Bear Ranges',
+                              // 'Mining Operations',
+                              'Adirondacks'];
 
-    // for (var i = 0; i < toggleableLayerIds.length; i++) {
     for (var key in toggle_layers) {
         var link = document.createElement('a');
         document.getElementById(toggle_layers[key][6]).appendChild(link)
@@ -824,100 +825,93 @@ function setUpGlobalVars() {
         link.onclick = function (e) {
             var checkMapLayer = map.getLayer('3d-buildings');
             if (typeof checkMapLayer !== 'undefined') {
-                // } else if (this.textContent == 'National Parks') {
-                if (this.textContent == 'National Parks') {
-                    if (map.getLayoutProperty('national_park','visibility') == 'visible') {
-                      map.setLayoutProperty('national_park','visibility','none');
-                    } else {
-                      map.setLayoutProperty('national_park','visibility','visible');
-                    };
-                } else if (this.textContent == 'State Parks') {
-                    if (map.getLayoutProperty('landuse','visibility') == 'visible') {
-                      map.setLayoutProperty('landuse','visibility','none');
-                    } else {
-                      map.setLayoutProperty('landuse','visibility','visible');
-                    };
-                } else {
-                    for (key in toggle_layers) {
-                        if (toggle_layers[key][2] == this.textContent) {
-                            clickedLayer = key;
-                            var moving_div = document.getElementById('mydiv')
-                            if (map.getLayoutProperty(clickedLayer, 'visibility') == 'visible') {
+                for (key in toggle_layers) {
+                    if (toggle_layers[key][2] == this.textContent) {
+                        clickedLayer = key;
+                        var moving_div = document.getElementById('mydiv')
+                        if (map.getLayoutProperty(clickedLayer, 'visibility') == 'visible') {
+                          moving_div.removeChild(document.getElementById(key+'_item'))
+                          if (clickedLayer == 'census_1') {
+                            map.setLayoutProperty('census_1_fill', 'visibility', 'none');
+                          };
+                          if (clickedLayer == 'census_2') {
+                            map.setLayoutProperty('census_2_fill', 'visibility', 'none');
+                          };
+                          if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
+                            map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'none');
+                          };
+                          if (clickedLayer == 'precip') {
+                            map.setLayoutProperty('precip_text','visibility','none')
+                          };
+                          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                          // this.className = 'active';
+                        } else {
+                          var line = document.createElement('tr');
+                          // line.innerHTML = toggle_layers[key][2];
+                          line.innerHTML = '<td id="'+key+'_label" class="table-label"><b>'+toggle_layers[key][2]+'</b></td><td id="'+key+'_info" class="table-info">-</td>';
+                          line.id = key+'_item';
+                          moving_div.appendChild(line)
+                          if (clickedLayer == 'precip') {
+                            map.setLayoutProperty('precip_text','visibility','visible')
+                          };
+                          if (clickedLayer == 'traffic') {
+                            map.flyTo({
+                              center: [-76.12, 43.05],
+                              zoom: 8.2,
+                              pitch: 10,
+                              bearing: 0,
+                            });
+                          };
+                          if (clickedLayer == 'snowmobile') {
+                            map.flyTo({
+                              center: [-76.12, 43.05],
+                              zoom: 8.2,
+                              pitch: 10,
+                              bearing: 0,
+                            });
+                          };
+                          if (clickedLayer == 'census_1') {
+                            if (map.getLayoutProperty('census_2_fill','visibility') == 'visible') {
+                              window.alert("Close Advanced Census Layer before viewing Basic Census Layer");
                               moving_div.removeChild(document.getElementById(key+'_item'))
-                              if (clickedLayer == 'census_1') {
-                                map.setLayoutProperty('census_1_fill', 'visibility', 'none');
-                              };
-                              if (clickedLayer == 'census_2') {
-                                map.setLayoutProperty('census_2_fill', 'visibility', 'none');
-                              };
-                              if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
-                                map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'none');
-                              };
-                              if (clickedLayer == 'precip') {
-                                map.setLayoutProperty('precip_text','visibility','none')
-                              };
-                              map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-                              // this.className = 'active';
                             } else {
-                              var line = document.createElement('tr');
-                              // line.innerHTML = toggle_layers[key][2];
-                              line.innerHTML = '<td id="'+key+'_label" class="table-label"><b>'+toggle_layers[key][2]+'</b></td><td id="'+key+'_info" class="table-info">-</td>';
-                              line.id = key+'_item';
-                              moving_div.appendChild(line)
-                              if (clickedLayer == 'precip') {
-                                map.setLayoutProperty('precip_text','visibility','visible')
-                              };
-                              if (clickedLayer == 'traffic') {
-                                map.flyTo({
-                                  center: [-76.12, 43.05],
-                                  zoom: 8.5,
-                                  pitch: 10,
-                                  bearing: 0,
-                                });
-                              };
-                              if (clickedLayer == 'census_1') {
-                                if (map.getLayoutProperty('census_2_fill','visibility') == 'visible') {
-                                  window.alert("Close Advanced Census Layer before viewing Basic Census Layer");
-                                  moving_div.removeChild(document.getElementById(key+'_item'))
-                                } else {
-                                  map.setLayoutProperty('census_1_fill', 'visibility', 'visible');
-                                  map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-                                  // this.className = 'inactive';
-                                };
-                              } else if (clickedLayer == 'census_2') {
-                                if (map.getLayoutProperty('census_1_fill','visibility') == 'visible') {
-                                  window.alert("Close Basic Census Layer before viewing Advanced Census Layer");
-                                  moving_div.removeChild(document.getElementById(key+'_item'))
-                                } else {
-                                  map.flyTo({
-                                    center: [-76.12, 43.05],
-                                    zoom: 11.5,
-                                    pitch: 10,
-                                    bearing: 0,
-                                  });
-                                  map.setLayoutProperty('census_2_fill', 'visibility', 'visible');
-                                  map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-                                  // this.className = 'inactive';
-                                };
-                              } else if (clickedLayer == 'agriculture') {
-                                map.flyTo({
-                                  center: [-75.9, 42.9],
-                                  zoom: 8.5,
-                                  pitch: 10,
-                                  bearing: 0,
-                                });
-                                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-                                map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'visible');
-                                // this.className = 'inactive';
-                              } else {
-                                if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
-                                    map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'visible');
-                                };
-                                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-                                // this.className = 'inactive';
-                              };
-                              break;
+                              map.setLayoutProperty('census_1_fill', 'visibility', 'visible');
+                              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                              // this.className = 'inactive';
                             };
+                          } else if (clickedLayer == 'census_2') {
+                            if (map.getLayoutProperty('census_1_fill','visibility') == 'visible') {
+                              window.alert("Close Basic Census Layer before viewing Advanced Census Layer");
+                              moving_div.removeChild(document.getElementById(key+'_item'))
+                            } else {
+                              map.flyTo({
+                                center: [-76.12, 43.05],
+                                zoom: 11.5,
+                                pitch: 10,
+                                bearing: 0,
+                              });
+                              map.setLayoutProperty('census_2_fill', 'visibility', 'visible');
+                              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                              // this.className = 'inactive';
+                            };
+                          } else if (clickedLayer == 'agriculture') {
+                            map.flyTo({
+                              center: [-75.9, 42.9],
+                              zoom: 8.5,
+                              pitch: 10,
+                              bearing: 0,
+                            });
+                            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                            map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'visible');
+                            // this.className = 'inactive';
+                          } else {
+                            if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
+                                map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'visible');
+                            };
+                            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                            // this.className = 'inactive';
+                          };
+                          break;
                         };
                     };
                 };

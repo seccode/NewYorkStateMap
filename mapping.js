@@ -100,7 +100,7 @@ function setUpGlobalVars() {
                           'rails': ['mapbox://secfast.102qlnny','rails_2-dsd9c5','Railroads','vector','none','none','Infrastructure'],
                           'biodiversity': ['mapbox://secfast.2lstx3qf','Biodiversity_Indicator-46nyrk','Biodiversity Indicator','raster','none','none','Environment'],
                           'water_biodiversity': ['mapbox://secfast.5f341fim','Watershed-Biodiversity-12g1bi','Watershed Biodiversity','vector','#79CC79',.7,'Environment'],
-                          'traffic': ['mapbox://secfast.4khlw6gc','AADT_2015_tdv-5aggpk','Average Annual Traffic','vector','none','none','Infrastructure'],
+                          'traffic': ['mapbox://secfast.4khlw6gc','AADT_2015_tdv-5aggpk','Average Annual Daily Traffic','vector','none','none','Infrastructure'],
                           'watershed': ['mapbox://secfast.86eo47nf','aa_aas_watersheds_2-cnc9go','AA and AAs Watersheds','vector','#79CC79',.7,'Environment'],
                           'dec_land': ['mapbox://secfast.7ivjw684','DEC_lands-7ljzj9','DEC Land','vector','#79CC79',.7,'Environment'],
                           'lwrp': ['mapbox://secfast.7iomvt5s','LWRP_Communities-5p8xpg','Local Waterfront Revitatilzation Program','vector','#79CC79',.7,'Environment'],
@@ -281,9 +281,9 @@ function setUpGlobalVars() {
                     },'admin-state-province');
                     map.setLayoutProperty('precip_text','visibility','none')
                 };
-                if (key != 'soil' && key != 'senate' && key != 'congress' && key != 'assembly' && key != 'county' && key != 'school_zones' && key != 'city_town' && key != 'villages' && key != 'indian_territory') {
-                    map.setLayoutProperty(key+'_fill','visibility','none');
-                };
+                // if (key != 'soil' && key != 'senate' && key != 'congress' && key != 'assembly' && key != 'county' && key != 'school_zones' && key != 'city_town' && key != 'villages' && key != 'indian_territory') {
+                map.setLayoutProperty(key+'_fill','visibility','none');
+                // };
             };
             map.setLayoutProperty(key,'visibility','none')
         };
@@ -412,61 +412,93 @@ function setUpGlobalVars() {
 
         // Make parcel appear purple when hovered with mouse
         map.on("mousemove", function(e) {
+            on_fills = false;
             if (open_popup) {
                 if (!new_popup.isOpen()) {
                     open_popup = false;
                 };
             } else if (typeof checkMapLayer !== 'undefined') {
+                elements = document.getElementById('mydiv').children;
                 let f = map.queryRenderedFeatures(e.point);
-                var on_fills = false;
-                var on_census = false;
-                var on_geology = false;
-                var on_eco = false;
-                var county = false;
-                var city = false;
-                var village = false;
-                var school = false;
-                var indian = false;
-                var senate = false;
-                var congress = false;
-                var assembly = false;
-                if (f.length) {
+                if (!f.length) {
+                  for (j=2;j<elements.length;j++) {
+                    document.getElementById(elements[j].id.split('_item')[0]+'_info').textContent = '-';
+                  }
+                } else {
+                    for (j=2; j<elements.length; j++) {
+                      match = false;
+                      for (i=0; i<f.length; i++) {
+                         if (elements[j].id.split('_item')[0] == f[i].layer.id.split('_fill')[0]) {
+                           match = true;
+                           break;
+                         };
+                      };
+                      if (!match) {
+                        document.getElementById(elements[j].id.split('_item')[0]+'_info').textContent = '-';
+                      } else {
+                        var key = f[i].layer.id.split('_fill')[0];
+                        line = document.getElementById(key+'_info');
+                        if (!!line) {
+                          if (key == 'city_town' || key == 'villages' || key == 'school_zones' || key == 'indian_territory' || key == 'counties') {
+                            line.textContent = f[i].properties.NAME;
+                          } else if (key == 'senate' || key == 'assembly') {
+                            ending = findSuffix(f[i].properties.DISTRICT.toString())
+                            line.textContent = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.party[0]+'.)';
+                          } else if (key == 'congress') {
+                            ending = findSuffix(f[i].properties.DISTRICT.toString())
+                            line.textContent = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.Party[0]+'.)';
+                          } else if (key == 'empire_zones') {
+                            line.textContent = f[i].properties.MUNI_1 + ' ' + f[i].properties.ZONE_TYPE;
+                          } else if (key == 'census_1' || key == 'census_2') {
+                            line.textContent = 'Tract #'+f[i].properties.TRACT;
+                          } else if (key == 'agriculture') {
+                            line.textContent = 'District #'+f[i].properties.DistCode;
+                          } else if (key == 'soil') {
+                            line.textContent = 'Soil Type - '+f[i].properties.MUSYM;
+                          } else if (key == 'precip') {
+                            line.textContent = f[i].properties.RANGE;
+                          } else if (key == 'geology') {
+                            line.textContent = f[i].properties.ROCKDESC;
+                          } else if (key == 'water_biodiversity') {
+                            line.textContent = f[i].properties.HU_12_Name;
+                          } else if (key == 'dec_land') {
+                            line.textContent = f[i].properties.UMP + ' ' + f[i].properties.CATEGORY;
+                          } else if (key == 'lwrp') {
+                            line.textContent = f[i].properties.REDC;
+                          } else if (key == 'crit_env') {
+                            line.textContent = f[i].properties.NAME;
+                          } else if (key == 'aquifers') {
+                            line.textContent = 'Area - '+f[i].properties.SHAPE_AREA;
+                          } else if (key == 'eco_zone') {
+                            line.textContent = f[i].properties.MINOR_DESC;
+                          } else if (key == 'phosphorus') {
+                            line.textContent = f[i].properties.NAME;
+                          } else if (key == 'rails') {
+                            line.textContent = f[i].properties.LINE_NAME;
+                          } else if (key == 'wells') {
+                            line.textContent = f[i].properties.Foil_Loc;
+                          } else if (key == 'dams') {
+                            line.textContent = f[i].properties.NAME_ONE;
+                          } else if (key == 'birds') {
+                            line.textContent = f[i].properties.RTENAME + ' Migration Route';
+                          } else if (key == 'traffic') {
+                            var num = f[i].properties.AADT.toString();
+                            var length = num.length;
+                            if (length > 6) {
+                                var num = num.slice(0,length-6) + ',' + num.slice(length-6,length-3) + ',' + num.slice(length-3,length);
+                            } else if (length > 3) {
+                                var num = num.slice(0,length-3) + ',' + num.slice(length-3,length);
+                            } else {
+                                var num = num;
+                            };
+                            line.textContent = num + ' cars per day';
+                          } else {
+                            line.textContent = ' ';
+                          };
+                        };
+                      };
+                    };
                     for (i=0; i<f.length; i++) {
-                        if (f[i].layer.id == 'city_town_fill') {
-                            county = true;
-                            var county_name = f[i].properties.COUNTY;
-                            var city_name = f[i].properties.NAME;
-                        };
-                        if (f[i].layer.id == 'villages_fill') {
-                            village = true;
-                            var village_name = f[i].properties.NAME;
-                        };
-                        if (f[i].layer.id == 'school_zones_fill') {
-                            school = true;
-                            var school_name = f[i].properties.NAME;
-                        };
-                        if (f[i].layer.id == 'indian_territory_fill') {
-                            indian = true;
-                            var indian_name = f[i].properties.NAME;
-                        };
-                        if (f[i].layer.id == 'senate_fill') {
-                            senate = true;
-                            ending = findSuffix(f[i].properties.DISTRICT.toString())
-                            var senate_name = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.party[0]+'.)';
-                        };
-                        if (f[i].layer.id == 'congress_fill') {
-                            congress = true;
-                            var string = f[i].properties.DISTRICT.toString()
-                            ending = findSuffix(f[i].properties.DISTRICT.toString())
-                            var congress_name = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.Party[0]+'.)';
-                        };
-                        if (f[i].layer.id == 'assembly_fill') {
-                            assembly = true;
-                            ending = findSuffix(f[i].properties.DISTRICT.toString())
-                            var assembly_name = f[i].properties.DISTRICT + ending + ' District - '+f[i].properties.NAME+' ('+f[i].properties.party[0]+'.)';
-                        };
-
-
                         if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {
                             on_fills = !on_fills;
                             var layer_id = f[i].layer.id.replace('_fills','').replace('_fill_outlines','').replace('_outlines','');
@@ -500,7 +532,7 @@ function setUpGlobalVars() {
                         };
 
                         if (f[i].layer.id.includes('geology')) {
-                          on_geology = !on_geology;
+                          // on_geology = !on_geology;
                           map.getCanvas().style.cursor = 'pointer';
                           if (geologyhoveredStateId) {
                             map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: false});
@@ -509,7 +541,7 @@ function setUpGlobalVars() {
                           }
                         };
                         if (f[i].layer.id.includes('eco_zone')) {
-                          on_eco = !on_eco;
+                          // on_eco = !on_eco;
                           map.getCanvas().style.cursor = 'pointer';
                           if (ecohoveredStateId) {
                             map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: false});
@@ -519,7 +551,7 @@ function setUpGlobalVars() {
                         };
 
                         if (f[i].layer.id.includes('census_1_fill') || f[i].layer.id.includes('census_2_fill')) {
-                            on_census = !on_census;
+                            // on_census = !on_census;
                             map.getCanvas().style.cursor = 'pointer';
                             if (census1hoveredStateId) {
                                 map.setFeatureState({source: 'census_1', id: census1hoveredStateId, sourceLayer: toggle_layers['census_1'][1]}, {hover: false});
@@ -614,95 +646,49 @@ function setUpGlobalVars() {
                         };
                     };
 
-                    if (!on_fills) {
-                        if (activeLayer != 'none') {
-                            if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
-                                if (hoveredStateId) {
-                                    map.setFeatureState({source: activeLayer, id: hoveredStateId, sourceLayer: county_dict[activeLayer][1]}, {hover: false});
-                                };
-                                map.getCanvas().style.cursor = '';
-                                hoveredStateId =  null;
-                                popup.remove();
-                            };
-                        };
-                    };
-                    if (!on_census) {
-                        if (map.getLayoutProperty('census_1_fill','visibility') == 'visible') {
-                            if (census1hoveredStateId) {
-                                map.setFeatureState({source: 'census_1', id: census1hoveredStateId, sourceLayer: toggle_layers['census_1'][1]}, {hover: false});
-                            };
-                            map.getCanvas().style.cursor = '';
-                            census1hoveredStateId =  null;
-                        };
-                        if (map.getLayoutProperty('census_2_fill','visibility') == 'visible') {
-                            if (census2hoveredStateId) {
-                                map.setFeatureState({source: 'census_2', id: census2hoveredStateId, sourceLayer: toggle_layers['census_2'][1]}, {hover: false});
-                            };
-                            map.getCanvas().style.cursor = '';
-                            census2hoveredStateId =  null;
-                        };
-                    };
-                    if (!on_geology) {
-                      if (geologyhoveredStateId) {
-                        map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: false});
-                      };
-                      map.getCanvas().style.cursor = '';
-                      geologyhoveredStateId =  null;
-                    };
-                    if (!on_eco) {
-                      if (ecohoveredStateId) {
-                        map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: false});
-                      };
-                      map.getCanvas().style.cursor = '';
-                      ecohoveredStateId =  null;
-                    };
+                    // if (!on_fills) {
+                    //     if (activeLayer != 'none') {
+                    //         if (map.getLayoutProperty(activeLayer+'_fills','visibility') == 'visible' || map.getLayoutProperty(activeLayer+'_fill_outlines','visibility') == 'visible') {
+                    //             if (hoveredStateId) {
+                    //                 map.setFeatureState({source: activeLayer, id: hoveredStateId, sourceLayer: county_dict[activeLayer][1]}, {hover: false});
+                    //             };
+                    //             map.getCanvas().style.cursor = '';
+                    //             hoveredStateId =  null;
+                    //             popup.remove();
+                    //         };
+                    //     };
+                    // };
+                    // if (!on_census) {
+                    //     if (map.getLayoutProperty('census_1_fill','visibility') == 'visible') {
+                    //         if (census1hoveredStateId) {
+                    //             map.setFeatureState({source: 'census_1', id: census1hoveredStateId, sourceLayer: toggle_layers['census_1'][1]}, {hover: false});
+                    //         };
+                    //         map.getCanvas().style.cursor = '';
+                    //         census1hoveredStateId =  null;
+                    //     };
+                    //     if (map.getLayoutProperty('census_2_fill','visibility') == 'visible') {
+                    //         if (census2hoveredStateId) {
+                    //             map.setFeatureState({source: 'census_2', id: census2hoveredStateId, sourceLayer: toggle_layers['census_2'][1]}, {hover: false});
+                    //         };
+                    //         map.getCanvas().style.cursor = '';
+                    //         census2hoveredStateId =  null;
+                    //     };
+                    // };
+                    // if (!on_geology) {
+                    //   if (geologyhoveredStateId) {
+                    //     map.setFeatureState({source: 'geology', id: geologyhoveredStateId, sourceLayer: toggle_layers['geology'][1]}, {hover: false});
+                    //   };
+                    //   map.getCanvas().style.cursor = '';
+                    //   geologyhoveredStateId =  null;
+                    // };
+                    // if (!on_eco) {
+                    //   if (ecohoveredStateId) {
+                    //     map.setFeatureState({source: 'eco_zone', id: ecohoveredStateId, sourceLayer: toggle_layers['eco_zone'][1]}, {hover: false});
+                    //   };
+                    //   map.getCanvas().style.cursor = '';
+                    //   ecohoveredStateId =  null;
+                    // };
                 };
-
-                // element = document.getElementById('counties');
-                // element2 = document.getElementById('city_town');
-                // if (county) {
-                //     element.innerHTML = county_name;
-                //     element2.innerHTML = city_name;
-                // } else {
-                //     element.innerHTML = '-';
-                //     element2.innerHTML = '-';
-                // }
-                // element = document.getElementById('villages');
-                // if (village) {
-                //     element.innerHTML = village_name;
-                // } else {
-                //     element.innerHTML = '-';
-                // }
-                // element = document.getElementById('school_zones');
-                // if (school) {
-                //     element.innerHTML = school_name;
-                // } else {
-                //     element.innerHTML = '-';
-                // }
-                // element = document.getElementById('indian_territory');
-                // if (indian) {
-                //     element.innerHTML = indian_name;
-                // } else {
-                //     element.innerHTML = '-';
-                // }
-                // element = document.getElementById('senate');
-                // if (senate) {
-                //     element.innerHTML = senate_name;
-                // } else {
-                //     element.innerHTML = '-';
-                // }
-                // element = document.getElementById('congress');
-                // if (congress) {
-                //     element.innerHTML = congress_name;
-                // } else {
-                //     element.innerHTML = '-';
-                // }
-                // element = document.getElementById('assembly');
-                // if (assembly) {
-                //     element.innerHTML = assembly_name;
-                // } else {
-                //     element.innerHTML = '-';
-                // };
             };
         });
     });
@@ -734,8 +720,9 @@ function setUpGlobalVars() {
               map.setLayoutProperty(activeLayer+'_fill_outlines', 'visibility', 'visible');
               map.setPaintProperty(activeLayer+'_outlines','line-color','orange');
             } else if  (map.getLayoutProperty(activeLayer+'_fill_outlines', 'visibility') == 'visible') {
-              var line = document.createElement('p');
-              line.innerHTML = toggle_layers[key][2];
+              var line = document.createElement('tr');
+              // line.innerHTML = toggle_layers[key][2];
+              line.innerHTML = '<td id="'+activeLayer+'_label" class="table-label"><b>'+toggle_layers[key][2]+'</b></td><td id="'+activeLayer+'_info" class="table-info">-</td>';
               line.id = activeLayer+'_item';
               moving_div.appendChild(line)
               map.setLayoutProperty(activeLayer+'_fills', 'visibility', 'visible');
@@ -794,7 +781,7 @@ function setUpGlobalVars() {
                               'Bird Migration',
                               'Zebra Mussels',
                               'Railroads',
-                              'Average Annual Traffic',
+                              'Average Annual Daily Traffic',
                               'Enhanced Phosphorus Watersheds',
                               'Watershed Biodiversity',
                               'AA and AAs Watersheds',
@@ -846,19 +833,20 @@ function setUpGlobalVars() {
                             if (clickedLayer == 'census_2') {
                               map.setLayoutProperty('census_2_fill', 'visibility', 'none');
                             };
-                            if (clickedLayer != 'school_zones' && clickedLayer != 'villages' && clickedLayer != 'congress' && clickedLayer != 'senate' && clickedLayer != 'assembly' && clickedLayer != 'indian_territory' && clickedLayer != 'county' && clickedLayer != 'city_town') {
-                              if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
-                                map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'none');
-                              };
-                            }
+                            // if (clickedLayer != 'school_zones' && clickedLayer != 'villages' && clickedLayer != 'congress' && clickedLayer != 'senate' && clickedLayer != 'assembly' && clickedLayer != 'indian_territory' && clickedLayer != 'county' && clickedLayer != 'city_town') {
+                            if (typeof map.getLayer(clickedLayer+'_fill') !== 'undefined') {
+                              map.setLayoutProperty(clickedLayer+'_fill', 'visibility', 'none');
+                            };
+                            // }
                             if (clickedLayer == 'precip') {
                               map.setLayoutProperty('precip_text','visibility','none')
                             };
                             map.setLayoutProperty(clickedLayer, 'visibility', 'none');
                             // this.className = 'active';
                           } else {
-                            var line = document.createElement('p');
-                            line.innerHTML = toggle_layers[key][2];
+                            var line = document.createElement('tr');
+                            // line.innerHTML = toggle_layers[key][2];
+                            line.innerHTML = '<td id="'+key+'_label" class="table-label"><b>'+toggle_layers[key][2]+'</b></td><td id="'+key+'_info" class="table-info">-</td>';
                             line.id = key+'_item';
                             moving_div.appendChild(line)
                             if (clickedLayer == 'precip') {
@@ -1001,10 +989,6 @@ function setUpGlobalVars() {
                             map.setLayoutProperty(key+'_outlines', 'visibility', 'visible');
                         };
                     };
-                } else {
-                    map.setLayoutProperty(key+'_fills', 'visibility', 'none');
-                    map.setLayoutProperty(key+'_fill_outlines', 'visibility', 'none');
-                    map.setLayoutProperty(key+'_outlines', 'visibility', 'none');
                 };
             };
         };

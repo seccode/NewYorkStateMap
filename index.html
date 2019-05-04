@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<title>New York State Map</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="Map, GIS, NY, Census, Geography, Politics, Property, Parcels">
+<meta name="description" content="Interactive map of New York State to explore property, boundaries, geography, politics, and the environment">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial">
 <style>
 body, html {
   height: 100%;
-  font-family: "Inconsolata", sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .bgimg {
   background-position: center;
   background-size: cover;
-  background-image: url("/w3images/coffeehouse.jpg");
+  background-image: url("https://cdn.pixabay.com/photo/2015/08/16/03/47/new-york-890554_1280.png");
   min-height: 75%;
 }
 
@@ -34,10 +36,10 @@ body, html {
       <a href="#about" class="w3-button w3-block w3-black">ABOUT</a>
     </div>
     <div class="w3-col s3">
-      <a href="#menu" class="w3-button w3-block w3-black">MENU</a>
+      <a href="#data" class="w3-button w3-block w3-black">DATA</a>
     </div>
     <div class="w3-col s3">
-      <a href="#where" class="w3-button w3-block w3-black">WHERE</a>
+      <a href="#contact" class="w3-button w3-block w3-black">CONTACT</a>
     </div>
   </div>
 </div>
@@ -45,13 +47,12 @@ body, html {
 <!-- Header with image -->
 <header class="bgimg w3-display-container w3-grayscale-min" id="home">
   <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
-    <span class="w3-tag">Open from 6am to 5pm</span>
+    <span class="w3-tag" style="background: #152738;">Data updated May 4, 2019</span>
   </div>
-  <div class="w3-display-middle w3-center">
-    <span class="w3-text-white" style="font-size:90px">the<br>Cafe</span>
-  </div>
-  <div class="w3-display-bottomright w3-center w3-padding-large">
-    <span class="w3-text-white">15 Adr street, 5015</span>
+  <div class="w3-display-topmiddle" style="background: #152738; color: white; text-align:center; top: 100px; font-size:60px; width:700px; border: 1px solid white; box-shadow: 0 0 50px #9ecaed;">Map of New York</div>
+  <!-- <div style="top: 100px; font-size:60px; width:700px; border: 1px solid white; box-shadow: 0 0 50px #9ecaed;"> -->
+  <div class="w3-display-bottommiddle" style="background: #152738; bottom: 100px; font-size:24px; width:300px; border: 1px solid white; box-shadow: 0 0 50px #9ecaed;">
+    <a  href="map_page.html" class="w3-button w3-block" style="background: #152738; color:white;">View Map</a>
   </div>
 </header>
 
@@ -61,84 +62,292 @@ body, html {
 <!-- About Container -->
 <div class="w3-container" id="about">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT THE CAFE</span></h5>
-    <p>The Cafe was founded in blabla by Mr. Smith in lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    <p>In addition to our full espresso and brew bar menu, we serve fresh made-to-order breakfast and lunch sandwiches, as well as a selection of sides and salads and other good stuff.</p>
-    <div class="w3-panel w3-leftbar w3-light-grey">
-      <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
-      <p>Chef, Coffeeist and Owner: Liam Brown</p>
-    </div>
-    <img src="/w3images/coffeeshop.jpg" style="width:100%;max-width:1000px" class="w3-margin-top">
-    <p><strong>Opening hours:</strong> everyday from 6am to 5pm.</p>
-    <p><strong>Address:</strong> 15 Adr street, 5015, NY</p>
+    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">About the Map</span></h5>
+    <p>This interactive map of New York State was created with the mission of providing an easy-to-use tool for learning about the State of New York. Using this map, you will be able to explore areas of New York such as the Adirondacks, New York City, and the Finger Lake Region.</p>
+    <p>The features included in this map have been broken down into 9 categories:</p>
+    <ul>
+      <li>Boundary Lines</li>
+      <li>Political Regions</li>
+      <li>Economic Regions</li>
+      <li>Demographics</li>
+      <li>Tax Parcels/Property</li>
+      <li>Agriculture</li>
+      <li>Environment</li>
+      <li>Animals</li>
+      <li>Infrastructure</li>
+    </ul>
+    <p>Using open-source data provided by New York State, the USDA, and other government agencies, we are able to create an accurate and up-to-date map of millions of features across the State.</p>
+    <!-- <div class="w3-panel w3-leftbar w3-light-grey"> -->
+      <!-- <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p> -->
+      <!-- <p>Chef, Coffeeist and Owner: Liam Brown</p> -->
+    <!-- </div> -->
+    <!-- <p><strong>Opening hours:</strong> everyday from 6am to 5pm.</p> -->
+    <!-- <p><strong>Address:</strong> 15 Adr street, 5015, NY</p> -->
   </div>
 </div>
 
 <!-- Menu Container -->
-<div class="w3-container" id="menu">
+<div class="w3-container" id="data">
   <div class="w3-content" style="max-width:700px">
 
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">THE MENU</span></h5>
+    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">The Data</span></h5>
+    <p>Below is a brief summary of the layers available in this interactive map and where the data came from</p>
 
-    <div class="w3-row w3-center w3-card w3-padding">
-      <a href="javascript:void(0)" onclick="openMenu(event, 'Eat');" id="myLink">
-        <div class="w3-col s6 tablink">Eat</div>
-      </a>
-      <a href="javascript:void(0)" onclick="openMenu(event, 'Drinks');">
-        <div class="w3-col s6 tablink">Drink</div>
-      </a>
+    <div class="w3-container">
+      <h2><strong>Boundary Lines</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">School Districts</h3>
+            <p class="w3-text-grey" style="margin: 0;">Boundary Lines showing districts for New York K-12 Schools</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Counties</h3>
+            <p class="w3-text-grey" style="margin: 0;">New York County Boundaries</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Cities/Towns</h3>
+            <p class="w3-text-grey" style="margin: 0;">New York Cities and Town Boundaries</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Villages</h3>
+            <p class="w3-text-grey" style="margin: 0;">New York Villages Boundaries</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Indian Territory</h3>
+            <p class="w3-text-grey" style="margin: 0;">Boundaries for Designated Indian Territory in New York</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Political Regions</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Congressional Districts</h3>
+            <p class="w3-text-grey" style="margin: 0;">Boundary lines for 115th U.S. Congress</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Congressional Districts</h3>
+            <p class="w3-text-grey" style="margin: 0;">New York State Senate district lines</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">State Senate</h3>
+            <p class="w3-text-grey" style="margin: 0;">New York State Assembly district lines</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Economic Regions</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Empire Zone Program</h3>
+            <p class="w3-text-grey" style="margin: 0;">Tax incentive areas for economic development</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Demographics</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Basic Census Data</h3>
+            <p class="w3-text-grey" style="margin: 0;">Census data visualization by Census Tract</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Advanced Census Data</h3>
+            <p class="w3-text-grey" style="margin: 0;">Census data visualization by Census Block</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Tax Parcels/Property</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Tax Parcels</h3>
+            <ol type="1">
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Cayuga County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Cortland County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Genesee County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Greene County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Lewis County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Ontario County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Rensselaer County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Sullivan County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Tompkins County</p>
+              </li>
+              <li>
+                <p class="w3-text-grey" style="margin: 0;">Warren County</p>
+              </li>
+            </ol>
+            <p class="w3-text-grey" style="margin: 0;">Extensive property data including assessed value, and property details</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Agriculture</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Crop Cover</h3>
+            <p class="w3-text-grey" style="margin: 0;">Raster map with dark areas denoting heavier crop cover</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Agricultural Districts</h3>
+            <p class="w3-text-grey" style="margin: 0;">Agricultural District lines and identification as denoted by New York State</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Soil Info</h3>
+            <p class="w3-text-grey" style="margin: 0;">Classified soil regions</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Environment</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Annual Precipitation</h3>
+            <p class="w3-text-grey" style="margin: 0;">Average annual precipitation for regions of New York State</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Geology</h3>
+            <p class="w3-text-grey" style="margin: 0;">Geological Regions of New York State</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Watershed Biodiversity</h3>
+            <p class="w3-text-grey" style="margin: 0;">Watershed Biodiversity</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">AA and AAs Classified Watersheds</h3>
+            <p class="w3-text-grey" style="margin: 0;">AA and AAs Classified Watersheds</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">DEC Owned Land</h3>
+            <p class="w3-text-grey" style="margin: 0;">DEC Owned Land</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Local Waterfront Revitatilzation Program (LWRP)</h3>
+            <p class="w3-text-grey" style="margin: 0;">Local Waterfront Revitatilzation Program</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Critical Environmental Areas</h3>
+            <p class="w3-text-grey" style="margin: 0;">Critical Environmental Areas as denoted by the NYS DEC</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Aquifers</h3>
+            <p class="w3-text-grey" style="margin: 0;">Primary Aquifers in New York State</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Ecological Zones</h3>
+            <p class="w3-text-grey" style="margin: 0;">Classified ecological zones</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Enhanced Phosphorus Watersheds</h3>
+            <p class="w3-text-grey" style="margin: 0;">Enhanced phosphorus watersheds designated by NYS</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Adirondack State Park Boundary</h3>
+            <p class="w3-text-grey" style="margin: 0;">Adirondack State Park Boundary</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Animals</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Zebra Mussels Locations</h3>
+            <p class="w3-text-grey" style="margin: 0;">Invasive Species zebra mussel locations</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Bird Migration Routes</h3>
+            <p class="w3-text-grey" style="margin: 0;">Bird Migration Routes</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">North-South Hunting Line</h3>
+            <p class="w3-text-grey" style="margin: 0;">North-South Hunting Line</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Black Bear Ranges</h3>
+            <p class="w3-text-grey" style="margin: 0;">Black Bear Primary and Secondary Ranges</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
+
+      <h2><strong>Infrastructure</strong></h2>
+        <ul>
+          <li>
+            <h3 style="margin: 0;">Railroad Lines</h3>
+            <p class="w3-text-grey" style="margin: 0;">Railroad Lines</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Average Annual Daily Traffic</h3>
+            <p class="w3-text-grey" style="margin: 0;">Average Annual Daily Traffic</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Water Wells Locations</h3>
+            <p class="w3-text-grey" style="margin: 0;">Water Wells Locations</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Dam Locations</h3>
+            <p class="w3-text-grey" style="margin: 0;">Dam Locations</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+          <li>
+            <h3 style="margin: 0;">Snowmobile Trails</h3>
+            <p class="w3-text-grey" style="margin: 0;">Snowmobile Trails</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+          </li>
+        </ul>
     </div>
-
-    <div id="Eat" class="w3-container menu w3-padding-48 w3-card">
-      <h5>Bread Basket</h5>
-      <p class="w3-text-grey">Assortment of fresh baked fruit breads and muffins 5.50</p><br>
-
-      <h5>Honey Almond Granola with Fruits</h5>
-      <p class="w3-text-grey">Natural cereal of honey toasted oats, raisins, almonds and dates 7.00</p><br>
-
-      <h5>Belgian Waffle</h5>
-      <p class="w3-text-grey">Vanilla flavored batter with malted flour 7.50</p><br>
-
-      <h5>Scrambled eggs</h5>
-      <p class="w3-text-grey">Scrambled eggs, roasted red pepper and garlic, with green onions 7.50</p><br>
-
-      <h5>Blueberry Pancakes</h5>
-      <p class="w3-text-grey">With syrup, butter and lots of berries 8.50</p>
-    </div>
-
-    <div id="Drinks" class="w3-container menu w3-padding-48 w3-card">
-      <h5>Coffee</h5>
-      <p class="w3-text-grey">Regular coffee 2.50</p><br>
-
-      <h5>Chocolato</h5>
-      <p class="w3-text-grey">Chocolate espresso with milk 4.50</p><br>
-
-      <h5>Corretto</h5>
-      <p class="w3-text-grey">Whiskey and coffee 5.00</p><br>
-
-      <h5>Iced tea</h5>
-      <p class="w3-text-grey">Hot tea, except not hot 3.00</p><br>
-
-      <h5>Soda</h5>
-      <p class="w3-text-grey">Coke, Sprite, Fanta, etc. 2.50</p>
-    </div>
-    <img src="/w3images/coffeehouse2.jpg" style="width:100%;max-width:1000px;margin-top:32px;">
   </div>
 </div>
 
 <!-- Contact/Area Container -->
-<div class="w3-container" id="where" style="padding-bottom:32px;">
+<div class="w3-container" id="contact" style="padding-bottom:32px;">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">WHERE TO FIND US</span></h5>
-    <p>Find us at some address at some place.</p>
-    <img src="/w3images/map.jpg" class="w3-image" style="width:100%">
-    <p><span class="w3-tag">FYI!</span> We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste.</p>
-    <p><strong>Reserve</strong> a table, ask for today's special or just send us a message:</p>
+    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Contact Us</span></h5>
     <form action="/action_page.php" target="_blank">
       <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="number" placeholder="How many people" required name="People"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Date and time" required name="date" value="2017-11-16T20:00"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Message \ Special requirements" required name="Message"></p>
+      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Email Address" required name="Email"></p>
+      <p><input class="w3-input w3-padding-64 w3-border" type="text" placeholder="Message" required name="Message"></p>
       <p><button class="w3-button w3-black" type="submit">SEND MESSAGE</button></p>
     </form>
   </div>
@@ -149,26 +358,9 @@ body, html {
 
 <!-- Footer -->
 <footer class="w3-center w3-light-grey w3-padding-48 w3-large">
-  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+  <p>Map of New York</p>
 </footer>
 
-<script>
-// Tabbed Menu
-function openMenu(evt, menuName) {
-  var i, x, tablinks;
-  x = document.getElementsByClassName("menu");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < x.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" w3-dark-grey", "");
-  }
-  document.getElementById(menuName).style.display = "block";
-  evt.currentTarget.firstElementChild.className += " w3-dark-grey";
-}
-document.getElementById("myLink").click();
-</script>
 
 </body>
 </html>

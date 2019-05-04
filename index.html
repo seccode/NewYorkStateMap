@@ -1,948 +1,174 @@
-
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset='utf-8' />
-    <title>New York State Mapped</title>
-    <!-- <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' /> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="Map, GIS, NY, Census, Geography, Politics, Property, Parcels">
-    <meta name="description" content="Interactive map of New York State to explore property, boundaries, geography, politics, and the environment">
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- <script type="text/javascript" src="plotly-latest.min.js"></script> -->
-    <!-- <script src="jquery.csv.js"></script> -->
-    <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
-    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
-    <script type="text/javascript" src="mapping.js"></script>
-
-    <style>
-        body { margin:0; padding:0; }
-        /* #map { position:absolute; height:100%; right: 0; left: 216px} */
-        #map { position:absolute; height:100%; width:100%}
-    </style>
-
-    <style>
-    .main-header {
-      position: relative;
-      background-color: #708090;
-      border: 1px solid #000000;
-      border-radius: 3px;
-      color: white;
-      /* height: 5.7%; */
-      /* height: 10%; */
-      width: 13.07%;
-      font-size: .2vw;
-    }
-
-    .main-header-text {
-      /* position: absolute; */
-      /* bottom:30%; */
-      /* left:5%; */
-      color: white;
-      font-size: .2vw;
-    }
-
-    </style>
-
-    <style>
-        * {box-sizing: border-box;}
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        .topnav {
-            position: absolute;
-            /* height: 152px; */
-            overflow: hidden;
-            /* background-color: #778899; */
-            /* border-bottom: 3px solid #000; */
-        }
-        .topnav a {
-            float: left;
-            /* display: block; */
-            color: black;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 19px;
-        }
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        .topnav a.active {
-            position: fixed;
-            width:216px;
-            height:50px;
-            padding:12px;
-            background-color: #eae3d6;
-            /* background-color: #D0AB66; */
-            /* border-right: 1px solid #000000; */
-            border: 3px black;
-            border-style:ridge;
-            color: #152738;
-            font-weight:bold;
-        }
-        .topnav .search-container {
-            float: right;
-        }
-        .topnav input[type=text] {
-            padding: 6px;
-            margin-top: 8px;
-            font-size: 17px;
-            border: none;
-        }
-        .topnav .search-container button {
-            float: right;
-            padding: 6px;
-            margin-top: 8px;
-            margin-right: 16px;
-            background: #ddd;
-            font-size: 17px;
-            border: none;
-            cursor: pointer;
-        }
-        .topnav .search-container button:hover {
-            background: #ccc;
-        }
-        /* @media screen and (max-width: 600px) {
-            .topnav .search-container {
-                float: none;
-            }
-            .topnav a, .topnav input[type=text], .topnav .search-container button {
-                float: none;
-                display: block;
-                text-align: left;
-                width: 100%;
-                margin: 0;
-                padding: 14px;
-            }
-            .topnav input[type=text] {
-                border: 1px solid #ccc;
-            }
-        } */
-
-        .dropdown {
-          float: left;
-          overflow: hidden;
-          /* position: relative; */
-          /* top: 1px; */
-          /* left: 25.5%; */
-        }
-        .dropdown .dropbtn {
-          font-size: 17px;
-          outline: none;
-          color: white;
-          padding: 14px 16px;
-          background-color: inherit;
-          font-family: inherit;
-          margin: 0;
-          cursor: pointer;
-          /* border-right: 1px solid #000000; */
-          /* position: relative;
-          cursor: pointer;
-          font-size: 16px;
-          border: 1px solid #000000;
-          border-radius: 3px;
-          outline: none;
-          color: black;
-          padding-left: 10px;
-          background-color: #D0AB66;
-          font-family: inherit;
-          height: 5.65vh; */
-        }
-        .dropdown:hover .dropbtn {
-          opacity: .6;
-          background-color: red;
-        }
-        .dropdown-content {
-          display: none;
-          position: absolute;
-          background-color: #f9f9f9;
-          min-width: 217px;
-          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-          z-index: 1;
-          /* display: none;
-          border: 1px solid #000000;
-          background-color: #f9f9f9;
-          min-width: 160px;
-          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-          z-index: 1; */
-        }
-        .dropdown-content a {
-          float: none;
-          color: black;
-          padding: 12px 16px;
-          text-decoration: none;
-          display: block;
-          text-align: left;
-          /* float: none;
-          color: black;
-          padding: 12px 16px;
-          text-decoration: none;
-          display: block;
-          text-align: left; */
-        }
-        .dropdown:hover .dropdown-content {
-          display: block;
-        }
-        .dropdown-content a:hover {
-          background-color: #ddd;
-        }
-        .show {
-          display: block;
-        }
-        /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
-        @media screen and (max-width: 600px) {
-          .topnav a:not(:first-child), .dropdown .dropbtn {
-            display: none;
-          }
-          .topnav a.icon {
-            float: right;
-            display: block;
-          }
-        }
-
-        /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
-        @media screen and (max-width: 600px) {
-          .topnav.responsive {position: relative;}
-          .topnav.responsive a.icon {
-            position: absolute;
-            right: 0;
-            top: 0;
-          }
-          .topnav.responsive a {
-            float: none;
-            display: block;
-            text-align: left;
-          }
-          .topnav.responsive .dropdown {float: none;}
-          .topnav.responsive .dropdown-content {position: relative;}
-          .topnav.responsive .dropdown .dropbtn {
-            display: block;
-            width: 100%;
-            text-align: left;
-          }
-        }
-
-    </style>
-
-    <style>
-        .legend {
-            background-color: #DCEAE2;
-            border-radius: 10px;
-            /* bottom: 25px; */
-            bottom: 2.5%;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            padding: 10px;
-            position: absolute;
-            right: 0px;
-            z-index: 1;
-        }
-
-        .legend h4 {
-            margin: 0 0 10px;
-        }
-
-        .legend div span {
-            border-radius: 50%;
-            display: inline-block;
-            height: 20px;
-            margin-right: 5px;
-            width: 20px;
-        }
-
-    </style>
-
-    <style>
-        .filter-ctrl {
-            position: absolute;
-            top: 10px;
-            right: 40px;
-            z-index: 1;
-            width: 200px;
-        }
-
-        .filter-ctrl input[type=text] {
-            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            width: 100%;
-            border: 0;
-            background-color: #fff;
-            height: 30px;
-            margin: 0;
-            color: rgba(0,0,0,.5);
-            padding: 10px;
-            box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
-            border-radius: 3px;
-        }
-    </style>
-
-    <style>
-        #menu {
-            background: #C0C0C0;
-            position: absolute;
-            /* position: fixed; */
-            color: #000000;
-            z-index: 1;
-            font-size: .8vw;
-            bottom: 2.5%;
-            right: 51%;
-            border-radius: 3px;
-            height: 48.4vh;
-            width: 12vw;
-            border: 1px solid rgba(0,0,0,0.4);
-            border-radius: 5px;
-            font-family: 'Open Sans', sans-serif;
-            overflow-y: scroll;
-        }
-
-        #menu a {
-            /* font-size: 13px; */
-            font-size: .8vw;
-            color: #000000;
-            display: block;
-            margin: 0;
-            padding: 0;
-            padding: 10px;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(0,0,0,0.25);
-            border-radius: 5px;
-            text-align: center;
-            overflow-y: scroll;
-        }
-
-        #menu a:last-child {
-            border: none;
-        }
-
-        #menu a:hover {
-            background-color: #f8f8f8;
-        }
-
-        #menu a.active {
-            background-color: #DCDCDC;
-        }
-
-        #menu a.inactive {
-            background-color: #F53737;
-        }
-
-        #menu a.active:hover {
-            background: #3074a4;
-        }
-        ::-webkit-scrollbar {
-          -webkit-appearance: none;
-          width: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          border-radius: 5px;
-          background-color: rgba(0,0,0,.5);
-          -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
-        }
-    </style>
-    <style>
-    .marker {
-      border: none;
-      cursor: pointer;
-      height: 56px;
-      width: 56px;
-      background-image: url(https://commons.wikimedia.org/wiki/File:Zebra.png);
-      background-color: rgba(0, 0, 0, 0);
-    }
-    </style>
-
-    <style>
-    body {
-      color: #404040;
-      font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      margin: 0;
-      padding: 0;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    * {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      font-size: 22px;
-      margin: 0;
-      font-weight: 400;
-      line-height: 20px;
-      padding: 20px 2px;
-    }
-
-    a {
-      color: #404040;
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: #101010;
-    }
-
-    .sidebar {
-      /* position: absolute; */
-      position: fixed;
-      width: 25%;
-      height: 100%;
-      top: 0;
-      right: 0;
-      /* overflow: hidden; */
-      overflow-y: scroll;
-      border-right: 1px solid rgba(0, 0, 0, 0.25);
-      /* border-left: 1px solid rgba(0, 0, 0, 0.25); */
-      background: none;
-      /* background: rgba(119,136,153,.4); */
-    }
-
-    .pad2 {
-      padding: 20px;
-    }
-
-    .heading {
-      position: fixed;
-      /* background: #C0C0C0; */
-      background: #D0AB66;
-      border: 2px solid #000000;
-      border-radius: 3px;
-      /* border-bottom: 1px solid #eee; */
-      /* height: 6%; */
-      height: 52px;
-      width: 24.95%;
-      top: 0;
-      /* line-height: 60px; */
-      /* padding: 0 10px; */
-    }
-    .headingtext {
-      color: black;
-      position: relative;
-      top: 0%;
-      left: 40%;
-    }
-
-    .listings {
-      height: 100%;
-      overflow: auto;
-      padding-bottom: 60px;
-    }
-
-    .listings .item {
-      display: block;
-      border-bottom: 1px solid #eee;
-      padding: 10px;
-      text-decoration: none;
-    }
-
-    .listings .item:last-child { border-bottom: none; }
-
-    .listings .item .title {
-      display: block;
-      color: #00853e;
-      font-weight: 700;
-    }
-
-    .listings .item .title small { font-weight: 400; }
-
-    .listings .item.active .title,
-    .listings .item .title:hover { color: #8cc63f; }
-
-    .listings .item.active {
-      background-color: #f8f8f8;
-    }
-
-    .clearfix { display: block; }
-
-    .clearfix::after {
-      content: '.';
-      display: block;
-      height: 0;
-      clear: both;
-      visibility: hidden;
-    }
-    </style>
-    <style>
-    .toggleheader {
-      position: absolute;
-      background: #555;
-      bottom: 50.9%;
-      border-style: solid;
-      border-width: 1px;
-      border-color: #bfbfbf;
-      border-radius: 5px;
-      right: 51%;
-      padding: 12px;
-      text-align: center;
-      height: 5vh;
-      width: 12vw;
-      font: 1vw Arial;
-      color: white
-    }
-    </style>
-    <style>
-    body {font-family: Arial, Helvetica, sans-serif;}
-
-    /* The Modal (background) */
-    .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-
-    /* Modal Content */
-    .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
-
-    /* The Close Button */
-    .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    </style>
-    <style>
-    body {
-      font-family: "Lato", sans-serif;
-    }
-
-    .sidenav {
-      /* height: 92.4%; */
-      position: fixed;
-      top: 50px;
-      /* bottom: 70px; */
-      bottom: 0px;
-      width: 216px;
-      z-index: 1;
-      left: 0;
-      background-color: #152738;
-      opacity: .9;
-      overflow-x: hidden;
-      padding-top: 20px;
-      border-right: 1px solid black;
-    }
-
-    .sidenav a, .main-dropdown-btn {
-      padding: 6px 8px 6px 16px;
-      text-decoration: none;
-      font-size: 20px;
-      /* color: #eae3d6; */
-      color: #eae3d6;
-      display: block;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .sidenav a, .side-dropdown-btn {
-      padding: 6px 8px 6px 16px;
-      text-decoration: none;
-      font-size: 20px;
-      display: block;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .sidenav a:hover, .main-dropdown-btn:hover {
-      background: #eae3d6;
-      /* color: #f1f1f1; */
-      color: #000;
-    }
-
-    .side-dropdown-btn:hover {
-      color: #f1f1f1;
-    }
-
-    .main {
-      margin-left: 200px;
-      font-size: 20px;
-      padding: 0px 10px;
-    }
-
-    .active_main {
-      background-color: #eae3d6;
-      color: black;
-    }
-
-    .main-dropdown-container {
-      display: none;
-      background-color: #808080;
-      border: 2px solid #eae3d6;
-    }
-
-    .active {
-      background-color: #4173A4;
-      color: black;
-    }
-
-    .main-dropdown-container .link-active {
-      padding-right:18px;
-      color:#eae3d6;
-      background-color:#152738;
-      text-align:center;
-      border:5px solid #808080;
-      border-radius: 12px;
-      box-shadow:inset 0px 0px 0px 1px #000;
-    }
-
-    .main-dropdown-container .link-inactive {
-      padding-right:18px;
-      color:#eae3d6;
-      background-color:#0A5A02;
-      text-align:center;
-      border:5px solid #808080;
-      border-radius: 12px;
-      box-shadow:inset 0px 0px 0px 1px #000;
-    }
-
-    .side-dropdown-container {
-      display: none;
-      background-color: #111;
-      border: 2px solid #4173A4;
-    }
-
-    .main-dropdown-container-link-active {
-      padding-right:18px;
-      color:black;
-      background-color:#b3dd87;
-      text-align:center;
-      border:5px solid #808080;
-      border-radius: 12px;
-      box-shadow:inset 0px 0px 0px 1px #000;
-
-    }
-
-    .main-dropdown-container-link-inactive {
-      background-color: #FFA07A,
-      color: #000,
-    }
-
-    .fa-caret-down {
-      float: right;
-      padding-right: 8px;
-    }
-
-    @media screen and (max-height: 450px) {
-      .sidenav {padding-top: 15px;}
-      .sidenav a {font-size: 18px;}
-    }
-    ::-webkit-scrollbar {
-      width: 3px;
-      height: 3px;
-      border-left: 0;
-      background: rgba(0, 0, 0, 0.1);
-    }
-
-    ::-webkit-scrollbar-track {
-      background: none;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #eae3d6;
-      border-radius: 0;
-    }
-    </style>
-    <style>
-    #mydiv {
-      position: absolute;
-      width: 480px;
-      top: 0px;
-      right: 0px;
-      z-index: 9;
-      background-color: #f1f1f1;
-      opacity: .97;
-      text-align: left;
-      border: 1px solid #000;
-      /* border-top-left-radius: 6px; */
-      /* border-top-right-radius: 6px; */
-    }
-
-    #mydivheader {
-      padding: 10px;
-      cursor: move;
-      z-index: 10;
-      background-color: #152738;
-      border: 1px solid #000;
-      color: #eae3d6;
-      font-size:18px;
-      text-align: left;
-      /* border-top-left-radius: 4px; */
-      /* border-top-right-radius: 4px; */
-    }
-    span.grippy {
-      content: '....';
-      width: 10px;
-      height: 20px;
-      display: inline-block;
-      overflow: hidden;
-      line-height: 5px;
-      padding: 3px 4px;
-      cursor: move;
-      vertical-align: middle;
-      margin-top: -.7em;
-      margin-right: .3em;
-      font-size: 16px;
-      font-family: sans-serif;
-      letter-spacing: 2px;
-      color: #eae3d6;
-      text-shadow: 1px 0 1px black;
-    }
-    span.grippy::after {
-      content: '.. .. .. ..';
-    }
-
-    </style>
-    <style>
-    .remove-button {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 40px;
-      width: 216px;
-      background-color: #E74C3C;
-      color: black;
-      text-align: center;
-      padding: 6px;
-      font-size: 18px;
-      border: 3px solid black;
-    }
-
-    .remove-button:hover {
-      color: white;
-    }
-    </style>
-    <style>
-    .table-label {
-      position:relative;
-      text-align:left;
-      padding:10px;
-      background: #f1f1f1;
-    }
-
-    .table-info {
-      position:relative;
-      text-align:left;
-      background: #f1f1f1;
-    }
-    </style>
-
-
-
-</head>
-<!-- <body> -->
-<body style="overflow:hidden" onload="setUpGlobalVars()">
-    <div id="mydiv">
-      <div id="mydivheader"><span class="grippy"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Active Layers</div>
-      <table style="width:100%;">
-      </table>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+<style>
+body, html {
+  height: 100%;
+  font-family: "Inconsolata", sans-serif;
+}
+
+.bgimg {
+  background-position: center;
+  background-size: cover;
+  background-image: url("/w3images/coffeehouse.jpg");
+  min-height: 75%;
+}
+
+.menu {
+  display: none;
+}
+</style>
+<body>
+
+<!-- Links (sit on top) -->
+<div class="w3-top">
+  <div class="w3-row w3-padding w3-black">
+    <div class="w3-col s3">
+      <a href="#" class="w3-button w3-block w3-black">HOME</a>
     </div>
-    <div id='map'></div>
-    <div class="sidenav">
-      <a id="About" href="#about">About</a>
-      <div id="About_modal" class="modal">
-        <div class="modal-content">
-          <span id="About_close" class="close">&times;</span>
-          <div class="w3-col m6 w3-padding-large">
-            <h1 class="w1-center" align="center">About this Map</h1>
-            <p class="w1-large" align="center">This map was created as a tool to visualize and analyze features of New York State<br/></p>
-          </div>
-        </div>
-      </div>
-      <a id="Contact" href="#contact">Contact</a>
-      <div id="Contact_modal" class="modal">
-        <div class="modal-content">
-          <span id="Contact_close" class="close">&times;</span>
-          <div class="w3-col m6 w3-padding-large">
-            <h1 class="w1-center" align="center">Contact Page</h1>
-            <p class="w1-large" align="center">Sam Clymer - clymersam@gmail.com<br/><br/>Brendan Rappazzo - bhrappazzo@gmail.com<br/><br/></p>
-          </div>
-        </div>
-      </div>
-
-
-        <button class="main-dropdown-btn">Add Layers
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div id="main-container" class="main-dropdown-container">
-          <!-- <a style="color:black; background-color:#F6BE54; text-align:center; border:5px solid #808080; box-shadow:inset 0px 0px 0px 1px #000;" href="#satellite">Satellite View</a> -->
-          <button id="side-start" class="side-dropdown-btn">Boundaries
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Boundaries" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Politics
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Politics" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Economics
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Economics" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Demographics
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Demographics" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Tax Parcels
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Tax Parcels" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Agriculture
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Agriculture" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Environment
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Environment" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Animals
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Animals" class="side-dropdown-container">
-          </div>
-          <button class="side-dropdown-btn">Infrastructure
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div id="Infrastructure" class="side-dropdown-container">
-          </div>
-        </div>
-      </div>
-
-    <div class="topnav" id="topnavbar">
-      <a href="#home" class="active">New York State Map</a>
+    <div class="w3-col s3">
+      <a href="#about" class="w3-button w3-block w3-black">ABOUT</a>
     </div>
-    <!-- <a href="#reset" class="remove-button" onclick="setUpGlobalVars()">Remove All Layers<a> -->
+    <div class="w3-col s3">
+      <a href="#menu" class="w3-button w3-block w3-black">MENU</a>
+    </div>
+    <div class="w3-col s3">
+      <a href="#where" class="w3-button w3-block w3-black">WHERE</a>
+    </div>
+  </div>
+</div>
 
+<!-- Header with image -->
+<header class="bgimg w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
+    <span class="w3-tag">Open from 6am to 5pm</span>
+  </div>
+  <div class="w3-display-middle w3-center">
+    <span class="w3-text-white" style="font-size:90px">the<br>Cafe</span>
+  </div>
+  <div class="w3-display-bottomright w3-center w3-padding-large">
+    <span class="w3-text-white">15 Adr street, 5015</span>
+  </div>
+</header>
 
-    <script>
-    dragElement(document.getElementById("mydiv"));
+<!-- Add a background color and large text to the whole page -->
+<div class="w3-sand w3-grayscale w3-large">
 
-    function dragElement(elmnt) {
-      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      if (document.getElementById(elmnt.id + "header")) {
-        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-      } else {
-        elmnt.onmousedown = dragMouseDown;
-      }
+<!-- About Container -->
+<div class="w3-container" id="about">
+  <div class="w3-content" style="max-width:700px">
+    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT THE CAFE</span></h5>
+    <p>The Cafe was founded in blabla by Mr. Smith in lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>In addition to our full espresso and brew bar menu, we serve fresh made-to-order breakfast and lunch sandwiches, as well as a selection of sides and salads and other good stuff.</p>
+    <div class="w3-panel w3-leftbar w3-light-grey">
+      <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
+      <p>Chef, Coffeeist and Owner: Liam Brown</p>
+    </div>
+    <img src="/w3images/coffeeshop.jpg" style="width:100%;max-width:1000px" class="w3-margin-top">
+    <p><strong>Opening hours:</strong> everyday from 6am to 5pm.</p>
+    <p><strong>Address:</strong> 15 Adr street, 5015, NY</p>
+  </div>
+</div>
 
-      function dragMouseDown(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-      }
+<!-- Menu Container -->
+<div class="w3-container" id="menu">
+  <div class="w3-content" style="max-width:700px">
 
-      function elementDrag(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-      }
+    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">THE MENU</span></h5>
 
-      function closeDragElement() {
-        /* stop moving when mouse button is released:*/
-        document.onmouseup = null;
-        document.onmousemove = null;
-      }
-    }
+    <div class="w3-row w3-center w3-card w3-padding">
+      <a href="javascript:void(0)" onclick="openMenu(event, 'Eat');" id="myLink">
+        <div class="w3-col s6 tablink">Eat</div>
+      </a>
+      <a href="javascript:void(0)" onclick="openMenu(event, 'Drinks');">
+        <div class="w3-col s6 tablink">Drink</div>
+      </a>
+    </div>
 
-    var layerDropdown = document.getElementsByClassName("main-dropdown-btn")[0];
-    layerDropdown.addEventListener("click", function() {
-      this.classList.toggle("active_main");
-      var layerDropdown = this.nextElementSibling;
-      if (layerDropdown.style.display === "block") {
-      layerDropdown.style.display = "none";
-      } else {
-      layerDropdown.style.display = "block";
-      }
-    });
+    <div id="Eat" class="w3-container menu w3-padding-48 w3-card">
+      <h5>Bread Basket</h5>
+      <p class="w3-text-grey">Assortment of fresh baked fruit breads and muffins 5.50</p><br>
 
+      <h5>Honey Almond Granola with Fruits</h5>
+      <p class="w3-text-grey">Natural cereal of honey toasted oats, raisins, almonds and dates 7.00</p><br>
 
-    var dropdown = document.getElementsByClassName("side-dropdown-btn");
-    var i;
-    for (i=0;i<dropdown.length;i++) {
-      dropdown[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var dropdownContent = this.nextElementSibling;
-        if (dropdownContent.style.display === "block") {
-        dropdownContent.style.display = "none";
-        } else {
-        dropdownContent.style.display = "block";
-        }
-      });
-    }
+      <h5>Belgian Waffle</h5>
+      <p class="w3-text-grey">Vanilla flavored batter with malted flour 7.50</p><br>
 
+      <h5>Scrambled eggs</h5>
+      <p class="w3-text-grey">Scrambled eggs, roasted red pepper and garlic, with green onions 7.50</p><br>
 
-    var modal_1 = document.getElementById('About_modal');
-    var btn_1 = document.getElementById('About');
-    var span_1 = document.getElementById('About_close');
-    var modal_2 = document.getElementById('Contact_modal');
-    var btn_2 = document.getElementById('Contact');
-    var span_2 = document.getElementById('Contact_close');
-    btn_1.onclick = function() {
-      modal_1.style.display = "block";
-    }
-    span_1.onclick = function() {
-      modal_1.style.display = "none";
-    }
-    btn_2.onclick = function() {
-      modal_2.style.display = "block";
-    }
-    span_2.onclick = function() {
-      modal_2.style.display = "none";
-    }
-    window.onclick = function(event) {
-      if (event.target == modal_1 || event.target == modal_2) {
-        modal_1.style.display = "none";
-        modal_2.style.display = "none";
-      }
-    }
+      <h5>Blueberry Pancakes</h5>
+      <p class="w3-text-grey">With syrup, butter and lots of berries 8.50</p>
+    </div>
 
-    </script>
+    <div id="Drinks" class="w3-container menu w3-padding-48 w3-card">
+      <h5>Coffee</h5>
+      <p class="w3-text-grey">Regular coffee 2.50</p><br>
+
+      <h5>Chocolato</h5>
+      <p class="w3-text-grey">Chocolate espresso with milk 4.50</p><br>
+
+      <h5>Corretto</h5>
+      <p class="w3-text-grey">Whiskey and coffee 5.00</p><br>
+
+      <h5>Iced tea</h5>
+      <p class="w3-text-grey">Hot tea, except not hot 3.00</p><br>
+
+      <h5>Soda</h5>
+      <p class="w3-text-grey">Coke, Sprite, Fanta, etc. 2.50</p>
+    </div>
+    <img src="/w3images/coffeehouse2.jpg" style="width:100%;max-width:1000px;margin-top:32px;">
+  </div>
+</div>
+
+<!-- Contact/Area Container -->
+<div class="w3-container" id="where" style="padding-bottom:32px;">
+  <div class="w3-content" style="max-width:700px">
+    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">WHERE TO FIND US</span></h5>
+    <p>Find us at some address at some place.</p>
+    <img src="/w3images/map.jpg" class="w3-image" style="width:100%">
+    <p><span class="w3-tag">FYI!</span> We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste.</p>
+    <p><strong>Reserve</strong> a table, ask for today's special or just send us a message:</p>
+    <form action="/action_page.php" target="_blank">
+      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
+      <p><input class="w3-input w3-padding-16 w3-border" type="number" placeholder="How many people" required name="People"></p>
+      <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Date and time" required name="date" value="2017-11-16T20:00"></p>
+      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Message \ Special requirements" required name="Message"></p>
+      <p><button class="w3-button w3-black" type="submit">SEND MESSAGE</button></p>
+    </form>
+  </div>
+</div>
+
+<!-- End page content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-light-grey w3-padding-48 w3-large">
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+<script>
+// Tabbed Menu
+function openMenu(evt, menuName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("menu");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-dark-grey", "");
+  }
+  document.getElementById(menuName).style.display = "block";
+  evt.currentTarget.firstElementChild.className += " w3-dark-grey";
+}
+document.getElementById("myLink").click();
+</script>
 
 </body>
 </html>

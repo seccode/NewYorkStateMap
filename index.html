@@ -15,52 +15,28 @@ body, html {
 .bgimg {
   background-position: center;
   background-size: cover;
-  background-image: url("https://i.imgur.com/LykclKL.jpg");
-  min-height: 75%;
-}
-.bgimg2 {
-  background-position: center;
-  background-size: cover;
-  background-image: url("https://i.imgur.com/v6AN4c4.jpg");
-  min-height: 75%;
-}
-.bgimg3 {
-  background-position: center;
-  background-size: cover;
-  background-image: url("https://i.imgur.com/p95AD0T.jpg");
-  min-height: 75%;
-}
-.bgimg4 {
-  background-position: center;
-  background-size: cover;
-  background-image: url("https://i.imgur.com/QYdLuK2r.jpg");
-  min-height: 75%;
-}
-.bgimg5 {
-  background-position: center;
-  background-size: cover;
-  background-image: url("https://i.imgur.com/fmTkoSX.jpg");
-  min-height: 75%;
-}
-.bgimg6 {
-  background-position: center;
-  background-size: cover;
-  background-image: url("https://i.imgur.com/4yZdf8H.jpg");
-  min-height: 75%;
-}
-.bgimg7 {
-  background-position: center;
-  background-size: cover;
-  background-image: url("https://i.imgur.com/vcN5RgV.jpg");
-  min-height: 75%;
+  height: 75%;
 }
 
 .menu {
   display: none;
 }
 </style>
-<!-- <body> -->
-<body onload="setTimeout('nextPic()',7000)">
+
+<style>
+.back-image {
+  position:absolute;
+  width:100%;
+  overflow:hidden;
+  bottom:0;
+  transition: opacity .5s ease-in;
+}
+
+.back-image + .back-image {opacity: 0;}
+</style>
+
+<body>
+<!-- <body onload="setTimeout('nextPic()',7000)"> -->
 
 <!-- Links (sit on top) -->
 <div class="w3-top">
@@ -81,7 +57,16 @@ body, html {
 </div>
 
 <!-- Header with image -->
-<header class="bgimg5 w3-display-container" id="home">
+<header class="bgimg w3-display-container" id="home">
+
+  <img class="back-image" src="https://i.imgur.com/fmTkoSX.jpg"/>
+  <img class="back-image" src="https://i.imgur.com/p95AD0T.jpg"/>
+  <img class="back-image" src="https://i.imgur.com/v6AN4c4.jpg"/>
+  <img class="back-image" src="https://i.imgur.com/vcN5RgV.jpg"/>
+  <img class="back-image" src="https://i.imgur.com/4yZdf8H.jpg"/>
+  <img class="back-image" src="https://i.imgur.com/QYdLuK2r.jpg"/>
+  <img class="back-image" src="https://i.imgur.com/LykclKL.jpg"/>
+
   <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
     <span class="w3-tag" style="background: #152738;">Data updated May 4, 2019</span>
   </div>
@@ -166,12 +151,12 @@ body, html {
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
-            <h3 style="margin: 0;">Congressional Districts</h3>
+            <h3 style="margin: 0;">State Senate Districts</h3>
             <p class="w3-text-grey" style="margin: 0;">New York State Senate district lines</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
-            <h3 style="margin: 0;">State Senate</h3>
+            <h3 style="margin: 0;">State Assembly Districts</h3>
             <p class="w3-text-grey" style="margin: 0;">New York State Assembly district lines</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
@@ -191,12 +176,12 @@ body, html {
           <li>
             <h3 style="margin: 0;">Basic Census Data</h3>
             <p class="w3-text-grey" style="margin: 0;">Census data visualization by Census Tract</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://cugir.library.cornell.edu/">Cornell GIS Library</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Advanced Census Data</h3>
             <p class="w3-text-grey" style="margin: 0;">Census data visualization by Census Block</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://cugir.library.cornell.edu/">Cornell GIS Library</a>)</p>
           </li>
         </ul>
 
@@ -246,17 +231,17 @@ body, html {
           <li>
             <h3 style="margin: 0;">Crop Cover</h3>
             <p class="w3-text-grey" style="margin: 0;">Raster map with dark areas denoting heavier crop cover</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://cugir.library.cornell.edu/">Cornell GIS Library</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Agricultural Districts</h3>
             <p class="w3-text-grey" style="margin: 0;">Agricultural District lines and identification as denoted by New York State</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://cugir.library.cornell.edu/">Cornell GIS Library</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Soil Info</h3>
             <p class="w3-text-grey" style="margin: 0;">Classified soil regions</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://cugir.library.cornell.edu/">Cornell GIS Library</a>)</p>
           </li>
         </ul>
 
@@ -274,7 +259,7 @@ body, html {
           </li>
           <li>
             <h3 style="margin: 0;">Watershed Biodiversity</h3>
-            <p class="w3-text-grey" style="margin: 0;">Watershed Biodiversity</p>
+            <p class="w3-text-grey" style="margin: 0;">Estimated level of biodiversity relative to other watersheds in New York State</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
@@ -314,7 +299,7 @@ body, html {
           </li>
           <li>
             <h3 style="margin: 0;">Adirondack State Park Boundary</h3>
-            <p class="w3-text-grey" style="margin: 0;">Adirondack State Park Boundary</p>
+            <p class="w3-text-grey" style="margin: 0;">Official boundary line for Adirondack State Park</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
         </ul>
@@ -324,22 +309,22 @@ body, html {
           <li>
             <h3 style="margin: 0;">Zebra Mussels Locations</h3>
             <p class="w3-text-grey" style="margin: 0;">Invasive Species zebra mussel locations</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://cugir.library.cornell.edu/">Cornell GIS Library</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Bird Migration Routes</h3>
-            <p class="w3-text-grey" style="margin: 0;">Bird Migration Routes</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0;">Measured routes of bird migration</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://cugir.library.cornell.edu/">Cornell GIS Library</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">North-South Hunting Line</h3>
-            <p class="w3-text-grey" style="margin: 0;">North-South Hunting Line</p>
+            <p class="w3-text-grey" style="margin: 0;">East-West Line that separates Northen and Southern Hunting Zones in New York</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Black Bear Ranges</h3>
             <p class="w3-text-grey" style="margin: 0;">Black Bear Primary and Secondary Ranges</p>
-            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
+            <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://www.dec.ny.gov/">NYS DEC</a>)</p>
           </li>
         </ul>
 
@@ -347,27 +332,27 @@ body, html {
         <ul>
           <li>
             <h3 style="margin: 0;">Railroad Lines</h3>
-            <p class="w3-text-grey" style="margin: 0;">Railroad Lines</p>
+            <p class="w3-text-grey" style="margin: 0;">Railroad lines as shown on tax maps</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Average Annual Daily Traffic</h3>
-            <p class="w3-text-grey" style="margin: 0;">Average Annual Daily Traffic</p>
+            <p class="w3-text-grey" style="margin: 0;">Average annual daily traffic for roads, streets, and highways in New York</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Water Wells Locations</h3>
-            <p class="w3-text-grey" style="margin: 0;">Water Wells Locations</p>
+            <p class="w3-text-grey" style="margin: 0;">Locations and Attributes for water wells in New York</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Dam Locations</h3>
-            <p class="w3-text-grey" style="margin: 0;">Dam Locations</p>
+            <p class="w3-text-grey" style="margin: 0;">New York State Inventory of Water Dams</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
           <li>
             <h3 style="margin: 0;">Snowmobile Trails</h3>
-            <p class="w3-text-grey" style="margin: 0;">Snowmobile Trails</p>
+            <p class="w3-text-grey" style="margin: 0;">Marked and Maintained snowmobile trails in New York</p>
             <p class="w3-text-grey" style="margin: 0; font-size:12px;">(Source:<a href="https://gis.ny.gov/">NYS GIS</a>)</p>
           </li>
         </ul>
@@ -379,7 +364,7 @@ body, html {
 <div class="w3-container" id="contact" style="padding-bottom:32px;">
   <div class="w3-content" style="max-width:700px">
     <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Contact Us</span></h5>
-    <form action="/action_page.php" target="_blank">
+    <form action="mailto:clymersam@gmail.com" enctype="text/plain" method="get" target="_blank">
       <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
       <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Email Address" required name="Email"></p>
       <p><input class="w3-input w3-padding-64 w3-border" type="text" placeholder="Message" required name="Message"></p>
@@ -396,19 +381,20 @@ body, html {
   <p>Map of New York</p>
 </footer>
 
+
 <script>
-var picCount=0;
-var picArray= ["bgimg5","bgimg6","bgimg7","bgimg","bgimg2","bgimg3","bgimg4"]
+var current = 0,
+    slides = document.getElementsByClassName("back-image");
 
-function nextPic() {
-    picCount=(picCount+1<picArray.length)? picCount+1 : 0;
-    var build=picArray[picCount]+' w3-display-container';
-    document.getElementById("home").className=build;
-    setTimeout('nextPic()',7000)
-};
-
-console.log(document.getElementById("home").className);
+setInterval(function() {
+  for (var i = 0; i < slides.length; i++) {
+    slides[i].style.opacity = 0;
+  }
+  current = (current != slides.length - 1) ? current + 1 : 0;
+  slides[current].style.opacity = 1;
+}, 5000);
 </script>
+
 
 </body>
 </html>

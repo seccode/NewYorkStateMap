@@ -166,6 +166,12 @@ function setUpGlobalVars() {
                           'bears': ['mapbox://secfast.1ehs1gtd','bears_3-dcycad','Black Bear Ranges','vector',["match",['get','Label'],'Primary Bear Range','#3FA54B','Secondary Bear Range','#8CDA95','#8CDA95'],.7,'Animals'],
                           'snowmobile': ['mapbox://secfast.048x0bwe','NYSsnowmobile2018-19-06xu1u','Snowmobile Trails','vector','none','none','Infrastructure'],
                           'adirondacks': ['mapbox://secfast.609mbd92','adirondacks-8d6bzu','Adirondacks','vector','#79CC79',.7,'Environment'],
+                          'nyc_zoning_1': ['mapbox://secfast.78e7oxit','nyc_zoning_1-59lty3','NYC Commercial Districts','vector','#33A8FF',.7,'Boundaries'],
+                          'nyc_zoning_2': ['mapbox://secfast.3dscbr6u','nyc_zoning_2-0k2flc','NYC Zoning Districts','vector','#BB33FF',.7,'Boundaries'],
+                          'nyc_zoning_3': ['mapbox://secfast.5lv6kdof','nyc_zoning_3-8k6clm','NYC Special Zoning Districts','vector','#FF33F9',.7,'Boundaries'],
+                          // 'nyc_zoning_4': ['mapbox://secfast.53xtgn4e','nyc_zoning_4-4sxmvw','NYC Zoning 4','vector','#33A8FF',.7,'Boundaries'],
+                          // 'nyc_zoning_5': ['mapbox://secfast.4v2v1lrd','nyc_zoning_5-2zq86w','NYC Zoning 5','vector','#33A8FF',.7,'Boundaries'],
+                          'nyc_zoning_6': ['mapbox://secfast.94jbc8z2','nyc_zoning_6-acimj4','NYC Limited Height Districts','vector','#FF3361',.7,'Boundaries'],
                           // 'mining': ['mapbox://secfast.2r3ghji5','mining-907hl9','Mining Operations','vector','none','none','Economics'],
                           };
 
@@ -490,6 +496,14 @@ function setUpGlobalVars() {
                             line.textContent = f[i].properties.NAME_ONE;
                           } else if (key == 'birds') {
                             line.textContent = f[i].properties.RTENAME + ' Migration Route';
+                          } else if (key == 'nyc_zoning_1') {
+                            line.textContent = f[i].properties.project_na;
+                          } else if (key == 'nyc_zoning_2') {
+                            line.textContent = f[i].properties.zonedist;
+                          } else if (key == 'nyc_zoning_3') {
+                            line.textContent = f[i].properties.spname;
+                          } else if (key == 'nyc_zoning_6') {
+                            line.textContent = f[i].properties.lhlbl;
                           } else if (key == 'traffic') {
                             var num = f[i].properties.AADT.toString();
                             var length = num.length;
@@ -866,6 +880,14 @@ function setUpGlobalVars() {
                             map.flyTo({
                               center: [-76.12, 43.05],
                               zoom: 8.2,
+                              pitch: 10,
+                              bearing: 0,
+                            });
+                          };
+                          if (clickedLayer.includes('nyc_zoning')) {
+                            map.flyTo({
+                              center: [-74, 40.71],
+                              zoom: 9,
                               pitch: 10,
                               bearing: 0,
                             });

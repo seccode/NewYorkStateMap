@@ -65,7 +65,7 @@ function setUpGlobalVars() {
                           'indian_territory': ['mapbox://secfast.bc21xqhx','indian_territory-4n30ds','Indian Territory','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],'Boundaries'],
                           'crops': ['mapbox://secfast.63qhbo2t','CDL_2010_NY-7ym7gh','Crop Cover','raster','none','none','Agriculture'],
                           'agriculture': ['mapbox://secfast.2euzzuud','agriculture-913eim','Agricultural Districts','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],'Agriculture'],
-                          'soil': ['mapbox://secfast.1h9viy25','soil-0j12c4','Soil Info','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],'Agriculture'],
+                          // 'soil': ['mapbox://secfast.1h9viy25','soil-0j12c4','Soil Info','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],'Agriculture'],
                           'precip': ['mapbox://secfast.4gi9cwh5','precip-0qg8b2','Annual Precipitation (in.)','vector',['interpolate', ['linear'],['get','RANGE'],30, '#B5E3E9',65, '#3146DB',],.7,'Environment'],
                           'geology': ['mapbox://secfast.4cc0940p','geology-7dpveh','Geology','vector',["case",
                             ['==',['get','ROCKDESC'],'Lower Ordovician (Canadian)'],rainbow(31,1),
@@ -102,11 +102,11 @@ function setUpGlobalVars() {
                             '#000000'
                           ],["case",["boolean", ["feature-state","hover"], false], .8,.5],'Environment'],
                           'zebra': ['mapbox://secfast.9qepxeqa','zebra_mussels-3pzz5l','Zebra Mussels','vector','none','none','Animals'],
-                          'birds': ['mapbox://secfast.7o9su5kf','birds-0ixrxg','Bird Migration','vector','none','none','Animals'],
+                          // 'birds': ['mapbox://secfast.7o9su5kf','birds-0ixrxg','Bird Migration','vector','none','none','Animals'],
                           'empire_zones': ['mapbox://secfast.bhdyfqno','empirezone-ah3phb','Empire Zone Program','vector','#FFB533',["case",["boolean", ["feature-state","hover"], false], .7,0],'Economics'],
                           'rails': ['mapbox://secfast.102qlnny','rails_2-dsd9c5','Railroads','vector','none','none','Infrastructure'],
                           // 'biodiversity': ['mapbox://secfast.2lstx3qf','Biodiversity_Indicator-46nyrk','Biodiversity Indicator','raster','none','none','Environment'],
-                          'water_biodiversity': ['mapbox://secfast.5f341fim','Watershed-Biodiversity-12g1bi','Watershed Biodiversity','vector','#79CC79',.7,'Environment'],
+                          // 'water_biodiversity': ['mapbox://secfast.5f341fim','Watershed-Biodiversity-12g1bi','Watershed Biodiversity','vector','#79CC79',.7,'Environment'],
                           'traffic': ['mapbox://secfast.4khlw6gc','AADT_2015_tdv-5aggpk','Average Annual Daily Traffic','vector','none','none','Infrastructure'],
                           'watershed': ['mapbox://secfast.86eo47nf','aa_aas_watersheds_2-cnc9go','AA and AAs Watersheds','vector','#79CC79',.7,'Environment'],
                           'dec_land': ['mapbox://secfast.7ivjw684','DEC_lands-7ljzj9','DEC Land','vector','#79CC79',.7,'Environment'],
@@ -162,16 +162,15 @@ function setUpGlobalVars() {
                           'hunt_zone': ['mapbox://secfast.6wjgtb4v','hunt_zone-6xv8r5','North-South Hunting Line','vector','none','none','Animals'],
                           'dams': ['mapbox://secfast.9ybj04wk','nysdec_dams-72j3u4','Dams','vector','none','none','Infrastructure'],
                           'phosphorus': ['mapbox://secfast.a1uuppsr','phosphorus_zones-aehz2m','Enhanced Phosphorus Watersheds','vector','#79CC79',.7,'Environment'],
-                          // 'bears': ['mapbox://secfast.1ehs1gtd','bears_3-dcycad','Black Bear Ranges','vector','#79CC79',.7,'Animals'],
                           'bears': ['mapbox://secfast.1ehs1gtd','bears_3-dcycad','Black Bear Ranges','vector',["match",['get','Label'],'Primary Bear Range','#3FA54B','Secondary Bear Range','#8CDA95','#8CDA95'],.7,'Animals'],
                           'snowmobile': ['mapbox://secfast.048x0bwe','NYSsnowmobile2018-19-06xu1u','Snowmobile Trails','vector','none','none','Infrastructure'],
                           'adirondacks': ['mapbox://secfast.609mbd92','adirondacks-8d6bzu','Adirondacks','vector','#79CC79',.7,'Environment'],
-                          'nyc_zoning_1': ['mapbox://secfast.78e7oxit','nyc_zoning_1-59lty3','NYC Commercial Districts','vector','#33A8FF',.7,'Boundaries'],
-                          'nyc_zoning_2': ['mapbox://secfast.3dscbr6u','nyc_zoning_2-0k2flc','NYC Zoning Districts','vector','#BB33FF',.7,'Boundaries'],
-                          'nyc_zoning_3': ['mapbox://secfast.5lv6kdof','nyc_zoning_3-8k6clm','NYC Special Zoning Districts','vector','#FF33F9',.7,'Boundaries'],
-                          // 'nyc_zoning_4': ['mapbox://secfast.53xtgn4e','nyc_zoning_4-4sxmvw','NYC Zoning 4','vector','#33A8FF',.7,'Boundaries'],
-                          // 'nyc_zoning_5': ['mapbox://secfast.4v2v1lrd','nyc_zoning_5-2zq86w','NYC Zoning 5','vector','#33A8FF',.7,'Boundaries'],
-                          'nyc_zoning_6': ['mapbox://secfast.94jbc8z2','nyc_zoning_6-acimj4','NYC Limited Height Districts','vector','#FF3361',.7,'Boundaries'],
+                          'nyc_zoning_1': ['mapbox://secfast.78e7oxit','nyc_zoning_1-59lty3','NYC Commercial Districts','vector','#79CC79',.7,'NYC'],
+                          'nyc_zoning_2': ['mapbox://secfast.3dscbr6u','nyc_zoning_2-0k2flc','NYC Zoning Districts','vector','#BB33FF',.7,'NYC'],
+                          'nyc_zoning_3': ['mapbox://secfast.5lv6kdof','nyc_zoning_3-8k6clm','NYC Special Zoning Districts','vector','#FF33F9',.7,'NYC'],
+                          // 'nyc_zoning_4': ['mapbox://secfast.53xtgn4e','nyc_zoning_4-4sxmvw','NYC Zoning 4','vector','#33A8FF',.7,'NYC'],
+                          // 'nyc_zoning_5': ['mapbox://secfast.4v2v1lrd','nyc_zoning_5-2zq86w','NYC Zoning 5','vector','#33A8FF',.7,'NYC'],
+                          'nyc_zoning_6': ['mapbox://secfast.94jbc8z2','nyc_zoning_6-acimj4','NYC Limited Height Districts','vector','#FF3361',.7,'NYC'],
                           // 'mining': ['mapbox://secfast.2r3ghji5','mining-907hl9','Mining Operations','vector','none','none','Economics'],
                           };
 
@@ -386,10 +385,15 @@ function setUpGlobalVars() {
             'minzoom': 12,
             'paint': {
             'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': 8,
-            'fill-extrusion-opacity': .6
+            // 'fill-extrusion-height': [
+            // "interpolate", ["linear"], ["zoom"],
+            // 15, 0,
+            // 15.05, ["get", "height"]
+            // ],
+            'fill-extrusion-height': ["get", "height"],
+            'fill-extrusion-opacity': 1
             }
-        }, 'water');
+        });
 
 
         var checkMapLayer = map.getLayer('3d-buildings');
@@ -421,12 +425,25 @@ function setUpGlobalVars() {
                     if (f[i].layer.id.includes('congress') && map.getLayoutProperty('congress','visibility') == 'visible') {
                         c_popup = congressPopUp(map,f[i],lngLat);
                     };
+                    if (f[i].layer.id.includes('wells') && map.getLayoutProperty('wells','visibility') == 'visible') {
+                        w_popup = wellsPopUp(map,f[i],lngLat);
+                    };
+                    if (f[i].layer.id.includes('dams') && map.getLayoutProperty('dams','visibility') == 'visible') {
+                        d_popup = damPopUp(map,f[i],lngLat);
+                    };
+                    if (f[i].layer.id.includes('zebra') && map.getLayoutProperty('zebra','visibility') == 'visible') {
+                        z_popup = zebraPopUp(map,f[i],lngLat);
+                    };
+                    if (f[i].layer.id.includes('crit_env') && map.getLayoutProperty('crit_env','visibility') == 'visible') {
+                        ce_popup = crit_envPopUp(map,f[i],lngLat);
+                    };
                 };
             };
         });
 
         // Make parcel appear purple when hovered with mouse
         map.on("mousemove", function(e) {
+            var lngLat = e.lngLat;
             on_fills = false;
             if (open_popup) {
                 if (!new_popup.isOpen()) {
@@ -449,8 +466,10 @@ function setUpGlobalVars() {
                          };
                       };
                       if (!match) {
+                        map.getCanvas().style.cursor = '';
                         document.getElementById(elements[j].id.split('_item')[0]+'_info').textContent = '-';
                       } else {
+
                         var key = f[i].layer.id.split('_fill')[0];
                         line = document.getElementById(key+'_info');
                         if (!!line) {
@@ -481,9 +500,10 @@ function setUpGlobalVars() {
                           } else if (key == 'lwrp') {
                             line.textContent = f[i].properties.REDC;
                           } else if (key == 'crit_env') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.NAME;
                           } else if (key == 'aquifers') {
-                            line.textContent = 'Area - '+f[i].properties.SHAPE_AREA;
+                            line.textContent = 'Area: '+f[i].properties.SHAPE_AREA + ' sqft.';
                           } else if (key == 'eco_zone') {
                             line.textContent = f[i].properties.MINOR_DESC;
                           } else if (key == 'phosphorus') {
@@ -491,10 +511,15 @@ function setUpGlobalVars() {
                           } else if (key == 'rails') {
                             line.textContent = f[i].properties.LINE_NAME;
                           } else if (key == 'wells') {
-                            line.textContent = f[i].properties.Foil_Loc;
+                            map.getCanvas().style.cursor = 'pointer';
+                            line.textContent = 'Well Depth: '+f[i].properties.Well_Depth + ' feet';
+                          } else if (key == 'zebra') {
+                            map.getCanvas().style.cursor = 'pointer';
                           } else if (key == 'dams') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.NAME_ONE;
                           } else if (key == 'birds') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.RTENAME + ' Migration Route';
                           } else if (key == 'nyc_zoning_1') {
                             line.textContent = f[i].properties.project_na;
@@ -504,6 +529,8 @@ function setUpGlobalVars() {
                             line.textContent = f[i].properties.spname;
                           } else if (key == 'nyc_zoning_6') {
                             line.textContent = f[i].properties.lhlbl;
+                          } else if (key == 'bears') {
+                            line.textContent = f[i].properties.Label;
                           } else if (key == 'traffic') {
                             var num = f[i].properties.AADT.toString();
                             var length = num.length;
@@ -516,6 +543,7 @@ function setUpGlobalVars() {
                             };
                             line.textContent = num + ' cars per day';
                           } else {
+                            map.getCanvas().style.cursor = '';
                             line.textContent = ' ';
                           };
                         };
@@ -779,55 +807,6 @@ function setUpGlobalVars() {
       };
     };
 
-    // Toggle layers when clicked
-    var categories = ['Boundaries',
-                      'Politics',
-                      'Economics',
-                      'Demographics',
-                      'Property',
-                      'Agriculture',
-                      'Environment',
-                      'Animals',
-                      'Infrastructure'];
-
-    var toggleableLayerIds = ['Satellite View',
-                              'Crop Cover',
-                              'Biodiversity Indicator',
-                              'Counties',
-                              'Cities',
-                              'Villages',
-                              'Indian Territory',
-                              'School Zones',
-                              'Basic Census Data',
-                              'Advanced Census Data',
-                              'Congressional Districts',
-                              'State Senate',
-                              'State Assembly',
-                              'Empire Zone Program',
-                              'Agricultural Districts',
-                              'Soil Info',
-                              'Annual Precipitation (in.)',
-                              'Geology',
-                              'Bird Migration',
-                              'Zebra Mussels',
-                              'Railroads',
-                              'Average Annual Daily Traffic',
-                              'Enhanced Phosphorus Watersheds',
-                              'Watershed Biodiversity',
-                              'AA and AAs Watersheds',
-                              'DEC Land',
-                              'Snowmobile Trails',
-                              'Local Waterfront Revitatilzation Program',
-                              'Water Wells',
-                              'Critical Environmental Areas',
-                              'Aquifers',
-                              'Eco-Zones',
-                              'North-South Hunting Line',
-                              'Dams',
-                              // 'Biodiversity Indicator',
-                              'Black Bear Ranges',
-                              // 'Mining Operations',
-                              'Adirondacks'];
 
     for (var key in toggle_layers) {
         var link = document.createElement('a');
@@ -1062,6 +1041,55 @@ function congressPopUp(map,e,lngLat) {
               .setLngLat(lngLat)
               .setHTML(
                       '<embed src="https://en.wikipedia.org/wiki/Special:Search?search='+features.NAME+'" width="600" height="400" />'
+                      )
+              .addTo(map);
+  return popup;
+};
+function wellsPopUp(map,e,lngLat) {
+  var features = e.properties;
+  var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
+              .setLngLat(lngLat)
+              .setHTML(
+                      '<h3><u>Town:</u> '+features['Town']+'</h3>\n'+
+                      '<h3><u>Address:</u> '+features['Foil_Loc']+'</h3>\n'+
+                      '<h3><u>Well Depth:</u> '+features['Well_Depth']+' feet'+'</h3>\n'+
+                      '<h3><u>Rock Depth:</u> '+features['Rock_Depth']+' feet'+'</h3>'
+                      )
+              .addTo(map);
+  return popup;
+};
+function damPopUp(map,e,lngLat) {
+  var features = e.properties;
+  var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
+              .setLngLat(lngLat)
+              .setHTML(
+                      '<h3><u>Location:</u> '+features['BASIN_NAME']+'</h3>\n'+
+                      '<h3><u>Dam Height:</u> '+features['DAM_HEIGHT']+' feet'+'</h3>\n'+
+                      '<h3><u>Dam Length:</u> '+features['DAM_LENGTH']+' feet'+'</h3>\n'+
+                      '<h3><u>Purpose:</u> '+features['PURPOSES']+'</h3>\n'+
+                      '<h3><u>Owner:</u> '+features['OWNERS']+'</h3>\n'
+                      )
+              .addTo(map);
+  return popup;
+};
+function zebraPopUp(map,e,lngLat) {
+  var features = e.properties;
+  var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
+              .setLngLat(lngLat)
+              .setHTML(
+                      '<h3 style="max-width:200px;"><u>Location:</u> '+features['LOCALITY']+'</h3>\n'+
+                      '<h3><u>Year Measured:</u> '+features['Y']+'</h3>\n'
+                      )
+              .addTo(map);
+  return popup;
+};
+function crit_envPopUp(map,e,lngLat) {
+  var features = e.properties;
+  var popup = new mapboxgl.Popup({closeButton: true,closeOnClick: true})
+              .setLngLat(lngLat)
+              .setHTML(
+                      '<h3><u>Location:</u> '+features['LOCATION']+'</h3>\n'+
+                      '<h3><u>Purpose:</u> '+features['REASON']+'</h3>\n'
                       )
               .addTo(map);
   return popup;

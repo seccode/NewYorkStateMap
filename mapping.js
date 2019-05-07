@@ -486,29 +486,35 @@ function setUpGlobalVars() {
                           } else if (key == 'census_1' || key == 'census_2') {
                             line.textContent = 'Tract #'+f[i].properties.TRACT;
                           } else if (key == 'agriculture') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = 'District #'+f[i].properties.DistCode;
-                          } else if (key == 'soil') {
-                            line.textContent = 'Soil Type - '+f[i].properties.MUSYM;
+                          // } else if (key == 'soil') {
+                            // line.textContent = 'Soil Type - '+f[i].properties.MUSYM;
                           } else if (key == 'precip') {
                             line.textContent = f[i].properties.RANGE;
                           } else if (key == 'geology') {
                             line.textContent = f[i].properties.ROCKDESC;
-                          } else if (key == 'water_biodiversity') {
-                            line.textContent = f[i].properties.HU_12_Name;
+                          // } else if (key == 'water_biodiversity') {
+                            // line.textContent = f[i].properties.HU_12_Name;
                           } else if (key == 'dec_land') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.UMP + ' ' + f[i].properties.CATEGORY;
                           } else if (key == 'lwrp') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.REDC;
                           } else if (key == 'crit_env') {
                             map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.NAME;
                           } else if (key == 'aquifers') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = 'Area: '+f[i].properties.SHAPE_AREA + ' sqft.';
                           } else if (key == 'eco_zone') {
                             line.textContent = f[i].properties.MINOR_DESC;
                           } else if (key == 'phosphorus') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.NAME;
                           } else if (key == 'rails') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.LINE_NAME;
                           } else if (key == 'wells') {
                             map.getCanvas().style.cursor = 'pointer';
@@ -522,16 +528,22 @@ function setUpGlobalVars() {
                             map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.RTENAME + ' Migration Route';
                           } else if (key == 'nyc_zoning_1') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.project_na;
                           } else if (key == 'nyc_zoning_2') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.zonedist;
                           } else if (key == 'nyc_zoning_3') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.spname;
                           } else if (key == 'nyc_zoning_6') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.lhlbl;
                           } else if (key == 'bears') {
+                            map.getCanvas().style.cursor = 'pointer';
                             line.textContent = f[i].properties.Label;
                           } else if (key == 'traffic') {
+                            map.getCanvas().style.cursor = 'pointer';
                             var num = f[i].properties.AADT.toString();
                             var length = num.length;
                             if (length > 6) {

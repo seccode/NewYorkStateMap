@@ -8,6 +8,8 @@
     <meta name="keywords" content="Map, GIS, NY, Census, Geography, Politics, Property, Parcels">
     <meta name="description" content="Interactive map of New York State to explore property, boundaries, geography, politics, and the environment">
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -758,6 +760,17 @@
       background: #f1f1f1;
     }
     </style>
+    <style>
+    .geocoder {
+      position:absolute;
+      z-index:1;
+      width:20%;
+      left:225px;
+      /* margin-left:-25%; */
+      top:8px;
+    }
+    .mapboxgl-ctrl-geocoder { min-width:100%; }
+    </style>
 
 
 
@@ -858,7 +871,9 @@
     <!-- <a href="#reset" class="remove-button" onclick="setUpGlobalVars()">Remove All Layers<a> -->
 
 
+    <div id='geocoder' class='geocoder'></div>
     <script>
+
     dragElement(document.getElementById("mydiv"));
 
     function dragElement(elmnt) {

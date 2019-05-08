@@ -14,6 +14,14 @@ function setUpGlobalVars() {
       pitch: 0,
       bearing: 0,
     });
+    var geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl,
+      countries: 'us',
+      bbox: [-79.78, 40.54, -71.81, 45.05],
+    });
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
 
     // Initialize mapbox popup
     var popup = new mapboxgl.Popup({
@@ -172,6 +180,7 @@ function setUpGlobalVars() {
                           // 'nyc_zoning_5': ['mapbox://secfast.4v2v1lrd','nyc_zoning_5-2zq86w','NYC Zoning 5','vector','#33A8FF',.7,'NYC'],
                           'nyc_zoning_6': ['mapbox://secfast.94jbc8z2','nyc_zoning_6-acimj4','NYC Limited Height Districts','vector','#FF3361',.7,'NYC'],
                           // 'mining': ['mapbox://secfast.2r3ghji5','mining-907hl9','Mining Operations','vector','none','none','Economics'],
+                          'albany_flood': ['mapbox://secfast.7c4j4agh','albany_flood-58lfno','Albany Flood','vector','#79CC79',.7,'Environment'],
                           };
 
 
@@ -403,6 +412,7 @@ function setUpGlobalVars() {
         map.on('click', function (e) {
             var lngLat = e.lngLat;
             let f = map.queryRenderedFeatures(e.point);
+            // console.log(f)
             if (f.length && (typeof checkMapLayer !== 'undefined')) {
                 for (i=0; i<f.length; i++) {
                     if (f[i].layer.id.includes('fills') || f[i].layer.id.includes('_fill_outlines')) {

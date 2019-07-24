@@ -56,6 +56,10 @@ function setUpGlobalVars() {
                       'tompkins': ['mapbox://secfast.bxmtsg75',"tompkins-6devsn",[-76.5, 42.45],false,'Tompkins County'],
                       'sullivan': ['mapbox://secfast.3h6gzxg4', "sullivan-80f85m",[-74.72, 41.67],false,'Sullivan County'],
                       'warren': ['mapbox://secfast.dt68zx9t', "warren-794izr",[-73.75, 43.61],false,'Warren County'],
+
+
+                      'summit': ['mapbox://secfast.1ti19rk7', "summit-66htbt",[106.06, 39.59],false,'Summit County'],
+
                       // 'onondaga': ['mapbox://secfast.aakb983p', "onondaga-bj1ko6",[-78.15, 43.05],false],
                       };
 

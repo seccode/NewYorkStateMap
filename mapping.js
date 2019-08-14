@@ -941,8 +941,6 @@ function setUpGlobalVars() {
                 };
             };
         };
-        // var layers = document.getElementById('menu');
-        // layers.appendChild(link);
     };
 
     for (var key in county_dict) {
@@ -1185,9 +1183,6 @@ function makePopUp(map,e,lngLat,county_dict) {
     return popup;
 };
 function rainbow(numOfSteps, step) {
-    // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
-    // Adam Cole, 2011-Sept-14
-    // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
     var r, g, b;
     var h = step / numOfSteps;
     var i = ~~(h * 6);

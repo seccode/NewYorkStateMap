@@ -58,7 +58,7 @@ function setUpGlobalVars() {
                       'warren': ['mapbox://secfast.dt68zx9t', "warren-794izr",[-73.75, 43.61],false,'Warren County'],
 
 
-                      'summit': ['mapbox://secfast.1ti19rk7', "summit-66htbt",[106.06, 39.59],false,'Summit County'],
+                      // 'summit': ['mapbox://secfast.1ti19rk7', "summit-66htbt",[106.06, 39.59],false,'Summit County'],
 
                       // 'onondaga': ['mapbox://secfast.aakb983p', "onondaga-bj1ko6",[-78.15, 43.05],false],
                       };
